@@ -1,0 +1,7 @@
+advancedgraphics = yes
+vectors = no
+resultant = no
+trail = yes
+effects = yes
+warpArrows = no
+speed = 4

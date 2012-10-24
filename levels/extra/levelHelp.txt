@@ -1,0 +1,27 @@
+/* Notes: 
+ *	Input angles are in DEGREES, all calculations use RADIANS though; thus, angles are converted to radians in the Moon constructor. 
+ *  Data file input syntax:
+ *		Moons must be below the body to which they are to be attached to.
+ *		Custom colors should be defined using "Color(r#, g#, b#)".
+ *			Acceptable colors: red, black, blue, cyan, gray, green, magenta, orange, pink, yellow, purple, violet
+ *		Spaces do not matter in the file. 	
+ *		Levels MUST be finished with the level() line.
+ *		"Comments" may be put in the file; the line should start with a "//" if it is a comment. 
+ *
+ *		ball(centerX, centerY, radius, color)
+ *		body(centerx, centerY, radius, color)
+ *		moon(startingAngle, distanceFromBody, radius, color)
+ *		warp(centerX, centerY)
+ *		rect(centerX, centerY, xLength/2, yLength/2, color)
+ *		goal(centerX, centerY, radius)
+ *		level(followFactor, gravityStrengthFactor)
+ *
+ *		followFactor and gravityStrengthFactor are the ONLY VALUES that may be DOUBLES. 
+ *			As followFactor DECREASES, the screen will follow the ball more (1 = always on center of the ball, numbers less than 1.25 should be avoided)
+ *			As followFactor INCREEASES, the screen will follow the ball less 
+ *                       
+ *		
+ *		Acceptable words for input: centerX, centerY, maxX, maxY, up, down, left, right (case does not matter) 
+		Decimals should only be used for the level parameters - followFactor and gravityStrengthFactor, all other values should be integers.
+ *
+*/

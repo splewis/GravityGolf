@@ -1,0 +1,127 @@
+Ball launched. Point: (321, 83). Magnitude: 145.0551619212498, Angle: 33.47096427464572
+Level 1 complete. 1 swings.
+
+Ball launched. Point: (330, 274). Magnitude: 292.85662020859286, Angle: 319.29260218088933
+Level 2 complete. 1 swings.
+
+Ball launched. Point: (274, 157). Magnitude: 221.37976420621646, Angle: 133.71883830535793
+Level 3 complete. 1 swings.
+
+Ball launched. Point: (193, 357). Magnitude: 286.8815086407627, Angle: 287.23488199344564
+Ball launched. Point: (193, 354). Magnitude: 284.0176050881353, Angle: 287.4141966153087
+Ball launched. Point: (191, 354). Magnitude: 283.425475213503, Angle: 287.0284154186186
+Level 4 complete. 3 swings.
+
+Ball launched. Point: (754, 646). Magnitude: 209.05740838343903, Angle: 328.89523691212827
+Level 5 complete. 1 swings.
+
+Ball launched. Point: (144, 254). Magnitude: 105.60303025955268, Angle: 127.30394827798344
+Level 6 complete. 1 swings.
+
+Ball launched. Point: (293, 160). Magnitude: 215.5203006679417, Angle: 196.16449915225692
+Level 7 complete. 1 swings.
+
+Ball launched. Point: (517, 289). Magnitude: 293.5523803344132, Angle: 344.5908147380009
+Level 8 complete. 1 swings.
+
+Ball launched. Point: (521, 200). Magnitude: 277.19487729754314, Angle: 113.60570668076907
+Level 9 complete. 1 swings.
+
+Ball launched. Point: (396, 597). Magnitude: 242.11773995310628, Angle: 309.80557109226515
+Level 10 complete. 1 swings.
+
+Ball launched. Point: (175, 99). Magnitude: 290.5580836941213, Angle: 166.05940882970995
+Level 11 complete. 1 swings.
+
+Ball launched. Point: (364, 15). Magnitude: 211.43556938225885, Angle: 134.42514524775703
+Level 12 complete. 1 swings.
+
+Ball launched. Point: (407, 521). Magnitude: 275.6320010448714, Angle: 318.67719097984275
+Level 13 complete. 1 swings.
+
+Ball launched. Point: (684, 357). Magnitude: 194.83326204732086, Angle: 342.6810615684853
+Level 14 complete. 1 swings.
+
+Ball launched. Point: (124, 70). Magnitude: 287.17242207426534, Angle: 104.52014901853703
+Level 15 complete. 1 swings.
+
+Ball launched. Point: (604, 170). Magnitude: 200.8706051168264, Angle: 57.81320595903743
+Level 16 complete. 1 swings.
+
+Ball launched. Point: (487, 622). Magnitude: 286.96515467910035, Angle: 343.396376137034
+Level 17 complete. 1 swings.
+
+Ball launched. Point: (458, 498). Magnitude: 291.9075196016711, Angle: 355.48086228529354
+Ball launched. Point: (443, 500). Magnitude: 277.1299334247385, Angle: 354.82428908555977
+Level 18 complete. 2 swings.
+
+Ball launched. Point: (491, 281). Magnitude: 280.6599365780588, Angle: 344.9239300250812
+Level 19 complete. 1 swings.
+
+Ball launched. Point: (514, 460). Magnitude: 214.23351745233518, Angle: 2.6754266560291478
+Level 20 complete. 1 swings.
+
+Ball launched. Point: (445, 118). Magnitude: 252.05158202241066, Angle: 174.76441033820154
+Level 21 complete. 1 swings.
+
+Ball launched. Point: (379, 607). Magnitude: 292.42605903031284, Angle: 246.41549853156903
+Level 22 complete. 1 swings.
+
+Ball launched. Point: (483, 109). Magnitude: 294.61330587738223, Angle: 37.41444398732174
+Level 23 complete. 1 swings.
+
+Ball launched. Point: (543, 430). Magnitude: 282.4340631014609, Angle: 7.527615112420289
+Level 24 complete. 1 swings.
+
+Ball launched. Point: (287, 307). Magnitude: 168.24089871371942, Angle: 301.13897243697886
+Level 25 complete. 1 swings.
+
+Ball launched. Point: (704, 254). Magnitude: 224.80213522117623, Angle: 23.60018986791777
+Level 26 complete. 1 swings.
+
+Ball launched. Point: (479, 230). Magnitude: 241.59884105682295, Angle: 55.454835077753486
+Level 27 complete. 1 swings.
+
+Ball launched. Point: (302, 37). Magnitude: 171.0263137648707, Angle: 37.8749836510982
+Level 28 complete. 1 swings.
+
+Ball launched. Point: (593, 505). Magnitude: 193.12690128513947, Angle: 300.1496617010158
+Level 29 complete. 1 swings.
+
+Ball launched. Point: (497, 604). Magnitude: 289.0069203323685, Angle: 210.11373315098243
+Level 30 complete. 1 swings.
+
+Ball launched. Point: (433, 102). Magnitude: 296.36632737205485, Angle: 72.726706078548
+Level 31 complete. 1 swings.
+
+Ball launched. Point: (870, 268). Magnitude: 119.41942890501528, Angle: 62.576649292890494
+Level 32 complete. 1 swings.
+
+Ball launched. Point: (352, 108). Magnitude: 273.5854528296415, Angle: 122.0053832080835
+Level 33 complete. 1 swings.
+
+Ball launched. Point: (198, 610). Magnitude: 289.56001105124994, Angle: 249.37447731303973
+Level 34 complete. 1 swings.
+
+Ball launched. Point: (275, 99). Magnitude: 248.02016047087784, Angle: 159.95768325510636
+Ball launched. Point: (274, 97). Magnitude: 249.64975465639858, Angle: 159.6051239179516
+Ball launched. Point: (277, 96). Magnitude: 247.19425559668656, Angle: 159.14554196042164
+Ball launched. Point: (279, 95). Magnitude: 245.68679248181007, Angle: 158.7615694725643
+Level 35 complete. 4 swings.
+
+Ball launched. Point: (252, 156). Magnitude: 165.73774464496614, Angle: 102.19133647060235
+Level 36 complete. 1 swings.
+
+Ball launched. Point: (405, 181). Magnitude: 52.0, Angle: -0.0
+Level 37 complete. 1 swings.
+
+Ball launched. Point: (249, 504). Magnitude: 297.0420845604205, Angle: 213.74356497029612
+Level 38 complete. 1 swings.
+
+Ball launched. Point: (354, 587). Magnitude: 277.74268667239465, Angle: 295.82698212362
+Level 39 complete. 1 swings.
+
+Ball launched. Point: (423, 127). Magnitude: 225.48835890129672, Angle: 109.15813904858275
+Level 40 complete. 1 swings.
+
+Game complete. 46 swings total.
