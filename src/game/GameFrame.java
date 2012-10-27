@@ -12,10 +12,9 @@ import javax.swing.JFrame;
  *
  */
 
-@SuppressWarnings("serial")
 public class GameFrame extends JFrame implements KeyListener {
 	
-	GamePanel gp;
+	private GamePanel gp;
 	
 	public GameFrame() throws IOException { 
 		gp = new GamePanel();

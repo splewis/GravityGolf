@@ -30,8 +30,6 @@
  *          If followFactor is 0, screen shifting is disabled
  *
  *
- * @author Sean Lewis
- * @version 1.00 2011/7/26
  */    
 
 package game;
@@ -47,11 +45,22 @@ import javax.swing.JOptionPane;
 
 import structures.*;
 
+/**
+ * 
+ * @author Sean Sean Lewis
+ *
+ */
 public class DataReader {
 
 	private PrintWriter pw;
-	boolean errorFound = false;
+	private boolean errorFound = false;
 
+	/**
+	 * 
+	 * @param mainFile
+	 * @return
+	 * @throws IOException
+	 */
 	public ArrayList<Level> getLevelData(String mainFile) throws IOException {
 		pw = new PrintWriter(new File("logs/datalog.txt"));
 	 	ArrayList<Level> levels = new ArrayList<Level>();
@@ -63,6 +72,11 @@ public class DataReader {
 		return levels;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
 	public int[] getSettings() throws IOException {
 
 		int[] settings = {1, 0, 0, 0, 1, 0, 3};
@@ -258,4 +272,11 @@ public class DataReader {
 
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean wasErrorFound() {
+		return errorFound;
+	}
 }

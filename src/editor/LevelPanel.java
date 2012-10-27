@@ -27,7 +27,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-@SuppressWarnings("serial")
+/**
+ * 
+ * @author Sean
+ *
+ */
 class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseMotionListener, ItemListener {
 
 	static final int Ball = 0;

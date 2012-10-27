@@ -1,15 +1,14 @@
-/**
- * A WarpPoint is a structure that allows the ball to be teleported to the next warpPoint available.
- *
- * @author Sean Lewis
- * @version 1.00 2011/7/26
- */ 
- package structures;
+package structures;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
  
+/**
+ * A WarpPoint is a structure that allows the ball to be teleported to the next warpPoint available.
+ * @author Sean Lewis
+ *
+ */
 public class WarpPoint {
 
 	/*

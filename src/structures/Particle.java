@@ -3,6 +3,11 @@ package structures;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+/**
+ * 
+ * @author Sean Lewis
+ *
+ */
 public class Particle {
 	
 	private double startX, startY;

@@ -1,8 +1,3 @@
-/**
- * 
- * 
- * 
- */
 package editor;
 
 import java.awt.Toolkit;
@@ -11,11 +6,18 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
-@SuppressWarnings("serial")
+/**
+ * 
+ * @author Sean Lewis
+ *
+ */
 class LevelFrame extends JFrame implements KeyListener {
+
+	private LevelPanel lp = new LevelPanel();
 	
-	LevelPanel lp = new LevelPanel();
-	
+	/**
+	 * 
+	 */
 	public LevelFrame() {
 		getContentPane().add(lp);
 		this.addKeyListener(this);

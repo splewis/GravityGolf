@@ -1,20 +1,3 @@
-/**
- * @(#)GamePanel.java
- *
- *
- * @author Sean Lewis
- * @version 1.00 2011/11/3
- */
-
-/*
- * To do: 
- * 
- * 
- * draw reflector bodies differently
- * fancy goal post drawing
- *  
- */
-
 package game;
 
 import structures.Point2d;
@@ -52,7 +35,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import structures.*;
 
-@SuppressWarnings("serial")
+/**
+ * 
+ * @author Sean Lewis
+ *
+ */
 public class GamePanel extends JPanel implements  ActionListener, MouseListener, MouseMotionListener, ItemListener, Runnable {
  
 	public static final int Width = 1000;

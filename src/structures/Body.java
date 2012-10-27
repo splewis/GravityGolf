@@ -3,7 +3,6 @@
  *
  *
  * @author Sean Lewis
- * @version 1.00 2011/7/26
  */ 
 
 package structures;
@@ -37,15 +36,32 @@ public class Body {
 	// 97 -100% fade from white to black
 	private int extraRadius;
 			
-
+	/**
+	 * 
+	 */
 	public Body() {		
 	}	
 
+	/**
+	 * 
+	 * @param centerX
+	 * @param centerY
+	 * @param radius
+	 * @param color
+	 */
 	public Body(int centerX, int centerY, int radius, Color color) {
 		this(centerX, centerY, radius, color, radius);
 		// if no mass specified, the mass is set to the radius
 	}
 
+	/**
+	 * 
+	 * @param centerX
+	 * @param centerY
+	 * @param radius
+	 * @param color
+	 * @param mass
+	 */
 	public Body(int centerX, int centerY, int radius, Color color, int mass) {
 		this.centerX = centerX;
 		this.centerY = centerY;
@@ -78,6 +94,12 @@ public class Body {
 		
 	}	
 
+	/**
+	 * 
+	 * @param dx
+	 * @param dy
+	 * @param g
+	 */
 	public void advancedDraw(double dx, double dy, Graphics2D g) {
 		if(radius < 10) {
 			basicDraw((int) Math.round(dx), (int) Math.round(dy), g);
@@ -90,59 +112,118 @@ public class Body {
 		
 	}
 	
+	/**
+	 * 
+	 * @param dx
+	 * @param dy
+	 * @param g
+	 */
 	public void basicDraw(int dx, int dy, Graphics2D g) {
 		g.setColor(color);
 		g.fillOval( (int)(leftX + dx), (int)(topY + dy), diameter, diameter);
 	}
 
+	/**
+	 * 
+	 * @param m
+	 */
 	public void addMoon(Moon m) {
 		moons.add(m);
 	}	
 
+	/**
+	 * 
+	 * @param b
+	 */
 	public void setReflector(boolean b) {
 		reflector = b;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isReflector() {
 		return reflector;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public double getCenterX() {
 		return centerX;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public double getCenterY() {
 		return centerY;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Point2d getCenter() {
 		return center;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Color getColor() {			
 		return color;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getRadiusSq() {
 		return radiusSq;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getDiameter() {
 		return diameter;
 	}			
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMass() {
 		return mass;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ArrayList<Moon> getMoons() {
 		return moons;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getRadius() {
 		return radius;
 	}
 
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void setLocation(int x, int y) {
 		centerX = x;
 		centerY = y;	
@@ -150,6 +231,9 @@ public class Body {
 		topY = centerY - radius;
 	}	
 
+	/**
+	 * 
+	 */
 	public String toString() {		
 		String str = "body(";		
 		str += Math.round(centerX) + ", " + Math.round(centerY)+ ", " + radius + ", " + CalcHelp.getColorDisplay(color) + ")";

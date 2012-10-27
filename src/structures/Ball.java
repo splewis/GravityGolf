@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Sean
+ *
+ */
 public class Ball extends Body {
-
-	// Inherited fields from Body: radius, diameter, color
 	
 	private int startX, startY;	
 	private double centerX, centerY;

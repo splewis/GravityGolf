@@ -14,13 +14,21 @@ import javax.swing.JTextField;
 import game.*;
 import structures.*;
 
-@SuppressWarnings("serial")
+/**
+ * 
+ * @author Sean Lewis
+ *
+ */
 public class DataGenerator extends JFrame {
 
 	ArrayList<Level> levels;
 	JTextField field = new JTextField(6);
 	JButton button = new JButton("Calculate");
 	
+	/**
+	 * 
+	 * @throws IOException
+	 */
 	public DataGenerator() throws IOException {
 		DataReader reader = new DataReader();
 		levels = reader.getLevelData("levels/levels.txt");	
@@ -58,10 +66,18 @@ public class DataGenerator extends JFrame {
 		setVisible(true);
 	}	
 	
+	/**
+	 * 
+	 */
 	public void paint(Graphics g) {
 
 	}
 	
+	/**
+	 * 
+	 * @param args
+	 * @throws IOException
+	 */
 	public static void main(String []args) throws IOException {
 		new DataGenerator();
 	}	

@@ -14,10 +14,7 @@ import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 
 
-public class Moon extends Body {
-		
-	// Inherited fields from Body: radius, diameter, color
-	
+public class Moon extends Body {		
 	// Constant rate of moon angular velocity (radians per update)
 	private double deltaAngle = 0.0;			
 	// Parameters:
@@ -35,6 +32,14 @@ public class Moon extends Body {
 	private float[] dist = {0.93f, 0.97f, .995f};	
 	Color[]colors;
 	
+	/**
+	 * 
+	 * @param a
+	 * @param d
+	 * @param r
+	 * @param c
+	 * @param b
+	 */
 	public Moon(int a, int d, int r, Color c, Body b) { 
 		startingAngle = a;
 		currentAngle = Math.toRadians(startingAngle);
@@ -58,6 +63,9 @@ public class Moon extends Body {
 		colors[2] = Color.BLACK;
 	}	
 
+	/**
+	 * 
+	 */
 	public void advancedDraw(double dx, double dy, Graphics2D g) {
 		RadialGradientPaint  gradient =
 				    new RadialGradientPaint(new Point2D.Double(centerX + dx, centerY + dy), radius, dist, colors);		
@@ -66,24 +74,42 @@ public class Moon extends Body {
 		g.fillOval((int) Math.round(centerX - radius + dx), (int) Math.round(centerY - radius + dy), diameter + 1, diameter + 1);
 	}
 
+	/**
+	 * 
+	 * @param g
+	 */
 	public void advancedDraw(Graphics2D g) {
 		advancedDraw(0, 0, g);
 	}
 
+	/**
+	 * 
+	 */
 	public void basicDraw(int dx, int dy, Graphics2D g) {
 		g.setColor(color);
 		g.fillOval((int)centerX  - radius + dx, (int)centerY - radius + dy, diameter, diameter);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public double getAngle() {
 		return currentAngle;
 	}
 
+	/**
+	 * 
+	 */
 	public Point2d getCenter() {
 		center = new Point2d(centerX, centerY);
 		return center;
 	}
 
+	/**
+	 * 
+	 * @param g
+	 */
 	public void move(double g) {
 		if(deltaAngle == 0.0) {
 			deltaAngle = .0075 * Math.sqrt(g * bodyMass / (startingDistance + bodyRadius + radius));
@@ -95,6 +121,9 @@ public class Moon extends Body {
 		centerY = (bodyCenterY - startingDistance * Math.sin(currentAngle));	
 	}	
 
+	/**
+	 * 
+	 */
 	public String toString() {		
 		return "moon(" + startingAngle + ", " + startingDistance + ", " + radius + ", "  + CalcHelp.getColorDisplay(color) + ")";
 	}

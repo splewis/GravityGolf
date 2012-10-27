@@ -5,12 +5,10 @@ package structures;
  * @author Sean Lewis
  *
  */
-
 public class Point2d {
 			
 	public double x;	
-	public double y;
-	
+	public double y;	
 	
 	 // Initializes a new Point2d at the origin, (0, 0).	 
 	public Point2d() {

@@ -8,7 +8,6 @@ import structures.Body;
 /**
 * Class that provides several frequently used methods across classes
 * @author Sean Lewis
-* @version 1.00 2011/8/30
 */
 
 public final class CalcHelp {

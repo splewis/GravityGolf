@@ -1,10 +1,3 @@
-/**
- * A Level is the generic structure for each level's storage information.
- *
- * @author Sean Lewis
- * @version 1.00 2011/7/26
- */ 
-
 package structures;
 
 import game.GamePanel;
@@ -19,6 +12,11 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * A Level is the generic structure for each level's storage information.
+ * @author Sean Lewis
+ *
+ */
 public class Level {
 	
 	public static int numLevels = 0;

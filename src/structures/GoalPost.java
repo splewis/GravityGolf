@@ -1,15 +1,13 @@
-/**
- * A GoalPost is the goal for the ball to reach.
- *
- * @author Sean Lewis
- * @version 1.00 2011/7/26
- */
 package structures;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 
- 
+/**
+ *  
+ * @author Sean Lewis
+ *
+ */
 public class GoalPost {
 	
 	private static final Color GoalPostColor = Color.WHITE;
