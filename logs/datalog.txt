@@ -1,3 +1,0 @@
-Done reading levels\levels.txt. Took 27 ms.
-
-Done reading all data. Took 27 ms.
