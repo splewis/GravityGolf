@@ -1006,7 +1006,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			}
 			drawingInitialVelocity = true;
 			launchAngle = CalcHelp.getAngle(initialPoint, terminalPoint);
-			if(launchAngle < 0) launchAngle += CalcHelp.tau;
+			if(launchAngle < 0) launchAngle += (2 * Math.PI);
 		}
 	}
 	public void mouseReleased(MouseEvent event)	{
@@ -1016,7 +1016,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			swingData[currentLevelN]++; // since currentLevel 5 corresponds to index 4 in the array
 			launchMagnitude = CalcHelp.getDistance(initialPoint, terminalPoint);
 			launchAngle 	= CalcHelp.getAngle(   initialPoint, terminalPoint);
-			if(launchAngle < 0) launchAngle += CalcHelp.tau; // so the display only shows the positive coterminal angle (300 instead of -60)
+			if(launchAngle < 0) launchAngle += (2 * Math.PI); // so the display only shows the positive coterminal angle (300 instead of -60)
 			if(launchMagnitude > MaxInitialMagnitude) launchMagnitude = MaxInitialMagnitude;
 
 			gameWriter.println("Ball launched. Point: (" + event.getX() + ", " + event.getY() + "). Magnitude: " + launchMagnitude + ", Angle: " + Math.toDegrees(launchAngle));

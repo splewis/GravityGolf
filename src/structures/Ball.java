@@ -53,7 +53,7 @@ public class Ball extends Body {
 		
 		for(int i = 0; i < num; i++) {
 			
-			double angle = (Math.random() * CalcHelp.tau);				
+			double angle = (Math.random() * 2 * Math.PI);				
 				int x = (int)cX;
 				int y = (int)cY;
 				double xSpeed = 0.75 * (Math.random() * speed * Math.cos(angle));

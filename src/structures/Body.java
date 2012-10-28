@@ -8,6 +8,7 @@
 package structures;
  
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
@@ -118,7 +119,7 @@ public class Body {
 	 * @param dy
 	 * @param g
 	 */
-	public void basicDraw(int dx, int dy, Graphics2D g) {
+	public void basicDraw(int dx, int dy, Graphics g) {
 		g.setColor(color);
 		g.fillOval( (int)(leftX + dx), (int)(topY + dy), diameter, diameter);
 	}
