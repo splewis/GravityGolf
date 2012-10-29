@@ -7,6 +7,8 @@
 
 package structures;
 
+import game.DataReader;
+
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -180,7 +182,7 @@ public class Blockage {
 	 */
 	public String toString() {
 		return "rect(" + centerX + ", " + centerY + ", " + xSize + ", " + ySize
-				+ ", " + CalcHelp.getColorDisplay(color) + ")";
+				+ ", " + DataReader.getColorDisplay(color) + ")";
 	}
 
 }

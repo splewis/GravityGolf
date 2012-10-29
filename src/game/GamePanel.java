@@ -312,8 +312,8 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			bodies = currentLevel.getBodies();
 			screenXShift = currentLevel.getScreenXShift();
 			screenYShift = currentLevel.getScreenYShift();
-			initialPoint = new Point2d((int) Math.round(ball.getCenterX() + screenXShift), 
-									 (int) Math.round(ball.getCenterY() + screenYShift));
+			initialPoint = new Point2d((int) Math.round(ball.getCenter().x + screenXShift), 
+									 (int) Math.round(ball.getCenter().y + screenYShift));
 
 			drawLevel(g);
 			g.setFont(InfoFont);
@@ -346,7 +346,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				g.drawString("Click to continue", 10, 80);			
 			}
 			if(!ball.isLaunched() && drawingInitialVelocity) {
-				initialPoint = new Point2d((int) Math.round(ball.getCenterX() + screenXShift), (int) Math.round(ball.getCenterY() + screenYShift ));
+				initialPoint = new Point2d((int) Math.round(ball.getCenter().x + screenXShift), (int) Math.round(ball.getCenter().y + screenYShift ));
 				g.setColor(Color.WHITE);
 				double angle =  CalcHelp.getAngle(initialPoint, terminalPoint);
 				g.setColor(Color.white);
@@ -402,7 +402,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				currentLevel.updateLevel();
 			}
 			if(settings[TrailNum] && ball.isLaunched() && paints > 2) { 
-				trailPoints.add(new Point2d(ball.getCenterX() , ball.getCenterY()));			
+				trailPoints.add(new Point2d(ball.getCenter().x , ball.getCenter().y));			
 			}
 			if(currentLevel.timeToReset() && !drawingEffects && settings[EffectsNum]) {
 				Body intersected = currentLevel.getBodyIntersection();
@@ -417,17 +417,17 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				// 1st value is multiplicative factor
 				// TODO: make based of rate at which screen shifts
 				int sign1 = -1;
-				if(ball.getCenterX() + screenXShift < 0) {
+				if(ball.getCenter().x + screenXShift < 0) {
 					sign1 = 1;
-				} else if(ball.getCenterX() + screenXShift > 0) {
+				} else if(ball.getCenter().x + screenXShift > 0) {
 					sign1 = CalcHelp.randomSign();				
 				}
 				shakeValues[0] = CalcHelp.randomDouble(35, 40) * shakeFactor * sign1; 
 				
 				int sign2 = -1;
-				if(ball.getCenterY() + screenYShift < 0) {
+				if(ball.getCenter().y + screenYShift < 0) {
 					sign2 = 1;
-				} else if(ball.getCenterY() + screenYShift > 0) {
+				} else if(ball.getCenter().y + screenYShift > 0) {
 					sign2 = CalcHelp.randomSign();				
 				}
 				shakeValues[3] = CalcHelp.randomDouble(35, 40) * shakeFactor * sign2; 					
@@ -482,8 +482,8 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			bodies = currentLevel.getBodies();
 			screenXShift = currentLevel.getScreenXShift();
 			screenYShift = currentLevel.getScreenYShift();
-			initialPoint = new Point2d((int) Math.round(ball.getCenterX() + screenXShift), 
-									 (int) Math.round(ball.getCenterY() + screenYShift));
+			initialPoint = new Point2d((int) Math.round(ball.getCenter().x + screenXShift), 
+									 (int) Math.round(ball.getCenter().y + screenYShift));
 
 			drawLevel(g);
 			g.setFont(InfoFont);
@@ -517,7 +517,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				g.drawString("Click to continue", 10, 80);			
 			}
 			if(!ball.isLaunched() && drawingInitialVelocity) {
-				initialPoint = new Point2d((int) Math.round(ball.getCenterX() + screenXShift), (int) Math.round(ball.getCenterY() + screenYShift ));
+				initialPoint = new Point2d((int) Math.round(ball.getCenter().x + screenXShift), (int) Math.round(ball.getCenter().y + screenYShift ));
 				g.setColor(Color.WHITE);
 				double angle =  CalcHelp.getAngle(initialPoint, terminalPoint);
 				g.setColor(Color.white);
@@ -567,8 +567,8 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			blockages  = currentLevel.getBlockages();
 			stars = currentLevel.getStars();
 		followFactor = currentLevel.getFollowFactor();
-		dXShift = ( 500.0 - ball.getCenterX() ) / followFactor;
-		dYShift = ( 350.0 - ball.getCenterY() ) / followFactor;
+		dXShift = ( 500.0 - ball.getCenter().x ) / followFactor;
+		dYShift = ( 350.0 - ball.getCenter().y ) / followFactor;
 		if(l != 0) {
 			blinkingBall = true;
 		}
@@ -592,8 +592,8 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			blockages  = currentLevel.getBlockages();
 			stars = currentLevel.getStars();
 		followFactor = currentLevel.getFollowFactor();
-		dXShift = ( Width  - ball.getCenterX() ) / followFactor;
-		dYShift = ( Height - ball.getCenterY() ) / followFactor;
+		dXShift = ( Width  - ball.getCenter().x ) / followFactor;
+		dYShift = ( Height - ball.getCenter().y ) / followFactor;
 		drawingInitialVelocity = false;
 		levelComplete = false;
 	}
@@ -633,6 +633,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				screenYShift += (shakeValues[3] * Math.sin(dt / shakeValues[4]) * Math.exp(shakeValues[5] * dt));
 				yShift = (int)Math.round(screenYShift);
 			}
+			
 			for(int i = 0; i < particles.size(); i++) {
 				Particle b = particles.get(i);
 
@@ -680,9 +681,9 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			}
 		} else {			
 			for(Body b: bodies) {
-				b.basicDraw(xShift, yShift, g);
+				b.draw(xShift, yShift, g);
 				for(Moon m: b.getMoons()) {
-					m.basicDraw(xShift, yShift, g);
+					m.draw(xShift, yShift, g);
 				}
 			}
 			for(Blockage b: blockages) {
@@ -718,10 +719,10 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 					} else {
 						g.setColor(ball.getColor());
 					}
-					ball.draw(screenXShift, screenYShift, c, g);
+					ball.draw(screenXShift, screenYShift, g, c);
 				} 
 			} else { // moving ball
-				ball.draw(screenXShift, screenYShift, g);
+				ball.draw(screenXShift, screenYShift, g, ball.getColor());
 			}
 		}	
 
@@ -733,9 +734,9 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		
 		if(currentLevelN == 0 && gameStarted) {
 			g.setColor(Color.white);
-			g.drawString("Aim here!", goals.get(0).getCenterX() - 20 + xShift, goals.get(0).getCenterY() - 70 + yShift);
+			g.drawString("Aim here!", (int)(goals.get(0).getCenter().x - 20 + xShift), (int)(goals.get(0).getCenter().y - 70 + yShift));
 			
-			drawArrow(new Point2d( goals.get(0).getCenterX() - 5 + xShift, goals.get(0).getCenterY() - 65 + yShift), 
+			drawArrow(new Point2d( goals.get(0).getCenter().x - 5 + xShift, goals.get(0).getCenter().y - 65 + yShift), 
 					 goals.get(0).getCenter().translate(xShift, yShift - goals.get(0).getRadius() - 3), 
 					 0, 5, g);
 		}
@@ -797,7 +798,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 	public void drawGravityVectors(Graphics2D g) {
 		g.setColor(Color.white);				
 		
-		Point2d ballCent = new Point2d(ball.getCenterX(), ball.getCenterY());
+		Point2d ballCent = new Point2d(ball.getCenter().x, ball.getCenter().y);
 		for(Body b : bodies) {
 			Point2d bodyCent = b.getCenter();
 			double angle = CalcHelp.getAngle(ballCent, bodyCent);
@@ -820,18 +821,18 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 
 		double totalX = 0.0;
 		double totalY = 0.0;
-		Point2d ballCent = new Point2d(ball.getCenterX(), ball.getCenterY());
+		Point2d ballCent = new Point2d(ball.getCenter().x, ball.getCenter().y);
 
 		for(Body b : bodies) {
 
-			Point2d bodyCent = new Point2d(b.getCenterX(), b.getCenterY());
+			Point2d bodyCent = new Point2d(b.getCenter().x, b.getCenter().y);
 			double angle = CalcHelp.getAngle(ballCent, bodyCent);
 			double length =  currentLevel.getGravityStrength()* ArrowLength * b.getRadius() / CalcHelp.getDistance(ballCent, bodyCent) + 5;
 			totalX += length * Math.cos(angle);
 			totalY -= length * Math.sin(angle);
 
 			for(Moon m : b.getMoons()) {
-				Point2d moonCent = new Point2d(m.getCenterX(), m.getCenterY());
+				Point2d moonCent = new Point2d(m.getCenter().x, m.getCenter().y);
 				angle = CalcHelp.getAngle(ballCent, moonCent);
 				length =  currentLevel.getGravityStrength() * ArrowLength * m.getRadius() / CalcHelp.getDistance(ballCent, moonCent) + 5;
 				totalX += length * Math.cos(angle);
@@ -841,7 +842,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		}
 
 		g.setColor(Color.blue);
-		Point2d tempPt1 = new Point2d(ball.getCenterX() + screenXShift, ball.getCenterY() + screenYShift);
+		Point2d tempPt1 = new Point2d(ball.getCenter().x + screenXShift, ball.getCenter().y + screenYShift);
 		Point2d tempPt2 = new Point2d(tempPt1.x + totalX , tempPt1.y + totalY);
 		drawArrow(tempPt1, tempPt2, ArrowDistanceFromBall, ArrowSize, g);
 	}

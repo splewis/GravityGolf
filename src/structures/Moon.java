@@ -8,6 +8,8 @@
 
 package structures;
 
+import game.DataReader;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
@@ -24,7 +26,7 @@ public class Moon extends Body {
 	private final int bodyMass;
 	private final int bodyRadius;
 	// Parameter-dependent:
-	private double centerX, centerY;
+
 	private Point2d center;
 	// Variables:
 	private double currentAngle;
@@ -45,12 +47,13 @@ public class Moon extends Body {
 		radius = r;
 		color = c;
 		diameter = 2 * radius;
-		bodyCenterX = (int) b.getCenterX();
-		bodyCenterY = (int) b.getCenterY();
+		bodyCenterX = (int) b.getCenter().x;
+		bodyCenterY = (int) b.getCenter().y;
 		bodyRadius = (int) b.getRadius();
 		bodyMass = (int) b.getMass();
-		centerX = b.getCenterX() + Math.cos(currentAngle) * d;
-		centerY = b.getCenterY() - Math.sin(currentAngle) * d;
+		double x = b.getCenter().x + Math.cos(currentAngle) * d;
+		double y = b.getCenter().y - Math.sin(currentAngle) * d;
+		center = new Point2d(x, y);
 		if (radius < 50) {
 			dist[0] = 0.90f;
 			dist[1] = 0.95f;
@@ -66,12 +69,12 @@ public class Moon extends Body {
 	 */
 	public void advancedDraw(double dx, double dy, Graphics2D g) {
 		RadialGradientPaint gradient = new RadialGradientPaint(
-				new Point2D.Double(centerX + dx, centerY + dy), radius, dist,
+				new Point2D.Double(center.x + dx, center.y + dy), radius, dist,
 				colors);
 
 		g.setPaint(gradient);
-		g.fillOval((int) Math.round(centerX - radius + dx),
-				(int) Math.round(centerY - radius + dy), diameter + 1,
+		g.fillOval((int) Math.round(center.x - radius + dx),
+				(int) Math.round(center.y - radius + dy), diameter + 1,
 				diameter + 1);
 	}
 
@@ -80,15 +83,6 @@ public class Moon extends Body {
 	 */
 	public void advancedDraw(Graphics2D g) {
 		advancedDraw(0, 0, g);
-	}
-
-	/**
-	 * 
-	 */
-	public void basicDraw(int dx, int dy, Graphics2D g) {
-		g.setColor(color);
-		g.fillOval((int) centerX - radius + dx, (int) centerY - radius + dy,
-				diameter, diameter);
 	}
 
 	/**
@@ -102,7 +96,6 @@ public class Moon extends Body {
 	 * 
 	 */
 	public Point2d getCenter() {
-		center = new Point2d(centerX, centerY);
 		return center;
 	}
 
@@ -117,8 +110,8 @@ public class Moon extends Body {
 		}
 		currentAngle -= deltaAngle;
 		// System.out.println("angle:" + currentAngle);
-		centerX = (bodyCenterX + startingDistance * Math.cos(currentAngle));
-		centerY = (bodyCenterY - startingDistance * Math.sin(currentAngle));
+		center.x = (bodyCenterX + startingDistance * Math.cos(currentAngle));
+		center.y = (bodyCenterY - startingDistance * Math.sin(currentAngle));
 	}
 
 	/**
@@ -126,7 +119,7 @@ public class Moon extends Body {
 	 */
 	public String toString() {
 		return "moon(" + startingAngle + ", " + startingDistance + ", "
-				+ radius + ", " + CalcHelp.getColorDisplay(color) + ")";
+				+ radius + ", " + DataReader.getColorDisplay(color) + ")";
 	}
 
 }

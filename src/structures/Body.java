@@ -1,7 +1,8 @@
 package structures;
 
+import game.DataReader;
+
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
@@ -11,17 +12,9 @@ import java.util.ArrayList;
  * A Body is the default class for an object that is representing a Planet.
  * @author Sean Lewis
  */
-public class Body {
+public class Body extends CircularShape {
 
-	protected Color color;
-	protected int radius;
-	protected int radiusSquared;
-	protected int diameter;
-
-	protected Point2d topLeft;
-	protected Point2d center;
 	protected int mass;
-	
 	private ArrayList<Moon> moons;
 	private boolean reflector = false;
 
@@ -60,17 +53,13 @@ public class Body {
 	public Body(int centerX, int centerY, int radius, Color color, int mass) {
 		center = new Point2d(centerX, centerY);
 		this.radius = radius;
-		radiusSquared = radius * radius;
 		this.color = color;
 		this.mass = mass;
-		initializeComponents();
-	}
-
-	// TODO: put all advanced drawing calculation in a single method used by moon and Body
-	private void initializeComponents() {
-		topLeft = new Point2d(center.x - radius, center.y - radius);
-		diameter = 2 * radius;
 		moons = new ArrayList<Moon>();
+		initializeVars();
+
+		// TODO: put all advanced drawing calculation in a single method used by
+		// moon and Body
 		if (radius < 60) {
 			dist[0] = 0.88f;
 			dist[1] = 0.95f;
@@ -84,7 +73,6 @@ public class Body {
 		colors[0] = color;
 		colors[1] = Color.WHITE;
 		colors[2] = Color.BLACK;
-
 	}
 
 	/**
@@ -94,7 +82,7 @@ public class Body {
 	 */
 	public void advancedDraw(double dx, double dy, Graphics2D g) {
 		if (radius < 10) {
-			basicDraw((int) Math.round(dx), (int) Math.round(dy), g);
+			draw((int) Math.round(dx), (int) Math.round(dy), g);
 		} else {
 			g.setPaint(new RadialGradientPaint(new Point2D.Double(
 					center.x + dx, center.y + dy), radius + extraRadius, dist,
@@ -105,17 +93,6 @@ public class Body {
 							+ 1);
 		}
 
-	}
-
-	/**
-	 * @param dx
-	 * @param dy
-	 * @param g
-	 */
-	public void basicDraw(int dx, int dy, Graphics g) {
-		g.setColor(color);
-		g.fillOval((int) (topLeft.x + dx), (int) (topLeft.y + dy), diameter,
-				diameter);
 	}
 
 	/**
@@ -142,48 +119,6 @@ public class Body {
 	/**
 	 * @return
 	 */
-	public double getCenterX() {
-		return center.x;
-	}
-
-	/**
-	 * @return
-	 */
-	public double getCenterY() {
-		return center.y;
-	}
-
-	/**
-	 * @return
-	 */
-	public Point2d getCenter() {
-		return center;
-	}
-
-	/**
-	 * @return
-	 */
-	public Color getColor() {
-		return color;
-	}
-
-	/**
-	 * @return
-	 */
-	public int getRadiusSq() {
-		return radiusSquared;
-	}
-
-	/**
-	 * @return
-	 */
-	public int getDiameter() {
-		return diameter;
-	}
-
-	/**
-	 * @return
-	 */
 	public int getMass() {
 		return mass;
 	}
@@ -196,28 +131,12 @@ public class Body {
 	}
 
 	/**
-	 * @return
-	 */
-	public int getRadius() {
-		return radius;
-	}
-
-	/**
-	 * @param x
-	 * @param y
-	 */
-	public void setLocation(int x, int y) {
-		center = new Point2d(x, y);
-		topLeft = new Point2d(center.x - radius, center.y - radius);
-	}
-
-	/**
 	 * 
 	 */
 	public String toString() {
 		String str = "body(";
 		str += Math.round(center.x) + ", " + Math.round(center.y) + ", "
-				+ radius + ", " + CalcHelp.getColorDisplay(color) + ")";
+				+ radius + ", " + DataReader.getColorDisplay(color) + ")";
 		for (Moon m : moons) {
 			str += "\n" + m.toString();
 		}

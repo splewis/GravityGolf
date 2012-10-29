@@ -163,6 +163,20 @@ public final class CalcHelp {
 		return 4;
 	}
 
+//	/**
+//	 * Returns the gravitational acceleration experienced by an object.
+//	 * @param location the location of the object experiencing the acceleration
+//	 * @param sourceLocation the location of where the source of gravity comes
+//	 *        from
+//	 * @param strength the strength (typically the mass) of the source
+//	 * @param g the gravitational constant
+//	 * @return the magnitude of the acceleration felt
+//	 */
+//	public static double getAcceleration(Point2d location,
+//			Point2d sourceLocation, double strength, double g) {
+//		return g * strength / location.getDistanceSquared(sourceLocation);
+//	}
+
 	@Deprecated
 	// TODO: move to Body
 	public static double getAcceleration(Body b1, Body b2, double g) {
@@ -234,7 +248,6 @@ public final class CalcHelp {
 		return getAngle(p2.x - p1.x, p2.y - p1.y);
 	}
 
-	// TODO: move to DataReader
 	@Deprecated
 	public static String getColorDisplay(Color c) {
 		if (c.equals(Color.red))
@@ -281,8 +294,8 @@ public final class CalcHelp {
 	}
 
 	/**
-	 * Returns a new Color with each component randomly shifted by at most d. The
-	 * values are adjusted so that the new Color is valid.
+	 * Returns a new Color with each component randomly shifted by at most d.
+	 * The values are adjusted so that the new Color is valid.
 	 * @param color the base color
 	 * @param maxDifference the maximum change for any one color
 	 * @return a color randomly shifted by at most maxDifference
@@ -351,7 +364,6 @@ public final class CalcHelp {
 		return x;
 	}
 
-	// TODO: move to DataREader
 	@Deprecated
 	public static Color readColor(String str) {
 		str = str.toLowerCase();

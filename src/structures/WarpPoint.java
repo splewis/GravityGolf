@@ -1,65 +1,49 @@
 package structures;
 
-import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
- 
-/**
- * A WarpPoint is a structure that allows the ball to be teleported to the next warpPoint available.
- * @author Sean Lewis
- *
- */
-public class WarpPoint {
 
-	/*
+/**
+ * A WarpPoint is a structure that allows the ball to be teleported to the next
+ * warpPoint available.
+ * @author Sean Lewis
+ */
+public class WarpPoint extends CircularShape {
+
+	/**
 	 * The Radius of all WarpPoints.
 	 */
-	public static final int Radius = 15;
-	
-	/*
+	public static final int RADIUS = 15;
+
+	/**
 	 * The Image for all WarpPoints.
 	 */
-	public static final Image Image = Toolkit.getDefaultToolkit().getImage("images/spiralImage.gif");
-	
-	private int centerX, centerY;
-	private Point2d center;	
+	public static final Image Image = Toolkit.getDefaultToolkit().getImage(
+			"images/spiralImage.gif");
 
 	public WarpPoint() {
 		this(0, 0);
 	}
 
 	public WarpPoint(int x, int y) {
-		centerX = x;
-		centerY = y;
-		center = new Point2d(centerX, centerY);
-	}	
-	
-	public void draw(int dx, int dy, Graphics2D g) {
-		g.drawImage(Image, centerX - Radius + dx, centerY - Radius + dy, null);	
+		center = new Point2d(x, y);
+		radius = RADIUS;
+		initializeVars();
 	}
 
-	public void draw(Graphics2D g) {
-		g.drawImage(Image, centerX - Radius, centerY - Radius, null);		
+	public void draw(int dx, int dy, Graphics g, Color c) {
+		g.drawImage(Image, (int) (center.x - radius + dx), 
+				           (int) (center.y - radius + dy), null);
 	}
 
-	public Point2d getCenter() {
-		return center;
-	}
-
-	public int getCenterX() {
-		return centerX;
-	}
-
-	public int getCenterY() {
-		return centerY;
-	}
-
-	public int getRadius() {
-		return Radius;
+	public void draw(Graphics g) {
+		draw(0, 0, g);
 	}
 
 	public String toString() {
-		return "warp(" + centerX + ", " + centerY + ")";
-	}	
-	
+		return "warp(" + center.x + ", " + center.y + ")";
+	}
+
 }

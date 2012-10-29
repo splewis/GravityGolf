@@ -157,7 +157,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 			g.fillOval( (int)p1.getX() - r + xShift, (int)p1.getY() - r + yShift, r*2, r*2 );
 
 		} else if(objectItems[Warp].isSelected() && p2 != null) {
-			g.drawImage(WarpPoint.Image, (int)p1.getX() - WarpPoint.Radius + xShift, (int)p1.getY() - WarpPoint.Radius + yShift, null);
+			g.drawImage(WarpPoint.Image, (int)p1.getX() - WarpPoint.RADIUS + xShift, (int)p1.getY() - WarpPoint.RADIUS + yShift, null);
 
 		} else if(objectItems[Blockage].isSelected() && p2 != null) {
 			int x1 = Math.min(p1.x, p2.x);
@@ -180,7 +180,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 
 				if(p2 != null && ball != null && !ball.isLaunched()) {
 					g.setColor(Color.white);
-					Point2d initialPoint = new Point2d((int)Math.round(ball.getCenterX() + screenXShift), (int)Math.round(ball.getCenterY() + screenYShift));
+					Point2d initialPoint = new Point2d((int)Math.round(ball.getCenter().x + screenXShift), (int)Math.round(ball.getCenter().y + screenYShift));
 					drawArrow(initialPoint, new Point2d(p2), g);
 				}
 
@@ -219,20 +219,21 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 			gp.draw(xShift, yShift, g);
 		}
 		for(Body b: bodies) {
-			b.basicDraw(xShift, yShift,g);
+			b.draw(xShift, yShift,g);
 			for(Moon m: b.getMoons()) {
-				m.basicDraw(xShift, yShift,g);
+				m.draw(xShift, yShift,g);
 			}
 		}
-		for(WarpPoint w: warps) {
-			g.drawImage(WarpPoint.Image, w.getCenterX() - WarpPoint.Radius + xShift, w.getCenterY() - WarpPoint.Radius + yShift, this);
+		for (WarpPoint w : warps) {
+			g.drawImage(WarpPoint.Image, (int)w.getCenter().x - WarpPoint.RADIUS
+					+ xShift, (int)w.getCenter().y - WarpPoint.RADIUS + yShift, this);
 		}
 		for(Blockage b: blockages) {
 			b.draw(xShift, yShift,g);
 		}
 		if(ball != null) {
 			g.setColor(ball.getColor());
-			g.fillOval((int)Math.round(ball.getCenterX() - ball.getRadius() + screenXShift), (int)Math.round(ball.getCenterY() - ball.getRadius() + screenYShift), ball.getDiameter(), ball.getDiameter());
+			g.fillOval((int)Math.round(ball.getCenter().x - ball.getRadius() + screenXShift), (int)Math.round(ball.getCenter().y - ball.getRadius() + screenYShift), ball.getDiameter(), ball.getDiameter());
 		}
 
 
@@ -427,7 +428,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 				}
 			}
 			for(int i = 0; i < warps.size(); i++) {
-				if(CalcHelp.intersects(warps.get(i).getCenter(), new Point2d(p2), WarpPoint.Radius)) {
+				if(CalcHelp.intersects(warps.get(i).getCenter(), new Point2d(p2), WarpPoint.RADIUS)) {
 					warps.remove(i);
 					break;
 				}

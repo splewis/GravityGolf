@@ -123,4 +123,17 @@ public class Point2d {
 		return "(" + x + ", " + y + ")";
 	}
 
+	/**
+	 * Returns if two points have the same perpendicular components, to within
+	 * epsilon precision.
+	 * @param p a point
+	 * @param epsilon maximum allowed difference
+	 * @return if the objects represent the same point
+	 */
+	public boolean equals(Point2d p, double epsilon) {
+		double xDif = x - p.x;
+		double yDif = y - p.y;
+		return Math.abs(xDif) <= epsilon && Math.abs(yDif) <= epsilon;
+	}
+
 }

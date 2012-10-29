@@ -82,9 +82,9 @@ public class Level {
 		followFactor = ff;
 		gravityStrength = g;
 		screenXShift = (followFactor == 0) ? 0
-				: ((500 - ball.getCenterX()) / followFactor);
+				: ((500 - ball.getCenter().x) / followFactor);
 		screenYShift = (followFactor == 0) ? 0
-				: ((350 - ball.getCenterY()) / followFactor);
+				: ((350 - ball.getCenter().y) / followFactor);
 	}
 
 	public boolean isInitialized() {
@@ -204,20 +204,18 @@ public class Level {
 	 * reflectors
 	 */
 	public Body getBodyIntersection() {
-		for (Body b : bodies) {
-			if (!b.isReflector()
-					&& CalcHelp.intersects(b.getCenter(), ball.getCenter(),
-							b.getRadius(), ball.getRadius())) {
-				return b;
-			}
-			for (Moon m : b.getMoons()) {
-				if (CalcHelp.intersects(m.getCenter(), ball.getCenter(),
-						m.getRadius(), ball.getRadius())) {
-					return m;
-				}
-			}
-		}
-		return null;
+		return getBodyIntersection(ball.getCenter());
+//		for (Body b : bodies) {
+//			if (!b.isReflector() && ball.intersects(b)) {
+//				return b;
+//			}
+//			for (Moon m : b.getMoons()) {
+//				if (ball.intersects(m)) {
+//					return m;
+//				}
+//			}
+//		}
+//		return null;
 	}
 
 	public ArrayList<Blockage> getBlockages() {
@@ -268,10 +266,10 @@ public class Level {
 	}
 
 	public boolean isOutOfBounds() {
-		return ball.getCenterX() + screenXShift < 0
-				|| ball.getCenterX() + screenXShift > GamePanel.Width
-				|| ball.getCenterY() + screenYShift < 0
-				|| ball.getCenterY() + screenYShift > GamePanel.Height - 20;
+		return ball.getCenter().x + screenXShift < 0
+				|| ball.getCenter().x + screenXShift > GamePanel.Width
+				|| ball.getCenter().y + screenYShift < 0
+				|| ball.getCenter().y + screenYShift > GamePanel.Height - 20;
 	}
 
 	public boolean xOutOfBounds(double x) {
@@ -279,13 +277,12 @@ public class Level {
 	}
 
 	public boolean yOutOfBounds(double y) {
-		return y + screenYShift < 0 || y + screenYShift > GamePanel.Width;
+		return y + screenYShift < 0 || y + screenYShift > GamePanel.Height - 20;
 	}
 
 	public boolean inGoalPost() {
 		for (GoalPost g : goals) {
-			if (CalcHelp.intersects(ball.getCenter(), g.getCenter(),
-					ball.getRadius(), g.getRadius())) {
+			if (ball.intersects(g)) {
 				return true;
 			}
 		}
@@ -296,9 +293,9 @@ public class Level {
 		ball.resetLocation();
 		ball.setLaunched(false);
 		screenXShift = (followFactor == 0) ? 0
-				: ((500 - ball.getCenterX()) / followFactor);
+				: ((500 - ball.getCenter().x) / followFactor);
 		screenYShift = (followFactor == 0) ? 0
-				: ((350 - ball.getCenterY()) / followFactor);
+				: ((350 - ball.getCenter().y) / followFactor);
 	}
 
 	public boolean timeToReset() {
@@ -316,8 +313,9 @@ public class Level {
 			// Planetary effect on ball
 			if (ball.isLaunched()) {
 				angle = CalcHelp.getAngle(ball.getCenter(), b.getCenter());
-				gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(),
-						b, gravityStrength);
+//				gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(),
+//						b.getCenter(), b.getMass(), gravityStrength);
+				gravitationalForce = CalcHelp.getAcceleration(ball, b, gravityStrength);
 				sumXForce += Math.cos(angle) * gravitationalForce;
 				sumYForce -= Math.sin(angle) * gravitationalForce;
 			}
@@ -327,23 +325,22 @@ public class Level {
 				m.move(gravityStrength);
 				if (ball.isLaunched()) {
 					angle = CalcHelp.getAngle(ball.getCenter(), m.getCenter());
-					gravitationalForce = CalcHelp.getAcceleration(
-							ball.getCenter(), m, gravityStrength);
+
+					gravitationalForce = CalcHelp.getAcceleration(ball, m, gravityStrength);
 					sumXForce += Math.cos(angle) * gravitationalForce;
 					sumYForce -= Math.sin(angle) * gravitationalForce;
 				}
 			}
 			// Reflector collision and resolution
-			if (b.isReflector()
-					&& CalcHelp.intersects(ball.getCenter(), b.getCenter(),
-							ball.getRadius(), b.getRadius())) {
+			if (b.isReflector() && b.intersects(ball)) {
 				Vector2d v_i = ball.getVelocity();
-				Vector2d v_p = v_i.projection(Math.atan((ball.getCenterY() - b
-						.getCenterY()) / (ball.getCenterX() - b.getCenterX())));
+				Vector2d v_p = v_i
+						.projection(Math.atan((ball.getCenter().y - b
+								.getCenter().y)
+								/ (ball.getCenter().x - b.getCenter().x)));
 				Vector2d v_f = v_i.subtract(v_p.multiply(2));
 				ball.setVelocity(v_f);
-				while (CalcHelp.intersects(ball.getCenter(), b.getCenter(),
-						ball.getRadius(), b.getRadius())) {
+				while (ball.intersects(b)) {
 					ball.updateLocation();
 				}
 			}
@@ -352,8 +349,7 @@ public class Level {
 		boolean inAnyWarp = false;
 		for (int i = 0; i < warps.size(); i++) {
 			WarpPoint wp = warps.get(i);
-			boolean intersecting = CalcHelp.intersects(ball.getCenter(),
-					wp.getCenter(), WarpPoint.Radius, ball.getRadius());
+			boolean intersecting = ball.intersects(wp);
 			if (intersecting && !ballInWarp) {
 				ballInWarp = true;
 				if (warps.size() != 1) {
@@ -363,8 +359,8 @@ public class Level {
 					} else {
 						nextWarp = warps.get(0);
 					}
-					ball.setLocation(nextWarp.getCenterX(),
-							nextWarp.getCenterY());
+					ball.setLocation(nextWarp.getCenter().x,
+							nextWarp.getCenter().y);
 					inAnyWarp = true;
 					break;
 				}
@@ -383,10 +379,10 @@ public class Level {
 				if (!hittingBlockage) {
 					double xSpeed = ball.getXSpeed();
 					double ySpeed = ball.getYSpeed();
-					boolean sureUpDown = ball.getCenterX() > r.getX() + 3
-							&& ball.getCenterX() < r.getX() + r.getWidth() - 3;
-					boolean sureLeftRight = ball.getCenterY() > r.getY() + 3
-							&& ball.getCenterY() < r.getY() + r.getHeight() - 3;
+					boolean sureUpDown = ball.getCenter().x > r.getX() + 3
+							&& ball.getCenter().x < r.getX() + r.getWidth() - 3;
+					boolean sureLeftRight = ball.getCenter().y > r.getY() + 3
+							&& ball.getCenter().y < r.getY() + r.getHeight() - 3;
 					if (sureLeftRight) {
 						xSpeed *= -1;
 					} else if (sureUpDown) {
@@ -421,28 +417,28 @@ public class Level {
 		}
 
 		screenXShift = (followFactor == 0) ? 0
-				: ((500 - ball.getCenterX()) / followFactor);
+				: ((500 - ball.getCenter().x) / followFactor);
 		screenYShift = (followFactor == 0) ? 0
-				: ((350 - ball.getCenterY()) / followFactor);
+				: ((350 - ball.getCenter().y) / followFactor);
 	}
 
 	public void calculateSolutionSet(double max) {
 		solutions = new ArrayList<java.awt.Point>();
 		long t1 = System.currentTimeMillis();
 		double sqr = max * max;
-		for (int x = (int) (ball.getCenterX() - max); x <= (int) (ball
-				.getCenterX() + max); x++) {
+		for (int x = (int) (ball.getCenter().x - max); x <= (int) (ball
+				.getCenter().x + max); x++) {
 			if (xOutOfBounds(x)) {
 				continue;
 			}
-			for (int y = (int) (ball.getCenterY() - max); y <= (int) (ball
-					.getCenterY() + max); y++) {
+			for (int y = (int) (ball.getCenter().y - max); y <= (int) (ball
+					.getCenter().y + max); y++) {
 				if (yOutOfBounds(y)) {
 					continue;
 				}
 				Point2d p = new Point2d(x, y);
-				if (Math.pow(p.x - ball.getCenterX(), 2)
-						+ Math.pow(p.y - ball.getCenterY(), 2) <= sqr) {
+				if (Math.pow(p.x - ball.getCenter().x, 2)
+						+ Math.pow(p.y - ball.getCenter().y, 2) <= sqr) {
 
 					if (possibleWin(p, max)) {
 						solutions.add(p.getIntegerPoint());
@@ -498,13 +494,13 @@ public class Level {
 		// for non-translated points
 		if (!onScreen(p))
 			return false;
-		double mag = CalcHelp.getDistance(ball.getCenter(), p);
+		double mag = p.getDistance(ball.getCenter());
 		if (mag > max) {
 			mag = max;
 		}
 		double ang = CalcHelp.getAngle(ball.getCenter(), p);
-		Level cloneLevel = new Level(new Ball((int) ball.getCenterX(),
-				(int) ball.getCenterY(), ball.getRadius(), ball.getColor()),
+		Level cloneLevel = new Level(new Ball((int) ball.getCenter().x,
+				(int) ball.getCenter().y, ball.getRadius(), ball.getColor()),
 				bodies, warps, goals, blockages, followFactor, gravityStrength);
 		double xLength = Math.cos(ang) * mag;
 		double yLength = -Math.sin(ang) * mag;

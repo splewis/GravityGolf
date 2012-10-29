@@ -211,4 +211,17 @@ public class Vector2d {
 				+ Math.abs(yComp) + "j>";
 	}
 
+	/**
+	 * Returns if two vectors have the same perpendicular components, to within
+	 * epsilon precision.
+	 * @param v a vector
+	 * @param epsilon maximum allowed difference
+	 * @return if the objects represent the same vector
+	 */
+	public boolean equals(Vector2d v, double epsilon) {
+		double xDif = getXComponent() - v.getXComponent();
+		double yDif = getYComponent() - v.getYComponent();
+		return Math.abs(xDif) <= epsilon && Math.abs(yDif) <= epsilon;
+	}
+
 }
