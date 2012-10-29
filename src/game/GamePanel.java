@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 	public static final int Width = 1000;
 	public static final int Height = 700;	
     
-	boolean showSolution = true;
+	boolean showSolution = false;
 	ArrayList<java.awt.Point> points = new ArrayList<java.awt.Point>();
 	
 	// Game Components
