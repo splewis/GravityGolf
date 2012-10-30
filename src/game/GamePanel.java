@@ -166,7 +166,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		initializeMenu();
 		setLevelUp(menuLevel);
 		ball.setLaunched(true);
-		ball.updateSpeed(0.0, 1.8);
+		ball.accelerate(new Vector2d(0.0, 1.8));
 		initialPoint = ball.getCenter();
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -408,7 +408,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				Body intersected = currentLevel.getBodyIntersection();
 				particles = ball.generateParticles(intersected);
 				shakeValues = new double[6];
-				double speed = Math.hypot(ball.getXSpeed(), ball.getYSpeed());
+				double speed = ball.getVelocity().getLength();
 				if(speed < .25) speed = .25;
 				if(speed > 2.5) speed = 2.5;
 
@@ -1023,7 +1023,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			gameWriter.println("Ball launched. Point: (" + event.getX() + ", " + event.getY() + "). Magnitude: " + launchMagnitude + ", Angle: " + Math.toDegrees(launchAngle));
 			double xLength =  Math.cos(launchAngle) * launchMagnitude;
 			double yLength = -Math.sin(launchAngle) * launchMagnitude;
-			ball.setSpeed(xLength / 200, yLength / 200); // 200 is a constant - only used here
+			ball.setVelocity(new Vector2d(xLength / 200, yLength / 200)); // 200 is a constant - only used here
 			ball.setLaunched(true);
 		}
 				

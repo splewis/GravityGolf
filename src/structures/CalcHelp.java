@@ -151,7 +151,7 @@ public final class CalcHelp {
 	public static int quadrant(double angle) {
 		while (angle < 0)
 			angle += 2 * Math.PI;
-		while (angle > 0)
+		while (angle > 2 * Math.PI)
 			angle -= 2 * Math.PI;
 
 		if (angle < Math.PI / 2)
@@ -177,46 +177,22 @@ public final class CalcHelp {
 		return g * strength / location.getDistanceSquared(sourceLocation);
 	}
 
+	// TODO: once dependences are removed, remove this method
 	@Deprecated
-	// TODO: move to Body
 	public static double getAcceleration(Body b1, Body b2, double g) {
 		return getAcceleration(b1.getCenter(), b2, g);
 	}
 
+	// TODO: once dependences are removed, remove this method
 	@Deprecated
-	// TODO
-	// move to Particle
 	public static double getAcceleration(Point2d p1, Particle p, double g) {
-		return g * p.getRadius() / getDistanceSquared(p1, p.getCenter()); // G
-																			// m1
-																			// m2
-																			// /
-																			// d^2,
-																			// m1
-																			// =
-																			// 1,
-																			// m2
-																			// =
-																			// radius
+		return g * p.getRadius() / getDistanceSquared(p1, p.getCenter());
 	}
 
+	// TODO: once dependences are removed, remove this method
 	@Deprecated
-	// TODO: move to body
 	public static double getAcceleration(Point2d p, Body b, double g) {
-		return g * b.getMass() / getDistanceSquared(p, b.getCenter()); // G m1
-																		// m2 /
-																		// d^2,
-																		// m1 =
-																		// 1, m2
-																		// =
-																		// radius
-		/*
-		 * Note: mass1 is ignored for the sake of calculation Because: F_net =
-		 * m*a -> a = F_net / m (F_net = the sum of graviational forces = F_g)
-		 * F_g = (G*m1*m2 / d^2) F_net = (G*m1*m2 / d^2) a = (G*m1*m2 / d^2) /
-		 * m1 a = (G*m2 / d^2) Thus: the mass of the ball has no effect of the
-		 * acceleration due to gravity upon it - thanks galileo!
-		 */
+		return g * b.getMass() / getDistanceSquared(p, b.getCenter());
 	}
 
 	/**
@@ -227,12 +203,10 @@ public final class CalcHelp {
 	 */
 	public static double getAngle(double xDif, double yDif) {
 		double angle = Math.atan(-yDif / xDif);
-		if (xDif > 0) {
+		if (xDif > 0) 
 			return angle;
-		}
-		if (xDif < 0) {
+		if (xDif < 0) 
 			return angle + Math.PI;
-		}
 		return Math.signum(-yDif) * Math.PI / 2.0;
 	}
 
@@ -289,13 +263,13 @@ public final class CalcHelp {
 		return new Color(r, g, b);
 	}
 
-	// TODO: move to body
+	// TODO: once dependences are removed, remove this method
 	@Deprecated
 	public static boolean intersects(Point2d p1, Point2d p2, int r1, int r2) {
 		return getDistanceSquared(p1, p2) < Math.pow((r1 + r2), 2);
 	}
 
-	// TODO: move to body
+	// TODO: once dependences are removed, remove this method
 	@Deprecated
 	public static boolean intersects(Point2d p1, Point2d p2, int r) {
 		return getDistanceSquared(p1, p2) < r * r;

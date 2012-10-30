@@ -87,8 +87,8 @@ public class Body extends CircularShape {
 			g.setPaint(new RadialGradientPaint(new Point2D.Double(
 					center.x + dx, center.y + dy), radius + extraRadius, dist,
 					colors));
-			g.fillOval((int) Math.round(topLeft.x + dx - extraRadius),
-					(int) Math.round(topLeft.y + dy - extraRadius), diameter
+			g.fillOval((int) Math.round(center.x - radius + dx - extraRadius),
+					(int) Math.round(center.y - radius + dy - extraRadius), diameter
 							+ 2 * extraRadius + 1, diameter + 2 * extraRadius
 							+ 1);
 		}

@@ -3,10 +3,14 @@ package structures;
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * 
+ * @author Sean Lewis
+ *
+ */
 public abstract class CircularShape {
 
 	protected Point2d center;
-	protected Point2d topLeft;
 	protected Color color;
 	protected int radius;
 	protected int radiusSquared;
@@ -17,7 +21,6 @@ public abstract class CircularShape {
 	 */
 	protected void initializeVars() {
 		setRadius(radius);
-		topLeft = new Point2d(center.x - radius, center.y - radius);
 	}
 
 	/**
@@ -117,6 +120,14 @@ public abstract class CircularShape {
 		this.radius = radius;
 		diameter = 2 * radius;
 		radiusSquared = radius * radius;
+	}
+
+	/**
+	 * 
+	 * @param center
+	 */
+	public void setCenter(Point2d center) {
+		this.center = center;
 	}
 
 	/**

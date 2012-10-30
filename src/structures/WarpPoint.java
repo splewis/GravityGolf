@@ -32,12 +32,14 @@ public class WarpPoint extends CircularShape {
 		radius = RADIUS;
 		initializeVars();
 	}
-
-	public void draw(int dx, int dy, Graphics g, Color c) {
+	
+	@Override
+	public void draw(double dx, double dy, Graphics g) {
 		g.drawImage(Image, (int) (center.x - radius + dx), 
 				           (int) (center.y - radius + dy), null);
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		draw(0, 0, g);
 	}

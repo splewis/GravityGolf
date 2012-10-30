@@ -9,29 +9,43 @@ import java.util.ArrayList;
 /**
  * @author Sean
  */
-public class Ball extends Body {
+public class Ball extends MovableCircularShape {
 
-	private int startX, startY;
-	private double xSpeed, ySpeed;
+	private final Point2d startingLocation;
 	private boolean launched;
 
+	/**
+	 * 
+	 */
 	public Ball() {
-
+		this(0, 0, 3, Color.red);
 	}
 
+	/**
+	 * 
+	 * @param centerX
+	 * @param centerY
+	 * @param radius
+	 * @param c
+	 */
 	public Ball(int centerX, int centerY, int radius, Color c) {
-		startX = centerX;
-		startY = centerY;
 		center = new Point2d(centerX, centerY);
+		startingLocation = new Point2d(centerX, centerY);
+		velocity = new Vector2d(0, 0);
 		color = c;
 		this.radius = radius;
 		initializeVars();
 	}
 
+	/**
+	 * 
+	 * @param body
+	 * @return
+	 */
 	public ArrayList<Particle> generateParticles(Body body) {
 		double cX = center.x;
 		double cY = center.y;
-		double speed = Math.hypot(xSpeed, ySpeed)
+		double speed = velocity.getLength()
 				* ((body != null) ? (body.getRadius() / 100.0) : 1);
 		if (speed < .50)
 			speed = .50;
@@ -40,8 +54,8 @@ public class Ball extends Body {
 		if (body != null) {
 			while (CalcHelp.intersects(new Point2d(cX, cY), body.getCenter(),
 					body.getRadius(), radius)) {
-				cX -= xSpeed;
-				cY -= ySpeed;
+				cX -= velocity.getXComponent();
+				cY -= velocity.getYComponent();
 			}
 		}
 
@@ -79,77 +93,36 @@ public class Ball extends Body {
 		return particles;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isLaunched() {
 		return launched;
 	}
 
+	/**
+	 * 
+	 * @param b
+	 */
 	public void setLaunched(boolean b) {
 		launched = b;
 	}
 
+	/**
+	 * 
+	 */
 	public void resetLocation() {
-		center.x = startX;
-		center.y = startY;
+		center = startingLocation;
 	}
 
-	public Point2d getCenter() {
-		return center;
-	}
-
-	public double getXSpeed() {
-		return xSpeed;
-	}
-
-	public double getYSpeed() {
-		return ySpeed;
-	}
-
-	public Vector2d getVelocity() {
-		return new Vector2d(xSpeed, ySpeed);
-	}
-
-	public void setVelocity(Vector2d v) {
-		xSpeed = v.getXComponent();
-		ySpeed = v.getYComponent();
-	}
-
-	public void setSpeed(double xSpeed, double ySpeed) {
-		this.xSpeed = xSpeed;
-		this.ySpeed = ySpeed;
-	}
-
-	public void setXSpeed(double xSpeed) {
-		this.xSpeed = xSpeed;
-	}
-
-	public void setYSpeed(double ySpeed) {
-		this.ySpeed = ySpeed;
-	}
-
-	public void updateLocation() {
-		center.x += xSpeed;
-		center.y += ySpeed;
-	}
-
-	public void updateLocation(double dx, double dy) {
-		center.x += dx;
-		center.y += dy;
-	}
-
-	public void updateSpeed(double dx, double dy) {
-		xSpeed += dx;
-		ySpeed += dy;
-	}
-
-	public void setLocation(double x, double y) {
-		center.x = x;
-		center.y = y;
-	}
-
+	/**
+	 * 
+	 */
 	public String toString() {
 		String str = "ball(";
-		str += startX + ", " + startY + ", " + radius + ", "
-				+ DataReader.getColorDisplay(color) + ")";
+		str += startingLocation.x + ", " + startingLocation.y + ", " + radius
+				+ ", " + DataReader.getColorDisplay(color) + ")";
 		return str;
 	}
 

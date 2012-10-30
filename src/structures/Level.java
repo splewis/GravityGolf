@@ -167,8 +167,7 @@ public class Level {
 
 	public void clearBallLocation() {
 		while (getBodyIntersection() != null || isOutOfBounds()) {
-			ball.updateLocation(-ball.getXSpeed() / 10.0,
-					-ball.getYSpeed() / 10.0);
+			ball.move(ball.getVelocity().multiply(0.1));
 		}
 	}
 
@@ -338,7 +337,8 @@ public class Level {
 				angle = CalcHelp.getAngle(ball.getCenter(), b.getCenter());
 //				gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(),
 //						b.getCenter(), b.getMass(), gravityStrength);
-				gravitationalForce = CalcHelp.getAcceleration(ball, b, gravityStrength);
+				gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(), b.getCenter(), b.getMass(), gravityStrength);
+				//gravitationalForce = CalcHelp.getAcceleration(ball, b, gravityStrength);
 				sumXForce += Math.cos(angle) * gravitationalForce;
 				sumYForce -= Math.sin(angle) * gravitationalForce;
 			}
@@ -349,7 +349,7 @@ public class Level {
 				if (ball.isLaunched()) {
 					angle = CalcHelp.getAngle(ball.getCenter(), m.getCenter());
 
-					gravitationalForce = CalcHelp.getAcceleration(ball, m, gravityStrength);
+					gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(), m.getCenter(), m.getMass(), gravityStrength);
 					sumXForce += Math.cos(angle) * gravitationalForce;
 					sumYForce -= Math.sin(angle) * gravitationalForce;
 				}
@@ -364,7 +364,7 @@ public class Level {
 				Vector2d v_f = v_i.subtract(v_p.multiply(2));
 				ball.setVelocity(v_f);
 				while (ball.intersects(b)) {
-					ball.updateLocation();
+					ball.move();
 				}
 			}
 		}
@@ -382,8 +382,7 @@ public class Level {
 					} else {
 						nextWarp = warps.get(0);
 					}
-					ball.setLocation(nextWarp.getCenter().x,
-							nextWarp.getCenter().y);
+					ball.setCenter(nextWarp.getCenter());
 					inAnyWarp = true;
 					break;
 				}
@@ -400,8 +399,8 @@ public class Level {
 		for (Rectangle r : blockageRects) {
 			if (r.contains(ball.getCenter().getIntegerPoint())) {
 				if (!hittingBlockage) {
-					double xSpeed = ball.getXSpeed();
-					double ySpeed = ball.getYSpeed();
+					double xSpeed = ball.getVelocity().getXComponent();
+					double ySpeed = ball.getVelocity().getYComponent();
 					boolean sureUpDown = ball.getCenter().x > r.getX() + 3
 							&& ball.getCenter().x < r.getX() + r.getWidth() - 3;
 					boolean sureLeftRight = ball.getCenter().y > r.getY() + 3
@@ -422,9 +421,9 @@ public class Level {
 					hittingBlockage = true;
 
 					if (!timeToReset()) {
-						ball.setSpeed(xSpeed, ySpeed);
+						ball.setVelocity(new Vector2d(xSpeed, ySpeed));
 						while (getBlockageIntersection() != null) {
-							ball.updateLocation();
+							ball.move();
 						}
 					}
 				}
@@ -435,8 +434,8 @@ public class Level {
 
 		if (!thisTime && ball.isLaunched()) {
 			hittingBlockage = false;
-			ball.updateSpeed(sumXForce, sumYForce);
-			ball.updateLocation();
+			ball.accelerate(new Vector2d(sumXForce, sumYForce));
+			ball.move();
 		}
 
 		screenXShift = (followFactor == 0) ? 0
@@ -527,7 +526,7 @@ public class Level {
 				bodies, warps, goals, blockages, followFactor, gravityStrength);
 		double xLength = Math.cos(ang) * mag;
 		double yLength = -Math.sin(ang) * mag;
-		cloneLevel.getBall().setSpeed(xLength / 200, yLength / 200);
+		cloneLevel.getBall().setVelocity(new Vector2d(xLength / 200, yLength / 200));
 		cloneLevel.getBall().setLaunched(true);
 		long t = System.currentTimeMillis();
 		while (true) {
