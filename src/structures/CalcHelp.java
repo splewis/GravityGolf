@@ -163,19 +163,19 @@ public final class CalcHelp {
 		return 4;
 	}
 
-//	/**
-//	 * Returns the gravitational acceleration experienced by an object.
-//	 * @param location the location of the object experiencing the acceleration
-//	 * @param sourceLocation the location of where the source of gravity comes
-//	 *        from
-//	 * @param strength the strength (typically the mass) of the source
-//	 * @param g the gravitational constant
-//	 * @return the magnitude of the acceleration felt
-//	 */
-//	public static double getAcceleration(Point2d location,
-//			Point2d sourceLocation, double strength, double g) {
-//		return g * strength / location.getDistanceSquared(sourceLocation);
-//	}
+	/**
+	 * Returns the gravitational acceleration experienced by an object.
+	 * @param location the location of the object experiencing the acceleration
+	 * @param sourceLocation the location of where the source of gravity comes
+	 *        from
+	 * @param strength the strength (typically the mass) of the source
+	 * @param g the gravitational constant
+	 * @return the magnitude of the acceleration felt
+	 */
+	public static double getAcceleration(Point2d location,
+			Point2d sourceLocation, double strength, double g) {
+		return g * strength / location.getDistanceSquared(sourceLocation);
+	}
 
 	@Deprecated
 	// TODO: move to Body
@@ -246,36 +246,6 @@ public final class CalcHelp {
 	 */
 	public static double getAngle(Point2d p1, Point2d p2) {
 		return getAngle(p2.x - p1.x, p2.y - p1.y);
-	}
-
-	@Deprecated
-	public static String getColorDisplay(Color c) {
-		if (c.equals(Color.red))
-			return "red";
-		if (c.equals(Color.black))
-			return "black";
-		if (c.equals(Color.blue))
-			return "blue";
-		if (c.equals(Color.cyan))
-			return "cyan";
-		if (c.equals(Color.gray))
-			return "gray";
-		if (c.equals(Color.green))
-			return "green";
-		if (c.equals(Color.magenta))
-			return "magenta";
-		if (c.equals(Color.orange))
-			return "orange";
-		if (c.equals(Color.pink))
-			return "pink";
-		if (c.equals(Color.yellow))
-			return "yellow";
-		if (c.equals(new Color(128, 0, 128)))
-			return "purple";
-		if (c.equals(new Color(127, 0, 255)))
-			return "violet";
-		return "Color(" + c.getRed() + ", " + c.getGreen() + ", " + c.getBlue()
-				+ ")";
 	}
 
 	@Deprecated
@@ -362,42 +332,6 @@ public final class CalcHelp {
 		if (x == 0)
 			return 1;
 		return x;
-	}
-
-	@Deprecated
-	public static Color readColor(String str) {
-		str = str.toLowerCase();
-		if (str.equals("red"))
-			return Color.red;
-		if (str.equals("black"))
-			return Color.black;
-		if (str.equals("blue"))
-			return Color.blue;
-		if (str.equals("cyan"))
-			return Color.cyan;
-		if (str.equals("gray"))
-			return Color.gray;
-		if (str.equals("green"))
-			return Color.green;
-		if (str.equals("magenta"))
-			return Color.magenta;
-		if (str.equals("orange"))
-			return Color.orange;
-		if (str.equals("pink"))
-			return Color.pink;
-		if (str.equals("yellow"))
-			return Color.yellow;
-		if (str.equals("purple"))
-			return new Color(128, 0, 128);
-		if (str.equals("violet"))
-			return new Color(127, 0, 255);
-
-		String r = str.substring(str.indexOf("(") + 1, str.indexOf(","));
-		String g = str.substring(str.indexOf(",") + 1, str.lastIndexOf(","));
-		String b = str.substring(str.lastIndexOf(",") + 1, str.indexOf(")"));
-
-		return new Color(Integer.parseInt(r), Integer.parseInt(g),
-				Integer.parseInt(b));
 	}
 
 }

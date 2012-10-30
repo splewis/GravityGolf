@@ -521,7 +521,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				g.setColor(Color.WHITE);
 				double angle =  CalcHelp.getAngle(initialPoint, terminalPoint);
 				g.setColor(Color.white);
-				if(CalcHelp.getDistance(initialPoint, terminalPoint) <= MaxInitialMagnitude) {
+				if(initialPoint.getDistance(terminalPoint) <= MaxInitialMagnitude) {
 					drawArrow(initialPoint, terminalPoint, ArrowDistanceFromBall, ArrowSize, g);
 				} else {
 					double xSide = MaxInitialMagnitude *  Math.cos(angle);

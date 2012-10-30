@@ -125,9 +125,9 @@ public abstract class CircularShape {
 	 * @return true if they overlap, false otherwise
 	 */
 	public boolean intersects(CircularShape circle) {
-		return CalcHelp.intersects(center, circle.getCenter(), radius, circle.getRadius());
-//		double distSquared = getCenter().getDistanceSquared(circle.getCenter());
-//		return distSquared < Math.pow((getRadius() + circle.getRadius()), 2);
-	}
+	//	return CalcHelp.intersects(center, circle.getCenter(), radius, circle.getRadius());
+		double distSquared = getCenter().getDistanceSquared(circle.getCenter());
+		return distSquared < Math.pow((getRadius() + circle.getRadius()), 2);
+	}	
 
 }

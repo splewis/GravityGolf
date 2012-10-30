@@ -70,7 +70,7 @@ public class Point2d {
 	 * @return the square of the distance between points.
 	 */
 	public double getDistanceSquared(Point2d p) {
-		return Math.pow(x - p.y, 2.0) + Math.pow(y - p.y, 2.0);
+		return Math.pow(x - p.x, 2.0) + Math.pow(y - p.y, 2.0);
 	}
 
 	/**

@@ -184,6 +184,7 @@ public class Level {
 	 * Checks if p is intersecting with any Body returns first intersection if
 	 * no intersection, returns null
 	 */
+	@Deprecated
 	public Body getBodyIntersection(Point2d p) {
 		for (Body b : bodies) {
 			if (CalcHelp.intersects(b.getCenter(), p, b.getRadius(), 0)) {
@@ -198,11 +199,33 @@ public class Level {
 		return null;
 	}
 
+	/**
+	 * Returns a Body that intersects the parameter, or null if there are none.
+	 * @param body a Body
+	 * @return a intersecting Body or null
+	 */
+	public Body getIntersectingBody(Body body) {
+		for (Body b : bodies) {
+			if (body.intersects(b)) {
+				return b;
+			}
+			for (Moon m : b.getMoons()) {
+				if (body.intersects(m)) {
+					return m;
+				}
+			}
+		}
+		return null;
+
+	}
+	
+	
 	/*
 	 * Checks if the ball is intersecting with any Body returns first
 	 * intersection if no intersection, returns null ignores bodies marked as
 	 * reflectors
 	 */
+	@Deprecated 
 	public Body getBodyIntersection() {
 		return getBodyIntersection(ball.getCenter());
 //		for (Body b : bodies) {

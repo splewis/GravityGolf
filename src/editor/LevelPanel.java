@@ -2,6 +2,8 @@ package editor;
 
 import structures.*;
 
+import game.DataReader;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -128,7 +130,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 	public Color selectedColor() {
 		for(int i = 0; i < colorItems.length; i++) {
 			if(colorItems[i].isSelected()) {
-				return CalcHelp.readColor(colorItems[i].getText().toLowerCase());
+				return DataReader.readColor(colorItems[i].getText().toLowerCase());
 			}
 		}
 		return null;
@@ -150,10 +152,10 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 		if(objectItems[Ball].isSelected() && p1 != null) {
 			g.fillOval( (int)p1.getX() - 3 + xShift, (int)p1.getY() - 3 + yShift, 6, 6 );
 		} else if(objectItems[Body].isSelected() && p2 != null) {
-			int r = (int) CalcHelp.getDistance(p1, p2);
+			int r = (int) p1.distance(p2);
 			g.fillOval( (int)p1.getX() - r + xShift, (int)p1.getY() - r + yShift, r*2, r*2 );
 		} else if(objectItems[Moon].isSelected() && p2 != null) {
-			int r = (int) CalcHelp.getDistance(p1, p2);
+			int r = (int) p1.distance(p2);
 			g.fillOval( (int)p1.getX() - r + xShift, (int)p1.getY() - r + yShift, r*2, r*2 );
 
 		} else if(objectItems[Warp].isSelected() && p2 != null) {
@@ -168,7 +170,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 
 		} else if(objectItems[Goal].isSelected() && p2 != null) {
 			g.setColor(Color.WHITE);
-			int r = (int) CalcHelp.getDistance(p1, p2);
+			int r = (int) p1.distance(p2);
 			g.fillOval((int)p1.getX() - r + xShift, (int)p1.getY() - r + yShift, r*2, r*2);
 		} else if(testItem.isSelected() ) { // testLevel mode
 			try {
@@ -186,7 +188,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 
 				if(p2 != null && ball != null && !ball.isLaunched() && released) {
 					ball.setLaunched(true);
-					double mag = CalcHelp.getDistance(ball.getCenter(), new Point2d(p2));
+					double mag = ball.getCenter().getDistance(new Point2d(p2));
 					if(mag > 300) mag = 300;
 					double angle = CalcHelp.getAngle(ball.getCenter(), new Point2d(p2));
 					double xComponent =  Math.cos(angle) * mag / 200;
