@@ -1,6 +1,8 @@
 package structures;
 
 /**
+ * Mathematical structure for representing Cartesian points with double
+ * precision.
  * @author Sean Lewis
  */
 public class Point2d {

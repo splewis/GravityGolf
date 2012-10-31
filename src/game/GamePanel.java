@@ -657,16 +657,6 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		
 	}
 	 
-	private void drawStars(Graphics2D g) {
-		int xShift = (int)Math.round(screenXShift);
-		int yShift = (int)Math.round(screenYShift);
-		for(Star p : stars) {
-			if(onScreen(p.getPoint())) {
-				p.draw(xShift, yShift, g);
-			}
-		}
-	}
-
 	private void drawWinScreen(Graphics2D g) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0 , Width + 30, Height);

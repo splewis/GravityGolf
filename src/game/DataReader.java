@@ -46,7 +46,7 @@ import javax.swing.JOptionPane;
 import structures.*;
 
 /**
- * @author Sean Sean Lewis
+ * @author Sean Lewis
  */
 public class DataReader {
 

@@ -22,10 +22,18 @@ public class WarpPoint extends CircularShape {
 	public static final Image Image = Toolkit.getDefaultToolkit().getImage(
 			"images/spiralImage.gif");
 
+	/**
+	 * Creates a new WarpPoint at (0,0).
+	 */
 	public WarpPoint() {
 		this(0, 0);
 	}
 
+	/**
+	 * Creates a new WarpPoint at (x, y)
+	 * @param x the center x coordinate
+	 * @param y the center y coordinate
+	 */
 	public WarpPoint(int x, int y) {
 		setCenter(new Point2d(x, y));
 		setRadius(RADIUS);
@@ -42,6 +50,9 @@ public class WarpPoint extends CircularShape {
 		draw(0, 0, g);
 	}
 
+	/**
+	 * Returns the description of this WarpPoint.
+	 */
 	public String toString() {
 		return "warp(" + center.x + ", " + center.y + ")";
 	}
