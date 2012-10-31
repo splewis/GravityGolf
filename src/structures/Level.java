@@ -165,7 +165,7 @@ public class Level {
 	}
 
 	public void clearBallLocation() {
-		while (getBodyIntersection() != null || isOutOfBounds()) {
+		while (getIntersectingBody() != null || isOutOfBounds()) {
 			ball.move(ball.getVelocity().multiply(0.1));
 		}
 	}
@@ -178,33 +178,15 @@ public class Level {
 		return bodies;
 	}
 
-	/*
-	 * Checks if p is intersecting with any Body returns first intersection if
-	 * no intersection, returns null
-	 */
-	@Deprecated
-	public Body getBodyIntersection(Point2d p) {
-		for (Body b : bodies) {
-			if (CalcHelp.intersects(b.getCenter(), p, b.getRadius(), 0)) {
-				return b;
-			}
-			for (Moon m : b.getMoons()) {
-				if (CalcHelp.intersects(m.getCenter(), p, m.getRadius(), 0)) {
-					return m;
-				}
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * Returns a Body that intersects the parameter, or null if there are none.
+	 * Ignores reflector bodies.
 	 * @param body a Body
 	 * @return a intersecting Body or null
 	 */
 	public Body getIntersectingBody() {
 		for (Body b : bodies) {
-			if (ball.intersects(b)) {
+			if (!b.isReflector() && ball.intersects(b)) {
 				return b;
 			}
 			for (Moon m : b.getMoons()) {
@@ -215,27 +197,6 @@ public class Level {
 		}
 		return null;
 
-	}
-
-	/*
-	 * Checks if the ball is intersecting with any Body returns first
-	 * intersection if no intersection, returns null ignores bodies marked as
-	 * reflectors
-	 */
-	@Deprecated
-	public Body getBodyIntersection() {
-		return getBodyIntersection(ball.getCenter());
-		// for (Body b : bodies) {
-		// if (!b.isReflector() && ball.intersects(b)) {
-		// return b;
-		// }
-		// for (Moon m : b.getMoons()) {
-		// if (ball.intersects(m)) {
-		// return m;
-		// }
-		// }
-		// }
-		// return null;
 	}
 
 	/**
@@ -284,24 +245,21 @@ public class Level {
 		return warps;
 	}
 
-	public boolean isOutOfBounds(Point2d p) {
+	private boolean isOutOfBounds(Point2d p) {
 		return p.x + screenXShift < 0 || p.x + screenXShift > GamePanel.Width
 				|| p.y + screenYShift < 0
 				|| p.y + screenYShift > GamePanel.Height - 20;
 	}
 
-	public boolean isOutOfBounds() {
-		return ball.getCenter().x + screenXShift < 0
-				|| ball.getCenter().x + screenXShift > GamePanel.Width
-				|| ball.getCenter().y + screenYShift < 0
-				|| ball.getCenter().y + screenYShift > GamePanel.Height - 20;
+	private boolean isOutOfBounds() {	
+		return isOutOfBounds(ball.getCenter());
 	}
 
-	public boolean xOutOfBounds(double x) {
+	private boolean xOutOfBounds(double x) {
 		return x + screenXShift < 0 || x + screenXShift > GamePanel.Width;
 	}
 
-	public boolean yOutOfBounds(double y) {
+	private boolean yOutOfBounds(double y) {
 		return y + screenYShift < 0 || y + screenYShift > GamePanel.Height - 20;
 	}
 
@@ -324,7 +282,7 @@ public class Level {
 	}
 
 	public boolean timeToReset() {
-		return isOutOfBounds() || (getBodyIntersection() != null);
+		return isOutOfBounds() || (getIntersectingBody() != null);
 	}
 
 	public void updateLevel() {
@@ -387,7 +345,8 @@ public class Level {
 					} else {
 						nextWarp = warps.get(0);
 					}
-					ball.setCenter(nextWarp.getCenter());
+					ball.setCenter(new Point2d(nextWarp.getCenter().x, nextWarp
+							.getCenter().y));
 					inAnyWarp = true;
 					break;
 				}

@@ -1,5 +1,6 @@
 package structures;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -35,19 +36,24 @@ public class WarpPoint extends CircularShape {
 	 * @param y the center y coordinate
 	 */
 	public WarpPoint(int x, int y) {
-		setCenter(new Point2d(x, y));
+		center = new Point2d(x, y);
 		setRadius(RADIUS);
 	}
 
 	@Override
 	public void draw(double dx, double dy, Graphics g) {
-		g.drawImage(Image, (int) (center.x - radius + dx), 
-				           (int) (center.y - radius + dy), null);
+		g.drawImage(Image, (int) (center.x - radius + dx), (int) (center.y
+				- radius + dy), null);
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		draw(0, 0, g);
+	}
+
+	@Override
+	public void draw(double dx, double dy, Graphics g, Color c) {
+		draw(0, 0, g, c);
 	}
 
 	/**

@@ -380,8 +380,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			trailPoints.clear();
 			ball.setLaunched(false);
 			levels.set(currentLevelN - 1, null);
-		}
-		
+		}		
 	}
 
 	public void paintComponent(Graphics gr) {
@@ -846,8 +845,8 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 
 		g.setColor(Color.white);
 		g.drawString("Press Space to begin", 373, 630);
-		g.drawString("1.00", 10, 630);
-		g.drawString("11/3/2011", 10, 660);
+		g.drawString("0.01", 10, 630);
+		g.drawString("11/1/2012", 10, 660);
 	}
 
 	public void actionPerformed(ActionEvent event) {
