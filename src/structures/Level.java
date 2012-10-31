@@ -1,7 +1,6 @@
 package structures;
 
 import game.GamePanel;
-
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -26,7 +25,7 @@ public class Level {
 	 * A constant for how many stars should be put in the level. As the number
 	 * increased, there are more stars.
 	 */
-	public static final int StarFactor = 7000;
+	private static final int StarFactor = 7000;
 
 	private static final int extraX = 100;
 	private static final int extraY = 100;
@@ -46,10 +45,10 @@ public class Level {
 	private BufferedImage image;
 	private ArrayList<java.awt.Point> solutions;
 
-	public int xMin;
-	public int xMax;
-	public int yMin;
-	public int yMax;
+	private int xMin;
+	private int xMax;
+	private int yMin;
+	private int yMax;
 
 	/**
 	 * Creates a new Level with blank values.
@@ -217,40 +216,44 @@ public class Level {
 		return null;
 
 	}
-	
-	
+
 	/*
 	 * Checks if the ball is intersecting with any Body returns first
 	 * intersection if no intersection, returns null ignores bodies marked as
 	 * reflectors
 	 */
-	@Deprecated 
+	@Deprecated
 	public Body getBodyIntersection() {
 		return getBodyIntersection(ball.getCenter());
-//		for (Body b : bodies) {
-//			if (!b.isReflector() && ball.intersects(b)) {
-//				return b;
-//			}
-//			for (Moon m : b.getMoons()) {
-//				if (ball.intersects(m)) {
-//					return m;
-//				}
-//			}
-//		}
-//		return null;
+		// for (Body b : bodies) {
+		// if (!b.isReflector() && ball.intersects(b)) {
+		// return b;
+		// }
+		// for (Moon m : b.getMoons()) {
+		// if (ball.intersects(m)) {
+		// return m;
+		// }
+		// }
+		// }
+		// return null;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ArrayList<Blockage> getBlockages() {
 		return blockages;
 	}
 
-	/*
-	 * Checks if the ball is intersecting with any Blockage returns first
-	 * intersection if no intersection, returns null
+	/**
+	 * 
+	 * @param shape
+	 * @return
 	 */
-	public Blockage getBlockageIntersection() {
+	public Blockage getBlockageIntersection(CircularShape shape) {
 		for (Blockage b : blockages) {
-			if (b.intersects(ball.getCenter())) {
+			if (b.intersects(shape.getCenter())) {
 				return b;
 			}
 		}
@@ -335,10 +338,8 @@ public class Level {
 			// Planetary effect on ball
 			if (ball.isLaunched()) {
 				angle = CalcHelp.getAngle(ball.getCenter(), b.getCenter());
-//				gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(),
-//						b.getCenter(), b.getMass(), gravityStrength);
-				gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(), b.getCenter(), b.getMass(), gravityStrength);
-				//gravitationalForce = CalcHelp.getAcceleration(ball, b, gravityStrength);
+				gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(),
+						b.getCenter(), b.getMass(), gravityStrength);
 				sumXForce += Math.cos(angle) * gravitationalForce;
 				sumYForce -= Math.sin(angle) * gravitationalForce;
 			}
@@ -349,7 +350,9 @@ public class Level {
 				if (ball.isLaunched()) {
 					angle = CalcHelp.getAngle(ball.getCenter(), m.getCenter());
 
-					gravitationalForce = CalcHelp.getAcceleration(ball.getCenter(), m.getCenter(), m.getMass(), gravityStrength);
+					gravitationalForce = CalcHelp.getAcceleration(
+							ball.getCenter(), m.getCenter(), m.getMass(),
+							gravityStrength);
 					sumXForce += Math.cos(angle) * gravitationalForce;
 					sumYForce -= Math.sin(angle) * gravitationalForce;
 				}
@@ -357,10 +360,9 @@ public class Level {
 			// Reflector collision and resolution
 			if (b.isReflector() && b.intersects(ball)) {
 				Vector2d v_i = ball.getVelocity();
-				Vector2d v_p = v_i
-						.projection(Math.atan((ball.getCenter().y - b
-								.getCenter().y)
-								/ (ball.getCenter().x - b.getCenter().x)));
+				Vector2d v_p = v_i.projection(Math.atan((ball.getCenter().y - b
+						.getCenter().y)
+						/ (ball.getCenter().x - b.getCenter().x)));
 				Vector2d v_f = v_i.subtract(v_p.multiply(2));
 				ball.setVelocity(v_f);
 				while (ball.intersects(b)) {
@@ -404,7 +406,8 @@ public class Level {
 					boolean sureUpDown = ball.getCenter().x > r.getX() + 3
 							&& ball.getCenter().x < r.getX() + r.getWidth() - 3;
 					boolean sureLeftRight = ball.getCenter().y > r.getY() + 3
-							&& ball.getCenter().y < r.getY() + r.getHeight() - 3;
+							&& ball.getCenter().y < r.getY() + r.getHeight()
+									- 3;
 					if (sureLeftRight) {
 						xSpeed *= -1;
 					} else if (sureUpDown) {
@@ -422,7 +425,7 @@ public class Level {
 
 					if (!timeToReset()) {
 						ball.setVelocity(new Vector2d(xSpeed, ySpeed));
-						while (getBlockageIntersection() != null) {
+						while (getBlockageIntersection(ball) != null) {
 							ball.move();
 						}
 					}
@@ -526,7 +529,8 @@ public class Level {
 				bodies, warps, goals, blockages, followFactor, gravityStrength);
 		double xLength = Math.cos(ang) * mag;
 		double yLength = -Math.sin(ang) * mag;
-		cloneLevel.getBall().setVelocity(new Vector2d(xLength / 200, yLength / 200));
+		cloneLevel.getBall().setVelocity(
+				new Vector2d(xLength / 200, yLength / 200));
 		cloneLevel.getBall().setLaunched(true);
 		long t = System.currentTimeMillis();
 		while (true) {

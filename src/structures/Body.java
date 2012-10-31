@@ -51,13 +51,12 @@ public class Body extends CircularShape {
 	 * @param mass
 	 */
 	public Body(int centerX, int centerY, int radius, Color color, int mass) {
-		center = new Point2d(centerX, centerY);
-		this.radius = radius;
-		this.color = color;
+		setCenter(new Point2d(centerX, centerY));
+		setRadius(radius);
+		setColor(color);
 		this.mass = mass;
+		
 		moons = new ArrayList<Moon>();
-		initializeVars();
-
 		// TODO: put all advanced drawing calculation in a single method used by
 		// moon and Body
 		if (radius < 60) {

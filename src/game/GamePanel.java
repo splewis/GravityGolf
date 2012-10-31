@@ -174,7 +174,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		setBackground(Color.black);
 	}
 
-	public void initializeMenu() {
+	private void initializeMenu() {
 		Ball b = new Ball(340, 335, 3, Color.red);
 		ArrayList<Body> bod = new ArrayList<Body>();
 		bod.add(new Body(495, 335, 100, Color.magenta));
@@ -221,7 +221,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		
 	}
 
-	public void importData() throws IOException {
+	private void importData() throws IOException {
 		DataReader reader = new DataReader();
 		levels = reader.getLevelData("levels/levels.txt");
 		int[] importedSettings = reader.getSettings();
@@ -285,13 +285,13 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		System.exit(0);
 	}
 		
-	public void gameUpdate(int n) {
+	private void gameUpdate(int n) {
 		for(int i = 0; i < n; i++) {
 			gameUpdate();
 		}
 	}
 	
-	public void sleep(long ms) {
+	private void sleep(long ms) {
 		try {
 			Thread.sleep(ms);
 		} catch(InterruptedException e) {
@@ -299,100 +299,13 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			e.printStackTrace();
 		}
 	}
-	
-	public void render(Graphics gr) {
 
-		Graphics2D g = (Graphics2D) gr;
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			
-		paints++;			
-
-		if(gameStarted && !gameWon) {
-			ball   = currentLevel.getBall();
-			bodies = currentLevel.getBodies();
-			screenXShift = currentLevel.getScreenXShift();
-			screenYShift = currentLevel.getScreenYShift();
-			initialPoint = new Point2d((int) Math.round(ball.getCenter().x + screenXShift), 
-									 (int) Math.round(ball.getCenter().y + screenYShift));
-
-			drawLevel(g);
-			g.setFont(InfoFont);
-
-			boolean drawData = false;
-			if(ball.isLaunched()) {
-				g.setColor(Color.green);
-				drawData = true;
-			} else if(drawingInitialVelocity) {
-				g.setColor(Color.white);
-				drawData = true;
-			} else if(drawingEffects) {
-				g.setColor(Color.red);
-				drawData = true;
-			}
-			
-			if(drawData) {
-				g.drawString("Length: " + DecimalFormatter.format(launchMagnitude) , 910, 20);
-				g.drawString("Angle: "  + DecimalFormatter.format(Math.toDegrees(launchAngle)), 910, 40);
-			}
-
-			g.setColor( Color.WHITE );
-			if(!gameWon) {
-				g.drawString("Swings: " + swingData[currentLevelN] + " / " + numSwingsTaken , 10, 40);
-				g.drawString("Level "   + (currentLevelN + 1) + " / " + (levels.size()) , 10, 20);
-			}
-			if(levelComplete) {
-				g.setColor(Color.GREEN);
-				g.drawString("Level Complete", 10, 60);	
-				g.drawString("Click to continue", 10, 80);			
-			}
-			if(!ball.isLaunched() && drawingInitialVelocity) {
-				initialPoint = new Point2d((int) Math.round(ball.getCenter().x + screenXShift), (int) Math.round(ball.getCenter().y + screenYShift ));
-				g.setColor(Color.WHITE);
-				double angle =  CalcHelp.getAngle(initialPoint, terminalPoint);
-				g.setColor(Color.white);
-				if(CalcHelp.getDistance(initialPoint, terminalPoint) <= MaxInitialMagnitude) {
-					drawArrow(initialPoint, terminalPoint, ArrowDistanceFromBall, ArrowSize, g);
-				} else {
-					double xSide = MaxInitialMagnitude *  Math.cos(angle);
-					double ySide = MaxInitialMagnitude * -Math.sin(angle);
-					Point2d tempTerminalPoint = new Point2d( (initialPoint.x + xSide), (initialPoint.y + ySide) );
-					drawArrow(initialPoint, tempTerminalPoint, ArrowDistanceFromBall, ArrowSize, g);
-				}
-			}
-			if(settings[VectorsNum] && !drawingEffects) {
-				drawGravityVectors(g);
-			}
-			if(settings[ResultantNum] && !drawingEffects) {
-				drawResultant(g);
-			}
-			if(gamePaused) {
-				g.setFont(AuthorFont);
-				g.setColor(Color.red);
-				g.drawString("PAUSED", 422, 50);
-			}
-		} else {
-			drawMenu(g);
-		}
-		if(settings[WarpArrowsNum]) {
-			drawWarpArrows(g);
-		}
-		if(gameWon) {
-			drawWinScreen(g);
-		}
-		if(levelComplete && currentLevelN == 0) {
-			g.setFont(MediumFont);
-			g.setColor(Color.WHITE);
-			g.drawString("Click to continue to the next level", 320, 60);
-		}
-		
-	}
-	
 	/*
 	 * Handles extra game logic
 	 *  - Sets initial special effect collision time
 	 *  - Updates the level if current level is completed
 	 */
-	public void gameUpdate() {
+	private void gameUpdate() {
 		if(!gameOver) {
 			if(gameStarted && currentLevelN >= levels.size()) {
 					gameWon = true;
@@ -454,7 +367,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		
 	}
 	
-	public void loadNextLevel() {
+	private void loadNextLevel() {
 		currentLevelN++;
 		levelComplete = false;
 		blinkingBall = true;
@@ -557,7 +470,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		}
 	}
 
-	public void setLevelUp(int l) {
+	private void setLevelUp(int l) {
 		currentLevel = levels.get(l);
 		currentLevel.generateLevelData();
 			ball   = currentLevel.getBall();
@@ -579,7 +492,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		if(showSolution) points = currentLevel.getSolutionSet();
 	}
 	
-	public void setLevelUp(Level l) {
+	private void setLevelUp(Level l) {
 		// used only for setting up menu level
 		currentLevel = l;
 		if(!currentLevel.isInitialized()) {
@@ -606,14 +519,14 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		drawingInitialVelocity = false;
 	}
 	
-	public void drawWarpArrows(Graphics2D g) {
+	private void drawWarpArrows(Graphics2D g) {
 		g.setColor(Color.white);
 		for(int i = 1; i < warps.size(); i++) {
 			drawArrow(warps.get(i - 1).getCenter().translate(screenXShift, screenYShift), warps.get(i).getCenter().translate(screenXShift, screenYShift), 0, 25, g);
 		}
 	} 
 
-	public void drawLevel(Graphics2D g) {
+	private void drawLevel(Graphics2D g) {
 		
 		long  t = System.currentTimeMillis();
 
@@ -657,8 +570,8 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 							i--;
 						}
 					}
-					b.multiplySpeed(0.99); // (rate for geometric slow down of particles)
-					b.updateLocation();
+					b.setVelocity(b.getVelocity().multiply(0.99)); // (rate for geometric slow down of particles)
+					b.move();
 				}
 				b.draw(screenXShift, screenYShift, g);
 			}
@@ -744,7 +657,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		
 	}
 	 
-	public void drawStars(Graphics2D g) {
+	private void drawStars(Graphics2D g) {
 		int xShift = (int)Math.round(screenXShift);
 		int yShift = (int)Math.round(screenYShift);
 		for(Star p : stars) {
@@ -754,7 +667,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		}
 	}
 
-	public void drawWinScreen(Graphics2D g) {
+	private void drawWinScreen(Graphics2D g) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0 , Width + 30, Height);
 		g.setFont(TitleFont);
@@ -773,7 +686,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		}
 	}
 
-	public void drawTrail(Graphics2D g) {
+	private void drawTrail(Graphics2D g) {
 	 	try {
 	 		Color c = Color.green;
 	 		g.setColor(c);
@@ -795,7 +708,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		 }
 	 }	
 
-	public void drawGravityVectors(Graphics2D g) {
+	private void drawGravityVectors(Graphics2D g) {
 		g.setColor(Color.white);				
 		
 		Point2d ballCent = new Point2d(ball.getCenter().x, ball.getCenter().y);
@@ -817,7 +730,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		
 	}
 	
-	public void drawResultant(Graphics2D g) {
+	private void drawResultant(Graphics2D g) {
 
 		double totalX = 0.0;
 		double totalY = 0.0;
@@ -847,7 +760,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		drawArrow(tempPt1, tempPt2, ArrowDistanceFromBall, ArrowSize, g);
 	}
 
-	public void drawArrow(Point2d p1, Point2d p2, int offset, int arrowsize, Graphics2D g) {
+	private void drawArrow(Point2d p1, Point2d p2, int offset, int arrowsize, Graphics2D g) {
 		double ang = CalcHelp.getAngle(p1, p2);
 
 		// Shifts away from the center of the ball, so the line starts a little past the edge of the ball
@@ -884,7 +797,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				   (int) Math.round(p2.x + arrowsize * sin1),   (int) Math.round(p2.y + arrowsize * cos1) );
 	}
 		
-	public void drawMenu(Graphics2D g) {
+	private void drawMenu(Graphics2D g) {
 		screenXShift = 0;
 		screenYShift = 0;
 		drawLevel(g);
@@ -1037,7 +950,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 	/**
 	 * Returns true if p is within the bounds of the screen, false otherwise
 	 */
-	public boolean onScreen(java.awt.Point p) {
+	private boolean onScreen(java.awt.Point p) {
 		return p.getX() + screenXShift > 0 && p.getX() + screenXShift < Width && p.getY() + screenYShift > 0 && p.getY() + screenYShift < Height;
 	}
 	public void itemStateChanged(ItemEvent event) {

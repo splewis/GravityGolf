@@ -7,7 +7,6 @@ package structures;
  * x-axis. <li>Angles are always stored in radians.
  * @author Sean Lewis
  */
-
 public class Vector2d {
 
 	private double xComp;
@@ -82,8 +81,7 @@ public class Vector2d {
 	 * @return the difference
 	 */
 	public Vector2d subtract(Vector2d v) {
-		return new Vector2d(xComp - v.getXComponent(), yComp
-				- v.getYComponent());
+		return add(v.multiply(-1.0));
 	}
 
 	/**
@@ -93,6 +91,15 @@ public class Vector2d {
 	 */
 	public Vector2d multiply(double k) {
 		return new Vector2d(xComp * k, yComp * k);
+	}
+
+	/**
+	 * Returns the scalar division of this and a constant.
+	 * @param k a constant
+	 * @return the product of the vector and 1/k
+	 */
+	public Vector2d divide(double k) {
+		return multiply(1.0 / k);
 	}
 
 	/**

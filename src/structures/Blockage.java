@@ -8,7 +8,6 @@
 package structures;
 
 import game.DataReader;
-
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;

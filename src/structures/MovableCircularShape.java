@@ -1,10 +1,14 @@
 package structures;
 
 /**
+ * Abstraction for Circular Shapes that are movable. Adds support for velocity.
  * @author Sean Lewis
  */
 public abstract class MovableCircularShape extends CircularShape {
 
+	/**
+	 * The velocity vector for the object.
+	 */
 	protected Vector2d velocity;
 
 	/**
@@ -19,8 +23,17 @@ public abstract class MovableCircularShape extends CircularShape {
 	 * @param velocity the vector to move position by
 	 */
 	public void move(Vector2d velocity) {
-		center.setX(center.getX() + velocity.getXComponent());
-		center.setY(center.getY() + velocity.getYComponent());
+		move(velocity, 1.0);
+	}
+
+	/**
+	 * Moves the object by dt * velocity
+	 * @param velocity the vector to move by
+	 * @param dt the value to multiply velocity by when adding
+	 */
+	public void move(Vector2d velocity, double dt) {
+		center.setX(center.getX() + dt * velocity.getXComponent());
+		center.setY(center.getY() + dt * velocity.getYComponent());
 	}
 
 	/**
@@ -28,7 +41,16 @@ public abstract class MovableCircularShape extends CircularShape {
 	 * @param acceleration the acceleration vector to add to velocity
 	 */
 	public void accelerate(Vector2d acceleration) {
-		velocity = velocity.add(acceleration);
+		accelerate(acceleration, 1.0);
+	}
+
+	/**
+	 * Changes the velocity by dt * acceleration
+	 * @param acceleration the vector to accelerate by
+	 * @param dt the value to multiply acceleration by when adding vectors
+	 */
+	public void accelerate(Vector2d acceleration, double dt) {
+		velocity = velocity.add(acceleration.multiply(dt));
 	}
 
 	/**

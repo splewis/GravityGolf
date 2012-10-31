@@ -87,8 +87,7 @@ public class DataReader {
 			settings[6] = Integer.parseInt(l.substring(l.indexOf("=") + 1));
 			infile.close();
 		} catch (Exception e) {
-			System.out
-					.println("Error in loading settings.txt, default settings loaded");
+
 			PrintWriter settingsWriter = new PrintWriter(new File(
 					"settings.txt"));
 			settingsWriter.println("advancedgraphics = yes");

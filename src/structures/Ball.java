@@ -1,13 +1,11 @@
 package structures;
 
 import game.DataReader;
-
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 /**
- * @author Sean
+ * @author Sean Lewis
  */
 public class Ball extends MovableCircularShape {
 
@@ -22,23 +20,20 @@ public class Ball extends MovableCircularShape {
 	}
 
 	/**
-	 * 
 	 * @param centerX
 	 * @param centerY
 	 * @param radius
 	 * @param c
 	 */
 	public Ball(int centerX, int centerY, int radius, Color c) {
-		center = new Point2d(centerX, centerY);
+		setCenter(new Point2d(centerX, centerY));
 		startingLocation = new Point2d(centerX, centerY);
+		setRadius(radius);
+		setColor(c);
 		velocity = new Vector2d(0, 0);
-		color = c;
-		this.radius = radius;
-		initializeVars();
 	}
 
 	/**
-	 * 
 	 * @param body
 	 * @return
 	 */
@@ -52,8 +47,9 @@ public class Ball extends MovableCircularShape {
 		if (speed > 2.50)
 			speed = 2.50;
 		if (body != null) {
-			while (CalcHelp.intersects(new Point2d(cX, cY), body.getCenter(),
-					body.getRadius(), radius)) {
+			double max = Math.pow(body.getRadius() + radius, 2);
+			while (body.getCenter().getDistanceSquared(
+					new Point2d(cX, cY)) < max) {
 				cX -= velocity.getXComponent();
 				cY -= velocity.getYComponent();
 			}
@@ -94,7 +90,6 @@ public class Ball extends MovableCircularShape {
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	public boolean isLaunched() {
@@ -102,7 +97,6 @@ public class Ball extends MovableCircularShape {
 	}
 
 	/**
-	 * 
 	 * @param b
 	 */
 	public void setLaunched(boolean b) {
@@ -113,7 +107,7 @@ public class Ball extends MovableCircularShape {
 	 * 
 	 */
 	public void resetLocation() {
-		center = startingLocation;
+		center = new Point2d(startingLocation.x, startingLocation.y);
 	}
 
 	/**

@@ -193,7 +193,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 					double angle = CalcHelp.getAngle(ball.getCenter(), new Point2d(p2));
 					double xComponent =  Math.cos(angle) * mag / 200;
 					double yComponent = -Math.sin(angle) * mag / 200;
-					ball.setSpeed(xComponent, yComponent);
+					ball.setVelocity(new Vector2d(xComponent, yComponent));
 					released = false;
 				}
 

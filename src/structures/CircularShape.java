@@ -4,24 +4,33 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 /**
- * 
+ * Abstraction for any object that is to be drawn in a circular way. Supports
+ * the geometry of the shape, drawing the shape, and changing the values of the
+ * Geometry variables.
  * @author Sean Lewis
- *
  */
 public abstract class CircularShape {
 
-	protected Point2d center;
-	protected Color color;
-	protected int radius;
-	protected int radiusSquared;
-	protected int diameter;
-
 	/**
-	 * Initializes the radiusSqured, diameter, and topLeft values.
+	 * The current center point for the circle.
 	 */
-	protected void initializeVars() {
-		setRadius(radius);
-	}
+	protected Point2d center;
+	/**
+	 * The primary color used for drawing.
+	 */
+	protected Color color;
+	/**
+	 * Radius of the circle.
+	 */
+	protected int radius;
+	/**
+	 * The square of the radius.
+	 */
+	protected int radiusSquared;
+	/**
+	 * The diameter, or twice the radius.
+	 */
+	protected int diameter;	
 
 	/**
 	 * Draws the shape with the shape's default color.
@@ -51,8 +60,8 @@ public abstract class CircularShape {
 
 	public void draw(double dx, double dy, Graphics g, Color color) {
 		g.setColor(color);
-		g.fillOval((int) (center.x - radius + dx), (int) (center.y - radius + dy),
-				diameter, diameter);
+		g.fillOval((int) (center.x - radius + dx),
+				(int) (center.y - radius + dy), diameter, diameter);
 	}
 
 	/**
@@ -106,15 +115,15 @@ public abstract class CircularShape {
 
 	/**
 	 * Sets the new color.
-	 * @param color
+	 * @param color the new color
 	 */
 	public void setColor(Color color) {
 		this.color = color;
 	}
 
 	/**
-	 * Sets the new radius.
-	 * @param radius
+	 * Sets the new radius. Also computes the diameter and radiusSquared values.
+	 * @param radius the new radius
 	 */
 	public void setRadius(int radius) {
 		this.radius = radius;
@@ -123,8 +132,8 @@ public abstract class CircularShape {
 	}
 
 	/**
-	 * 
-	 * @param center
+	 * Moves the circle by settings its center.
+	 * @param center the new center
 	 */
 	public void setCenter(Point2d center) {
 		this.center = center;
@@ -136,9 +145,8 @@ public abstract class CircularShape {
 	 * @return true if they overlap, false otherwise
 	 */
 	public boolean intersects(CircularShape circle) {
-	//	return CalcHelp.intersects(center, circle.getCenter(), radius, circle.getRadius());
 		double distSquared = getCenter().getDistanceSquared(circle.getCenter());
 		return distSquared < Math.pow((getRadius() + circle.getRadius()), 2);
-	}	
+	}
 
 }

@@ -10,10 +10,9 @@ public class GoalPost extends CircularShape {
 	private static final Color GoalPostColor = Color.WHITE;
 
 	public GoalPost(int x, int y, int r) {
-		center = new Point2d(x, y);
-		radius = r;
-		color = GoalPostColor;
-		initializeVars();
+		setCenter(new Point2d(x, y));
+		setRadius(r);
+		setColor(GoalPostColor);
 	}
 
 	public String toString() {
