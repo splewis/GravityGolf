@@ -202,13 +202,13 @@ public class Level {
 	 * @param body a Body
 	 * @return a intersecting Body or null
 	 */
-	public Body getIntersectingBody(Body body) {
+	public Body getIntersectingBody() {
 		for (Body b : bodies) {
-			if (body.intersects(b)) {
+			if (ball.intersects(b)) {
 				return b;
 			}
 			for (Moon m : b.getMoons()) {
-				if (body.intersects(m)) {
+				if (ball.intersects(m)) {
 					return m;
 				}
 			}
@@ -363,6 +363,9 @@ public class Level {
 				Vector2d v_p = v_i.projection(Math.atan((ball.getCenter().y - b
 						.getCenter().y)
 						/ (ball.getCenter().x - b.getCenter().x)));
+				
+				// TODO: projection clean up - what is going on here?
+				
 				Vector2d v_f = v_i.subtract(v_p.multiply(2));
 				ball.setVelocity(v_f);
 				while (ball.intersects(b)) {

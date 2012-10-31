@@ -342,15 +342,15 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 			if(objectItems[Ball].isSelected()) {
 				ball = new Ball((int)p1.getX(), (int)p1.getY(), 3, selectedColor());
 			} else if(objectItems[Body].isSelected()) {
-				bodies.add(new Body((int)p1.getX(), (int)p1.getY(), (int)CalcHelp.getDistance(p1, p2), selectedColor()));
+				bodies.add(new Body((int)p1.getX(), (int)p1.getY(), (int)p1.distance(p2), selectedColor()));
 			} else if(objectItems[Moon].isSelected() && bodies.size() > 0) {
 
-				int r = (int) CalcHelp.getDistance(p1, p2);
+				int r = (int) p1.distance(p2);
 				Point2d center = new Point2d(p1);
 				int index = 0;
-				double smallestDistance = CalcHelp.getDistance(center, bodies.get(0).getCenter()) - bodies.get(0).getRadius();
+				double smallestDistance = center.getDistance(bodies.get(0).getCenter()) - bodies.get(0).getRadius();
 				for(int i = 1; i < bodies.size(); i++) {
-					double d = CalcHelp.getDistance(center, bodies.get(i).getCenter()) - bodies.get(i).getRadius();
+					double d = center.getDistance(bodies.get(i).getCenter()) - bodies.get(i).getRadius();
 					if(d < smallestDistance) {
 						smallestDistance = d;
 						index = i;
@@ -367,7 +367,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 			} else if(objectItems[Warp].isSelected()) {
 				warps.add(new WarpPoint((int)p1.getX(), (int)p1.getY()));
 			} else if(objectItems[Goal].isSelected()) {
-				goals.add(new GoalPost((int)p1.getX(), (int)p1.getY(), (int)CalcHelp.getDistance(p1, p2)));
+				goals.add(new GoalPost((int)p1.getX(), (int)p1.getY(), (int)p1.distance(p2)));
 			}
 
 
@@ -418,25 +418,26 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener, MouseM
 			released = true;
 		}
 		p2 = event.getPoint();
+		Point2d otherPoint = new Point2d(p2);
 		if(!testItem.isSelected()) p2.translate(-dx, -dy);
 		if(editItem.isSelected()) {
-			if(CalcHelp.intersects(ball.getCenter(), new Point2d(p2), ball.getRadius())) {
+			if(ball.getCenter().withinDistance(otherPoint, ball.getRadius())) {
 				ball = null;
 			}
 			for(int i = 0; i < bodies.size(); i++) {
-				if(CalcHelp.intersects(bodies.get(i).getCenter(), new Point2d(p2), bodies.get(i).getRadius())) {
+				if(bodies.get(i).getCenter().withinDistance(otherPoint, bodies.get(i).getRadius())) {
 					bodies.remove(i);
 					break;
 				}
 			}
 			for(int i = 0; i < warps.size(); i++) {
-				if(CalcHelp.intersects(warps.get(i).getCenter(), new Point2d(p2), WarpPoint.RADIUS)) {
+				if(warps.get(i).getCenter().withinDistance(otherPoint, WarpPoint.RADIUS)) {
 					warps.remove(i);
 					break;
 				}
 			}
 			for(int i = 0; i < goals.size(); i++) {
-				if(CalcHelp.intersects(goals.get(i).getCenter(), new Point2d(p2), goals.get(i).getRadius())) {
+				if(goals.get(i).getCenter().withinDistance(otherPoint, goals.get(i).getRadius())) {
 					goals.remove(i);
 					break;
 				}

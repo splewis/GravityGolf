@@ -76,6 +76,16 @@ public class Point2d {
 	}
 
 	/**
+	 * Returns if a point is within a certain distance/
+	 * @param p another point
+	 * @param maxDistance the max (exclusive) distance
+	 * @return if this point is within maxDistance from p
+	 */
+	public boolean withinDistance(Point2d p, double maxDistance) {
+		return getDistanceSquared(p) < maxDistance * maxDistance;
+	}
+	
+	/**
 	 * Returns the translation of this point by dx and dy.
 	 * @param dx the x-difference
 	 * @param dy the y-difference

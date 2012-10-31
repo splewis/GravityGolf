@@ -162,7 +162,7 @@ public final class CalcHelp {
 			return 3;
 		return 4;
 	}
-
+	
 	/**
 	 * Returns the gravitational acceleration experienced by an object.
 	 * @param location the location of the object experiencing the acceleration

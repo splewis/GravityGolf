@@ -59,8 +59,7 @@ public class GameFrame extends JFrame implements KeyListener {
 					}
 					break;											
 			
-		}
-		gp.updateSettings();			
+		}			
 	}	
 	public void keyReleased(KeyEvent event){}
 	public void keyTyped   (KeyEvent event){}

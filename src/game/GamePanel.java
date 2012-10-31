@@ -318,7 +318,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 				trailPoints.add(new Point2d(ball.getCenter().x , ball.getCenter().y));			
 			}
 			if(currentLevel.timeToReset() && !drawingEffects && settings[EffectsNum]) {
-				Body intersected = currentLevel.getBodyIntersection();
+				Body intersected = currentLevel.getIntersectingBody();
 				particles = ball.generateParticles(intersected);
 				shakeValues = new double[6];
 				double speed = ball.getVelocity().getLength();
@@ -552,8 +552,8 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 
 				if(!gamePaused) {
 					for(Body bod: bodies) {
-						if(CalcHelp.intersects(bod.getCenter(), b.getCenter(), bod.getRadius(), (int) Math.round(b.getRadius()))
-						   || CalcHelp.getDistanceSquared(bod.getCenter(), b.getCenter()) <= (bod.getRadius()*.5)*(bod.getRadius()*.5) && i != 0) {
+						if(bod.intersects(b)
+						   || bod.getCenter().getDistanceSquared(b.getCenter()) <= (bod.getRadius()*.5)*(bod.getRadius()*.5) && i != 0) {
 							particles.remove(i);
 							i--;
 						}
@@ -565,7 +565,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 						}
 					}
 					for(GoalPost gp: goals) {
-						if(CalcHelp.intersects(b.getCenter(), gp.getCenter(), gp.getRadius()) && i != 0) {
+						if(b.intersects(gp) && i != 0) {
 							particles.remove(i);
 							i--;
 						}
@@ -705,14 +705,14 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		for(Body b : bodies) {
 			Point2d bodyCent = b.getCenter();
 			double angle = CalcHelp.getAngle(ballCent, bodyCent);
-			double length =  currentLevel.getGravityStrength() * ArrowLength * b.getRadius() / CalcHelp.getDistance(ballCent, bodyCent) + 5;
+			double length =  currentLevel.getGravityStrength() * ArrowLength * b.getRadius() / ballCent.getDistance(bodyCent) + 5;
 			Point2d p2 = new Point2d(ballCent.x + screenXShift + length * Math.cos(angle) , ballCent.y + length * -Math.sin(angle) + screenYShift);
 			Point2d ballPt = new Point2d(ballCent.x + screenXShift, ballCent.y + screenYShift);
 			drawArrow(ballPt, p2, ArrowDistanceFromBall, ArrowSize, g);
 			for(Moon m : b.getMoons()) {
 				Point2d moonCent = m.getCenter();;
 				angle = CalcHelp.getAngle(ballCent, moonCent);
-				length =  currentLevel.getGravityStrength()* ArrowLength * m.getRadius() / CalcHelp.getDistance(ballCent, moonCent) + 5;
+				length =  currentLevel.getGravityStrength()* ArrowLength * m.getRadius() / ballCent.getDistance(moonCent) + 5;
 				p2 = new Point2d(ballCent.x + screenXShift + length * Math.cos(angle) , ballCent.y + length * -Math.sin(angle) + screenYShift);
 				drawArrow(ballPt, p2, ArrowDistanceFromBall, ArrowSize, g);
 			}
@@ -730,14 +730,14 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 
 			Point2d bodyCent = new Point2d(b.getCenter().x, b.getCenter().y);
 			double angle = CalcHelp.getAngle(ballCent, bodyCent);
-			double length =  currentLevel.getGravityStrength()* ArrowLength * b.getRadius() / CalcHelp.getDistance(ballCent, bodyCent) + 5;
+			double length =  currentLevel.getGravityStrength()* ArrowLength * b.getRadius() / ballCent.getDistance(bodyCent) + 5;
 			totalX += length * Math.cos(angle);
 			totalY -= length * Math.sin(angle);
 
 			for(Moon m : b.getMoons()) {
 				Point2d moonCent = new Point2d(m.getCenter().x, m.getCenter().y);
 				angle = CalcHelp.getAngle(ballCent, moonCent);
-				length =  currentLevel.getGravityStrength() * ArrowLength * m.getRadius() / CalcHelp.getDistance(ballCent, moonCent) + 5;
+				length =  currentLevel.getGravityStrength() * ArrowLength * m.getRadius() / ballCent.getDistance(moonCent) + 5;
 				totalX += length * Math.cos(angle);
 				totalY -= length * Math.sin(angle);
 			}
@@ -902,9 +902,9 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		mouseDragged(event);
 	}
 	public void mouseDragged(MouseEvent event) {
-		if(!ball.isLaunched() && !gamePaused && CalcHelp.getDistance(new Point2d(event.getPoint()), initialPoint) > 2 * ArrowDistanceFromBall && !drawingEffects) {
+		if(!ball.isLaunched() && !gamePaused && initialPoint.getDistance(new Point2d(event.getPoint())) > 2 * ArrowDistanceFromBall && !drawingEffects) {
 			terminalPoint = new Point2d(event.getPoint().getX() ,event.getPoint().getY() );
-			launchMagnitude = CalcHelp.getDistance(initialPoint, terminalPoint);
+			launchMagnitude = initialPoint.getDistance(terminalPoint);
 			if(launchMagnitude > MaxInitialMagnitude) {
 				launchMagnitude = MaxInitialMagnitude;
 			}
@@ -918,8 +918,8 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		if(!gamePaused && !ball.isLaunched() && !drawingEffects && drawingInitialVelocity) {
 			numSwingsTaken++;
 			swingData[currentLevelN]++; // since currentLevel 5 corresponds to index 4 in the array
-			launchMagnitude = CalcHelp.getDistance(initialPoint, terminalPoint);
-			launchAngle 	= CalcHelp.getAngle(   initialPoint, terminalPoint);
+			launchMagnitude = initialPoint.getDistance(terminalPoint);
+			launchAngle = CalcHelp.getAngle(initialPoint, terminalPoint);
 			if(launchAngle < 0) launchAngle += (2 * Math.PI); // so the display only shows the positive coterminal angle (300 instead of -60)
 			if(launchMagnitude > MaxInitialMagnitude) launchMagnitude = MaxInitialMagnitude;
 
@@ -937,12 +937,6 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		drawingInitialVelocity = false;
 	}
 	
-	/**
-	 * Returns true if p is within the bounds of the screen, false otherwise
-	 */
-	private boolean onScreen(java.awt.Point p) {
-		return p.getX() + screenXShift > 0 && p.getX() + screenXShift < Width && p.getY() + screenYShift > 0 && p.getY() + screenYShift < Height;
-	}
 	public void itemStateChanged(ItemEvent event) {
 		for(int i = 0; i < settingsBoxes.length; i++) {
 			if(event.getSource() == settingsBoxes[i]) {
@@ -961,28 +955,15 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 	}
 	public void setSetting(int n, boolean b) {
 		settings[n] = b;
+		settingsBoxes[n].setState(settings[n]);
 	}
 	public void switchSetting(int n) {
 		settings[n] = !settings[n];
-	}
-
-	public boolean isGameWon() {
-		return gameWon;
-	}
-
-	public void setLevel(int i) {
-		currentLevelN = i;
-		setLevelUp(currentLevelN);
+		settingsBoxes[n].setState(settings[n]);
 	}
 
 	public void closeGameWriter() {
 		gameWriter.close();
-	}
-
-	public void updateSettings() {
-		for(int i = 0; i < settings.length; i++) {
-			settingsBoxes[i].setState(settings[i]);
-		}
 	}
 
 	public void printSettings() throws IOException {
@@ -1006,7 +987,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 	 	settingsWriter.close();
 	}
 
-	public void saveGame(File file) throws IOException {
+	private void saveGame(File file) throws IOException {
 		PrintWriter saveWriter = new PrintWriter(file);
 		for(int i = 0; i < levels.size(); i++) {
 			saveWriter.print(CalcHelp.encode(swingData[i], i) + " ");
@@ -1017,7 +998,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		gameWriter.println("Game saved to " + file.getName() + ".");
 	}
 
-	public void loadGame(File file) throws IOException {
+	private void loadGame(File file) throws IOException {
 		
 		int totalswingimport = 0;
 		int level = 0;
@@ -1079,7 +1060,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 		running = false;
 	}
 
-	public void killSpecialEffects() {
+	private void killSpecialEffects() {
 		effectStartTime = effectStartTime - SpecialEffectTime - 1;
 		drawingEffects = false;
 	}
