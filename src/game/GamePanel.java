@@ -588,7 +588,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			}	
 			for(Body b: bodies) {
 				for(Moon m: b.getMoons()) {
-					m.advancedDraw(screenXShift, screenYShift, g);
+					m.draw(screenXShift, screenYShift, g);
 				}
 			}
 		} else {			
