@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -17,6 +19,7 @@ public class BodyGraphicsTest extends JFrame {
 	private int largestSize;
 	private int smallestSize;
 	private List<Body> bodies;
+	private boolean drawOutline = false;
 
 	public static void main(String[] args) {
 		new BodyGraphicsTest(10, 100, 10);
@@ -28,10 +31,23 @@ public class BodyGraphicsTest extends JFrame {
 		this.smallestSize = smallestSize;
 		setSize(1200, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("BodyGraphicsTest");
+		setTitle("BodyGraphicsTest - press any key to draw outlines");
 		panel.setSize(getWidth(), getHeight());
 		setVisible(true);
 		makeBodies();
+		setFocusable(true);
+		addKeyListener(new KeyListener() {
+			public void keyPressed(KeyEvent e) {
+				drawOutline = !drawOutline;
+				repaint();
+			}
+
+			public void keyReleased(KeyEvent e) {
+			}
+
+			public void keyTyped(KeyEvent e) {
+			}
+		});
 	}
 
 	public void makeBodies() {
@@ -56,14 +72,17 @@ public class BodyGraphicsTest extends JFrame {
 				RenderingHints.VALUE_STROKE_NORMALIZE);
 		g.setRenderingHint(RenderingHints.KEY_RENDERING,
 				RenderingHints.VALUE_RENDER_QUALITY);
+
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		for (Body b : bodies) {
-			b.draw(0, 0, g);
-			g.setColor(Color.green);
-			g.drawOval((int) b.getCenter().x - b.getRadius(),
-					(int) b.getCenter().y - b.getRadius(), b.getDiameter(),
-					b.getDiameter());
+			b.draw(g);
+			if (drawOutline) {
+				g.setColor(Color.red);
+				g.drawOval((int) b.getCenter().x - b.getRadius(),
+						(int) b.getCenter().y - b.getRadius(), b.getDiameter(),
+						b.getDiameter());
+			}
 		}
 	}
 
