@@ -18,25 +18,23 @@ public class Body extends CircularShape {
 	private ArrayList<Moon> moons;
 	private boolean reflector = false;
 
-	// for advanced drawing
-	private Color[] colors;
-	private float[] dist = { 0.93f, 0.97f, 1.0f };
-	// 0 - 93 % pure color
-	// 93 -97 % fade from color to white
-	// 97 -100% fade from white to black
-	private int extraRadius;
+	protected int extraRadius;
+	protected Color[] colors;
+	protected float[] dist;
 
 	/**
-	 * 
+	 * Initializes a new empty Body.
 	 */
 	public Body() {
 	}
 
 	/**
-	 * @param centerX
-	 * @param centerY
-	 * @param radius
-	 * @param color
+	 * Initializes a new Body at a center point and radius with a color. Since
+	 * no mass is specified, the radius is used as the mass.
+	 * @param centerX the center x coordinate
+	 * @param centerY the center y coordinate
+	 * @param radius the radius
+	 * @param color the color
 	 */
 	public Body(int centerX, int centerY, int radius, Color color) {
 		this(centerX, centerY, radius, color, radius);
@@ -44,21 +42,27 @@ public class Body extends CircularShape {
 	}
 
 	/**
-	 * @param centerX
-	 * @param centerY
-	 * @param radius
-	 * @param color
-	 * @param mass
+	 * Initializes a new Body at a center point and radius with a color.
+	 * @param centerX the center x coordinate
+	 * @param centerY the center y coordinate
+	 * @param radius the radius
+	 * @param color the color
+	 * @param mass the mass
 	 */
 	public Body(int centerX, int centerY, int radius, Color color, int mass) {
 		setCenter(new Point2d(centerX, centerY));
 		setRadius(radius);
 		setColor(color);
 		this.mass = mass;
-		
 		moons = new ArrayList<Moon>();
-		// TODO: put all advanced drawing calculation in a single method used by
-		// moon and Body
+
+	}
+
+	/**
+	 * 
+	 */
+	protected void computeColoring() {
+		dist = new float[] { 0.93f, 0.97f, 1.0f };
 		if (radius < 60) {
 			dist[0] = 0.88f;
 			dist[1] = 0.95f;
@@ -80,6 +84,8 @@ public class Body extends CircularShape {
 	 * @param g
 	 */
 	public void advancedDraw(double dx, double dy, Graphics2D g) {
+		if (colors == null || dist == null)
+			computeColoring();
 		if (radius < 10) {
 			draw((int) Math.round(dx), (int) Math.round(dy), g);
 		} else {
@@ -87,43 +93,47 @@ public class Body extends CircularShape {
 					center.x + dx, center.y + dy), radius + extraRadius, dist,
 					colors));
 			g.fillOval((int) Math.round(center.x - radius + dx - extraRadius),
-					(int) Math.round(center.y - radius + dy - extraRadius), diameter
-							+ 2 * extraRadius + 1, diameter + 2 * extraRadius
-							+ 1);
+					(int) Math.round(center.y - radius + dy - extraRadius),
+					diameter + 2 * extraRadius, diameter + 2 * extraRadius);
 		}
 
 	}
 
 	/**
-	 * @param m
+	 * Adds a moon to orbit this Body.
+	 * @param m a parameter
 	 */
 	public void addMoon(Moon m) {
 		moons.add(m);
 	}
 
 	/**
-	 * @param b
+	 * Sets the reflector property for this Body.
+	 * @param isReflector a parameter
 	 */
-	public void setReflector(boolean b) {
-		reflector = b;
+	public void setReflector(boolean isReflector) {
+		reflector = isReflector;
 	}
 
 	/**
-	 * @return
+	 * Return if this Body has the reflector property.
+	 * @return if this Body has the reflector property
 	 */
 	public boolean isReflector() {
 		return reflector;
 	}
 
 	/**
-	 * @return
+	 * Returns the mass of the Body.
+	 * @return the mass
 	 */
 	public int getMass() {
 		return mass;
 	}
 
 	/**
-	 * @return
+	 * Returns the List of Moons attached to this Body.
+	 * @return the List of Moons
 	 */
 	public ArrayList<Moon> getMoons() {
 		return moons;
