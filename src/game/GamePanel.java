@@ -709,7 +709,7 @@ public class GamePanel extends JPanel implements  ActionListener, MouseListener,
 			Point2d ballPt = new Point2d(ballCent.x + screenXShift, ballCent.y + screenYShift);
 			drawArrow(ballPt, p2, ArrowDistanceFromBall, ArrowSize, g);
 			for(Moon m : b.getMoons()) {
-				Point2d moonCent = m.getCenter();;
+				Point2d moonCent = m.getCenter();
 				angle = CalcHelp.getAngle(ballCent, moonCent);
 				length =  currentLevel.getGravityStrength()* ArrowLength * m.getRadius() / ballCent.getDistance(moonCent) + 5;
 				p2 = new Point2d(ballCent.x + screenXShift + length * Math.cos(angle) , ballCent.y + length * -Math.sin(angle) + screenYShift);
