@@ -30,46 +30,49 @@ public abstract class CircularShape {
 	/**
 	 * The diameter, or twice the radius.
 	 */
-	protected int diameter;	
+	protected int diameter;
 
 	/**
-	 * Draws the shape with the shape's default color.
+	 * Draws the shape with the shape's default color. This is the primary
+	 * method for all drawing.
 	 * @param dx a translation x-difference
 	 * @param dy a translation y-difference
 	 * @param g the Graphics component to draw with
 	 */
 	public void draw(double dx, double dy, Graphics g) {
-		draw(dx, dy, g, color);
-	}
-
-	/**
-	 * Draws the shape with the shape's default color.
-	 * @param g the Graphics component to draw with
-	 */
-	public void draw(Graphics g) {
-		draw(0, 0, g, color);
-	}
-
-	/**
-	 * Draws the shape.
-	 * @param dx a translation x-difference
-	 * @param dy a translation y-difference
-	 * @param g the Graphics component to draw with
-	 * @param color the color to use
-	 */
-
-	public void draw(double dx, double dy, Graphics g, Color color) {
 		g.setColor(color);
 		g.fillOval((int) (center.x - radius + dx),
 				(int) (center.y - radius + dy), diameter, diameter);
 	}
 
 	/**
+	 * Draws the shape with the shape's default color.
+	 * @param g the Graphics component to draw with
+	 */
+	public final void draw(Graphics g) {
+		draw(0, 0, g);
+	}
+
+	/**
+	 * Draws the shape.
+	 * @param dx a translation x-difference
+	 * @param dy a translation y-difference
+	 * @param g the Graphics component to draw with
+	 * @param color the color to use
+	 */
+	public final void draw(double dx, double dy, Graphics g, Color color) {
+		Color savedColor = getColor();
+		setColor(color);
+		draw(dx, dy, g);
+		setColor(savedColor);
+	}
+
+	/**
 	 * Draws the shape.
 	 * @param g the Graphics component to draw with
 	 * @param color the color to use
 	 */
-	public void draw(Graphics g, Color color) {
+	public final void draw(Graphics g, Color color) {
 		draw(0, 0, g, color);
 	}
 
@@ -77,7 +80,7 @@ public abstract class CircularShape {
 	 * Returns the center coordinate.
 	 * @return the center
 	 */
-	public Point2d getCenter() {
+	public final Point2d getCenter() {
 		return center;
 	}
 
@@ -85,7 +88,7 @@ public abstract class CircularShape {
 	 * Returns the color.
 	 * @return the color
 	 */
-	public Color getColor() {
+	public final Color getColor() {
 		return color;
 	}
 
@@ -93,7 +96,7 @@ public abstract class CircularShape {
 	 * Returns the radius.
 	 * @return the radius
 	 */
-	public int getRadius() {
+	public final int getRadius() {
 		return radius;
 	}
 
@@ -101,7 +104,7 @@ public abstract class CircularShape {
 	 * Returns the square of the radius.
 	 * @return the square of the radius
 	 */
-	public int getRadiusSquared() {
+	public final int getRadiusSquared() {
 		return radiusSquared;
 	}
 
@@ -109,7 +112,7 @@ public abstract class CircularShape {
 	 * Returns the diameter.
 	 * @return the diameter
 	 */
-	public int getDiameter() {
+	public final int getDiameter() {
 		return diameter;
 	}
 
@@ -125,7 +128,7 @@ public abstract class CircularShape {
 	 * Sets the new radius. Also computes the diameter and radiusSquared values.
 	 * @param radius the new radius
 	 */
-	public void setRadius(int radius) {
+	public final void setRadius(int radius) {
 		this.radius = radius;
 		diameter = 2 * radius;
 		radiusSquared = radius * radius;
@@ -135,16 +138,18 @@ public abstract class CircularShape {
 	 * Moves the circle by settings its center.
 	 * @param center the new center
 	 */
-	public void setCenter(Point2d center) {
+	public final void setCenter(Point2d center) {
 		this.center = center;
 	}
 
 	/**
-	 * Returns if this intersects another CircularShape.
+	 * Returns if this intersects another CircularShape. Touching on the edge
+	 * (i.e. there is a single point of collision) is not considered an
+	 * intersection, so this case returns false.
 	 * @param circle another shape
 	 * @return true if they overlap, false otherwise
 	 */
-	public boolean intersects(CircularShape circle) {
+	public final boolean intersects(CircularShape circle) {
 		double distSquared = getCenter().getDistanceSquared(circle.getCenter());
 		return distSquared < Math.pow((getRadius() + circle.getRadius()), 2);
 	}
