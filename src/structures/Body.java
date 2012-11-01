@@ -3,6 +3,7 @@ package structures;
 import game.DataReader;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
@@ -78,21 +79,18 @@ public class Body extends CircularShape {
 		colors[2] = Color.BLACK;
 	}
 
-	/**
-	 * @param dx
-	 * @param dy
-	 * @param g
-	 */
-	public void advancedDraw(double dx, double dy, Graphics2D g) {
+	
+	public void draw(double dx, double dy, Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
 		if (colors == null || dist == null)
 			computeColoring();
 		if (radius < 10) {
 			draw((int) Math.round(dx), (int) Math.round(dy), g);
 		} else {
-			g.setPaint(new RadialGradientPaint(new Point2D.Double(
+			g2.setPaint(new RadialGradientPaint(new Point2D.Double(
 					center.x + dx, center.y + dy), radius + extraRadius, dist,
 					colors));
-			g.fillOval((int) Math.round(center.x - radius + dx - extraRadius),
+			g2.fillOval((int) Math.round(center.x - radius + dx - extraRadius),
 					(int) Math.round(center.y - radius + dy - extraRadius),
 					diameter + 2 * extraRadius, diameter + 2 * extraRadius);
 		}
