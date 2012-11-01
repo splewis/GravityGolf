@@ -142,7 +142,7 @@ public class Level {
 			w.draw(-xMin + extraX, -yMin + extraY, g);
 		}
 		for (Body b : bodies) {
-			b.advancedDraw(-xMin + extraX, -yMin + extraY, g);
+			b.draw(-xMin + extraX, -yMin + extraY, g);
 		}
 		for (Blockage b : blockages) {
 			b.draw(-xMin + extraX, -yMin + extraY, g);
