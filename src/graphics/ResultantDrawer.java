@@ -6,13 +6,16 @@ import java.util.List;
 import structures.*;
 
 /**
- * 
  * @author Sean Lewis
- *
  */
-public class ResultantDrawer extends GraphicEffect {
+public final class ResultantDrawer extends GraphicEffect {
 
-	public void draw(Level level, Graphics g) {
+	/**
+	 * 
+	 * @param level
+	 * @param g
+	 */
+	public static void draw(Level level, Graphics g) {
 
 		double screenXShift = level.getScreenXShift();
 		double screenYShift = level.getScreenYShift();
@@ -48,7 +51,6 @@ public class ResultantDrawer extends GraphicEffect {
 				ball.getCenter().y + screenYShift);
 		Point2d tempPt2 = new Point2d(tempPt1.x + totalX, tempPt1.y + totalY);
 		drawArrow(tempPt1, tempPt2, ArrowDistanceFromBall, ArrowSize, g);
-
 	}
 
 }
