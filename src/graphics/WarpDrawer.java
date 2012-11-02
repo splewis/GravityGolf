@@ -6,18 +6,21 @@ import java.util.ArrayList;
 import structures.*;
 
 /**
- * 
  * @author Sean Lewis
- *
  */
-public class WarpDrawer extends GraphicEffect {
+public final class WarpDrawer extends GraphicEffect {
 
-	public void draw(Level level, Graphics g) {
+	/**
+	 * 
+	 * @param level
+	 * @param g
+	 */
+	public static void draw(Level level, Graphics g) {
 		g.setColor(Color.white);
 		ArrayList<WarpPoint> warps = level.getWarpPoints();
 		double screenXShift = level.getScreenXShift();
 		double screenYShift = level.getScreenYShift();
-		
+
 		for (int i = 1; i < warps.size(); i++) {
 			Point2d p1 = warps.get(i - 1).getCenter()
 					.translate(screenXShift, screenYShift);
@@ -28,4 +31,5 @@ public class WarpDrawer extends GraphicEffect {
 		}
 
 	}
+
 }
