@@ -12,14 +12,12 @@ import structures.Moon;
 import structures.Point2d;
 
 /**
- * 
  * @author Sean Lewis
- *
  */
-public class GravityVectorsEffect extends GraphicEffect {
+public final class GravityVectorsEffect extends GraphicEffect {
 
-	public void draw(Level level, Graphics g) {
-		
+	public static void draw(Level level, Graphics g) {
+
 		List<Body> bodies = level.getBodies();
 		Ball ball = level.getBall();
 		double screenXShift = level.getScreenXShift();
@@ -39,7 +37,7 @@ public class GravityVectorsEffect extends GraphicEffect {
 			Point2d ballPt = new Point2d(ballCent.x + screenXShift, ballCent.y
 					+ screenYShift);
 			drawArrow(ballPt, p2, ArrowDistanceFromBall, ArrowSize, g);
-			
+
 			for (Moon m : b.getMoons()) {
 				Point2d moonCent = m.getCenter();
 				angle = CalcHelp.getAngle(ballCent, moonCent);
@@ -50,7 +48,7 @@ public class GravityVectorsEffect extends GraphicEffect {
 						* -Math.sin(angle) + screenYShift);
 				drawArrow(ballPt, p2, ArrowDistanceFromBall, ArrowSize, g);
 			}
-			
+
 		}
 
 	}
