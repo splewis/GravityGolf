@@ -46,63 +46,6 @@ public final class CalcHelp {
 	}
 
 	/**
-	 * Returns the decoded value of value through the key.
-	 * @param value the input value
-	 * @param key the unique input key
-	 * @return the decoded value
-	 */
-	// TODO: place encoding/decoding in seperate file?
-	public static int decode(long value, int key) {
-		if (isPrime(key)) {
-			return (int) ((value - key * key * key) / 3);
-		}
-		if (key % 6 == 0) {
-			return (int) (value / (key + 5) - key);
-		}
-		if (key % 4 == 0) {
-			return (int) (value - key) / -15;
-		}
-		if (key % 5 == 0) {
-			return (int) Math.sqrt(value - key);
-		}
-		if (key % 7 == 0) {
-			return (int) (value - key * key * key);
-		}
-		if (key % 2 == 0) {
-			return (int) (value + key * key + 20) / 10;
-		}
-		return (int) (value + 6 * key * key) / 8;
-	}
-
-	/**
-	 * Returns an encoded value based of the input value and unique key.
-	 * @param value the input value
-	 * @param key the unique input key
-	 * @return the encoded value
-	 */
-	public static long encode(int value, int key) {
-		if (isPrime(key)) {
-			return (value * 3) + key * key * key;
-		}
-		if (key % 6 == 0) {
-			return (value + key) * (key + 5);
-		}
-		if (key % 4 == 0) {
-			return -15 * value + key;
-		}
-		if (key % 5 == 0) {
-			return value * value + key;
-		}
-		if (key % 7 == 0) {
-			return value + key * key * key;
-		}
-		if (key % 2 == 0) {
-			return 10 * value - 20 - key * key;
-		}
-		return 8 * value - 6 * key * key;
-	}
-
-	/**
 	 * Calculates if a number is prime.
 	 * @param num a number
 	 * @return if num is prime
@@ -162,7 +105,7 @@ public final class CalcHelp {
 			return 3;
 		return 4;
 	}
-	
+
 	/**
 	 * Returns the gravitational acceleration experienced by an object.
 	 * @param location the location of the object experiencing the acceleration
@@ -203,9 +146,9 @@ public final class CalcHelp {
 	 */
 	public static double getAngle(double xDif, double yDif) {
 		double angle = Math.atan(-yDif / xDif);
-		if (xDif > 0) 
+		if (xDif > 0)
 			return angle;
-		if (xDif < 0) 
+		if (xDif < 0)
 			return angle + Math.PI;
 		return Math.signum(-yDif) * Math.PI / 2.0;
 	}
