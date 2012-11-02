@@ -36,6 +36,7 @@ package game;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -76,30 +77,32 @@ public class DataReader {
 	 */
 	public int[] getSettings() throws IOException {
 
-		int[] settings = { 1, 0, 0, 0, 1, 0, 3 };
+		int[] settings = { 0, 0, 0, 1, 0, 3 };
 		try {
 			Scanner infile = new Scanner(new File("settings.txt"));
 			int i = 0;
-			while (i < 6) {
+			while (i < 5) {
 				settings[i++] = (infile.nextLine().contains("yes")) ? (1) : (0);
 			}
 			String l = infile.nextLine().toLowerCase().replaceAll(" ", "");
-			settings[6] = Integer.parseInt(l.substring(l.indexOf("=") + 1));
+			settings[5] = Integer.parseInt(l.substring(l.indexOf("=") + 1));
 			infile.close();
 		} catch (Exception e) {
-
-			PrintWriter settingsWriter = new PrintWriter(new File(
-					"settings.txt"));
-			settingsWriter.println("advancedgraphics = yes");
-			settingsWriter.println("vectors = no");
-			settingsWriter.println("resultant = no");
-			settingsWriter.println("trail = no");
-			settingsWriter.println("effects = yes");
-			settingsWriter.println("warpArrows = no");
-			settingsWriter.println("speed = 3");
-			settingsWriter.close();
+			writeDefaultSettings();
 		}
 		return settings;
+	}
+
+	public static void writeDefaultSettings() throws FileNotFoundException {
+		PrintWriter settingsWriter = new PrintWriter(new File("settings.txt"));
+		settingsWriter.println("vectors = no");
+		settingsWriter.println("resultant = no");
+		settingsWriter.println("trail = no");
+		settingsWriter.println("effects = yes");
+		settingsWriter.println("warpArrows = no");
+		settingsWriter.println("speed = 3");
+		settingsWriter.close();
+
 	}
 
 	private ArrayList<Level> readFile(File file) throws IOException {
@@ -364,7 +367,7 @@ public class DataReader {
 			return new Color(127, 0, 255);
 
 		// TODO: error handling
-		
+
 		String r = str.substring(str.indexOf("(") + 1, str.indexOf(","));
 		String g = str.substring(str.indexOf(",") + 1, str.lastIndexOf(","));
 		String b = str.substring(str.lastIndexOf(",") + 1, str.indexOf(")"));
@@ -373,4 +376,34 @@ public class DataReader {
 				Integer.parseInt(b));
 	}
 
+
+	/**
+	 * Returns the decoded value of value through the key.
+	 * @param value the input value
+	 * @param key the unique input key
+	 * @return the decoded value
+	 */
+	public static int decode(long value, int key) {
+		if (CalcHelp.isPrime(key)) {
+			return (int) ((value - key * key * key) / 3);
+		}
+		if (key % 6 == 0) {
+			return (int) (value / (key + 5) - key);
+		}
+		if (key % 4 == 0) {
+			return (int) (value - key) / -15;
+		}
+		if (key % 5 == 0) {
+			return (int) Math.sqrt(value - key);
+		}
+		if (key % 7 == 0) {
+			return (int) (value - key * key * key);
+		}
+		if (key % 2 == 0) {
+			return (int) (value + key * key + 20) / 10;
+		}
+		return (int) (value + 6 * key * key) / 8;
+	}
+
+	
 }
