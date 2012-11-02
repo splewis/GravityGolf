@@ -1,59 +1,48 @@
 package graphics;
 
 import java.awt.Graphics;
-
 import structures.CalcHelp;
-import structures.Level;
 import structures.Point2d;
 
 /**
- * 
+ * Abstract class for representing extra graphical effects on screen.
  * @author Sean Lewis
- *
  */
 public abstract class GraphicEffect {
 
-	protected static final int ArrowDistanceFromBall = 4;
-	protected static final int ArrowSize = 12;
-	protected static final int ArrowLength = 200;
+	/**
+	 * 
+	 */
+	public static final int ArrowDistanceFromBall = 4;
 	
 	/**
 	 * 
 	 */
-	protected boolean on = false;
+	public static final int ArrowSize = 12;
+	
+	/**
+	 * 
+	 */
+	public static final int ArrowLength = 200;
 
 	/**
 	 * 
-	 * @param level
+	 * @param p1
+	 * @param p2
 	 * @param g
 	 */
-	public abstract void draw(Level level, Graphics g);
-
-	/**
-	 * 
-	 * @param on
-	 */
-	public void changeSetting(boolean on) {
-		this.on = on;
+	public static void drawArrow(Point2d p1, Point2d p2, Graphics g) {
+		GraphicEffect.drawArrow(p1, p2, ArrowDistanceFromBall, ArrowSize, g);
 	}
 
 	/**
-	 * 
-	 * @return
-	 */
-	public boolean isOn() {
-		return on;
-	}
-
-	/**
-	 * 
 	 * @param p1
 	 * @param p2
 	 * @param drawingOffset
 	 * @param arrowSize
 	 * @param g
 	 */
-	protected void drawArrow(Point2d p1, Point2d p2, int drawingOffset,
+	public static void drawArrow(Point2d p1, Point2d p2, int drawingOffset,
 			int arrowSize, Graphics g) {
 
 		double ang = CalcHelp.getAngle(p1, p2);
@@ -67,19 +56,18 @@ public abstract class GraphicEffect {
 				(int) Math.round(p1.y + yShift), (int) Math.round(p2.x),
 				(int) Math.round(p2.y));
 
-		double angleOne = ang - Math.PI / 4;
-		// double angleTwo = ang - Math.PI / 4;
+		double angle = ang - Math.PI / 4;
 
-		double cos1 = Math.cos(angleOne);
-		double sin1 = Math.sin(angleOne);
-
-		g.drawLine((int) Math.round(p2.x), (int) Math.round(p2.y),
-				(int) Math.round(p2.x - arrowSize * cos1),
-				(int) Math.round(p2.y + arrowSize * sin1));
+		double cosine = Math.cos(angle);
+		double sine = Math.sin(angle);
 
 		g.drawLine((int) Math.round(p2.x), (int) Math.round(p2.y),
-				(int) Math.round(p2.x + arrowSize * sin1),
-				(int) Math.round(p2.y + arrowSize * cos1));
+				(int) Math.round(p2.x - arrowSize * cosine),
+				(int) Math.round(p2.y + arrowSize * sine));
+
+		g.drawLine((int) Math.round(p2.x), (int) Math.round(p2.y),
+				(int) Math.round(p2.x + arrowSize * sine),
+				(int) Math.round(p2.y + arrowSize * cosine));
 
 	}
 
