@@ -1,28 +1,24 @@
 package game;
 
+import structures.Ball;
 import structures.Point2d;
 
 import graphics.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import structures.*;
 
 /**
  * @author Sean Lewis
  */
 public class GamePanel extends JPanel implements ActionListener, MouseListener,
-		MouseMotionListener, ItemListener, Runnable {
+		MouseMotionListener, Runnable {
 
 	public static final int Width = 1000;
 	public static final int Height = 700;
@@ -34,20 +30,16 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	public static final int MaxInitialMagnitude = 300;
 	public static final int ArrowLength = 200; // affects how large drawn
 												// vectors are relative to those
-												// vectors' magnitude
-	public static final int VectorsNum = 0;
-	public static final int ResultantNum = 1;
-	public static final int TrailNum = 2;
-	public static final int EffectsNum = 3;
+
+	public static final int EffectsNum = 0;		
+	public static final int VectorsNum = 1;
+	public static final int ResultantNum = 2;
+	public static final int TrailNum = 3;
 	public static final int WarpArrowsNum = 4;
-	private PrintWriter gameWriter;
 	// User-set settings
 	private boolean settings[] = new boolean[5];
-	ArrayList<Point2d> trailPoints = new ArrayList<Point2d>(); // stores all
-																// past values
-																// in the ball's
-																// trail
-	ArrayList<Star> stars = new ArrayList<Star>();
+	ArrayList<Point2d> trailPoints = new ArrayList<Point2d>(); 
+	
 	boolean drawingEffects;
 	boolean blinkingBall = true;
 	long effectStartTime; // stores time of collision for effects
@@ -55,24 +47,14 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	// Game data
 	private double launchAngle, launchMagnitude;
 	private Point2d initialPoint, terminalPoint; // for the initial velocity
-	private int[] swingData; // keeps track of swings for each level
-	private int numSwingsTaken; // keeps total sum of all swings
 	boolean drawingInitialVelocity, gameStarted, gamePaused, gameWon;
 
+	private GameManager gameManager;
 	// Current Level data storage
 	boolean errorFound;
-	private ArrayList<Level> levels;
+	// private ArrayList<Level> levels;
 	private Level currentLevel;
-	Ball ball;
-	ArrayList<Body> bodies;
-	ArrayList<WarpPoint> warps;
-	ArrayList<Blockage> blockages;
-	ArrayList<GoalPost> goals;
-	double followFactor;
-	double dXShift, dYShift;
-	// values for default shift values for levels - used for preventing ball
-	// flicker on resets
-	private int currentLevelN;
+	private Ball ball;
 	boolean levelComplete;
 	double screenXShift, screenYShift;
 
@@ -82,7 +64,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private Thread animator;
 	private volatile boolean running;
 	private int paints;
-	private boolean gameOver;
+	// private boolean gameOver;
 	// If ArrowAngle is changed, the drawArrow() method must be updated - see
 	// its comments for details.
 	// Special effect values
@@ -91,18 +73,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 							// collision
 	static final int TimeBetweenFlashes = 250; // ms
 
-	// Fonts n' shit
-	private static final DecimalFormat DecimalFormatter = new DecimalFormat("#0.00"); // for
-																				// angle/magnitude
-																				// display
-																				// (2
-																				// decimals)
-	public static final Font TitleFont = new Font("Tahoma", Font.ITALIC, 80);
-	public static final Font AuthorFont = new Font("Tahoma", Font.ITALIC, 30);
-	public static final Font MediumFont = new Font("Times new Roman", Font.ITALIC, 25);
-	public static final Font SmallFont = new Font("Times new Roman", Font.ITALIC, 20);
-	public static final Font InfoFont = new Font("Times new Roman", Font.PLAIN, 12); // angle/magnitude
-																				// display
+	// display
 	static final String[] instructionStrings = { "H: Help", "P: pause",
 			"R: reset", "Right arrow: speed up",
 			"Left arrow: slow down",
@@ -114,10 +85,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	JMenuBar menuBar = new JMenuBar();
 	JMenu settingsMenu = new JMenu("Settings");
 	JCheckBoxMenuItem[] settingsBoxes = {
-			new JCheckBoxMenuItem("Gravity vectors"),
-			new JCheckBoxMenuItem("Gravity resultant"),
-			new JCheckBoxMenuItem("Ball trail"),
-			new JCheckBoxMenuItem("Collision effects"),
+			new JCheckBoxMenuItem("Collision Effects"),
+			new JCheckBoxMenuItem("Gravity Vectors"),
+			new JCheckBoxMenuItem("Gravity Resultant"),
+			new JCheckBoxMenuItem("Baill Trail"),
 			new JCheckBoxMenuItem("Warp direction arrows"), };
 	JMenu speedMenu = new JMenu("Speed");
 
@@ -138,29 +109,33 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	JMenu loadMenu = new JMenu("Load");
 	JMenuItem loadItem = new JMenuItem("Load game");
 
-	// Menu Level Data
-	Level menuLevel;
-
 	public GamePanel() throws IOException {
-		importData();
-		gameWriter = new PrintWriter(new File("logs/gamelog.txt"));
+		gameManager = new GameManager();
+		currentLevel = gameManager.getCurrentLevel();
 		initializeMenu();
-		setLevelUp(menuLevel);
-		ball.setLaunched(true);
-		ball.accelerate(new Vector2d(0.0, 1.8));
-		initialPoint = ball.getCenter();
+		initialPoint = currentLevel.getBall().getCenter();
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setDoubleBuffered(true);
 		setBackground(Color.black);
+
+		int[] importedSettings = new DataReader().getSettings();
+		for (int i = 0; i < settings.length; i++) {
+			settings[i] = (importedSettings[i] == 1);
+		}
+		speed = importedSettings[settings.length];
 	}
 
 	private void initializeMenu() {
-		menuLevel = MenuScreen.getMenuLevel();
-
 		for (int i = 0; i < settingsBoxes.length; i++) {
 			settingsMenu.add(settingsBoxes[i]);
-			settingsBoxes[i].addItemListener(this);
+			settingsBoxes[i].addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					for (int i = 0; i < settingsBoxes.length; i++) {
+						settings[i] = settingsBoxes[i].getState();
+					}
+				}
+			});
 			settingsBoxes[i].setState(settings[i]);
 		}
 		settingsBoxes[VectorsNum].setMnemonic(KeyEvent.VK_V);
@@ -193,18 +168,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		loadItem.addActionListener(this);
 		menuBar.add(loadMenu);
 
-	}
-
-	private void importData() throws IOException {
-		DataReader reader = new DataReader();
-		levels = reader.getLevelData("levels/levels.txt");
-		int[] importedSettings = reader.getSettings();
-		for (int i = 0; i < settings.length; i++) {
-			settings[i] = (importedSettings[i] == 1);
-		}
-		int speed = importedSettings[settings.length];
 		speedButtons[speed].setSelected(true);
-		currentLevelN = 0;
+
 	}
 
 	public void addNotify() {
@@ -266,7 +231,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			repaint();
 
 			long dt = System.currentTimeMillis() - t;
-			// System.out.println(dt);
 			if (dt < period) {
 				if (dt < period)
 					sleep(period - dt);
@@ -274,7 +238,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				// System.out.println("Skip");
 			}
 		}
-		gameWriter.close();
+		GravityGolf.DataWriter.close();
 		System.exit(0);
 	}
 
@@ -298,11 +262,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	 * Updates the level if current level is completed
 	 */
 	private void gameUpdate() {
-		if (!gameOver) {
-			if (gameStarted && currentLevelN >= levels.size()) {
-				gameWon = true;
-				gamePaused = true;
-			}
+
+		if (!gameManager.isGameOver()) {
+			currentLevel = gameManager.getCurrentLevel();
+			ball = currentLevel.getBall();
 			if (!gamePaused || !gameStarted) {
 				currentLevel.updateLevel();
 			}
@@ -316,13 +279,14 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				particles = ball.generateParticles(intersected);
 				shakeValues = new double[6];
 				double speed = ball.getVelocity().getLength();
+				
 				if (speed < .25)
 					speed = .25;
 				if (speed > 2.5)
 					speed = 2.5;
 
-				double shakeFactor = 3 * speed / followFactor;
-				if (followFactor == 0.0)
+				double shakeFactor = 3 * speed / currentLevel.getFollowFactor();
+				if (currentLevel.getFollowFactor() == 0.0)
 					shakeFactor = 25 * speed;
 				// 1st value is multiplicative factor
 				// TODO: make based of rate at which screen shifts
@@ -357,33 +321,11 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				drawingEffects = true;
 			} else if (!levelComplete && currentLevel.inGoalPost() && !gameWon) {
 				levelComplete = true;
-				gameWriter.println("Level "
-						+ Integer.toString(currentLevelN + 1) + " complete. "
-						+ Integer.toString(swingData[currentLevelN])
-						+ " swings.");
-				gameWriter.println();
 			} else if (currentLevel.timeToReset() && !settings[EffectsNum]) {
 				resetLevel();
 			}
 		}
 
-	}
-
-	private void loadNextLevel() {
-		currentLevelN++;
-		levelComplete = false;
-		blinkingBall = true;
-		if (currentLevelN >= levels.size()) {
-			gameWriter.println("Game complete. "
-					+ Integer.toString(numSwingsTaken) + " swings total.");
-			gameWon = true;
-			gamePaused = true;
-		} else {
-			setLevelUp(currentLevelN);
-			trailPoints.clear();
-			ball.setLaunched(false);
-			levels.set(currentLevelN - 1, null);
-		}
 	}
 
 	public void paintComponent(Graphics gr) {
@@ -396,7 +338,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		paints++;
 		if (gameStarted && !gameWon) {
 			ball = currentLevel.getBall();
-			bodies = currentLevel.getBodies();
 			screenXShift = currentLevel.getScreenXShift();
 			screenYShift = currentLevel.getScreenYShift();
 			initialPoint = new Point2d((int) Math.round(ball.getCenter().x
@@ -404,28 +345,22 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					+ screenYShift));
 
 			drawLevel(g);
-			g.setFont(InfoFont);
 
-			boolean drawData = false;
+			Color textColor = null;
 			if (ball.isLaunched()) {
-				g.setColor(Color.green);
-				drawData = true;
+				textColor = Color.green;
 			} else if (drawingInitialVelocity) {
-				g.setColor(Color.white);
-				drawData = true;
+				textColor = Color.white;
 			} else if (drawingEffects) {
-				g.setColor(Color.red);
-				drawData = true;
+				textColor = Color.red;
+			}
+			if (textColor != null && terminalPoint != null) {
+				InfoDisplay.vectorInformation(terminalPoint, launchMagnitude,
+						launchAngle, textColor, g);
 			}
 
-			if (drawData) {
-				InfoDisplay.vectorInformation(terminalPoint, launchMagnitude, launchAngle, g);
-			}
-
-			g.setColor(Color.WHITE);
-			if (!gameWon) {
-				InfoDisplay.levelInformation(currentLevelN + 1, levels.size(),
-						swingData[currentLevelN], numSwingsTaken, g);
+			if (!gameWon && gameStarted) {
+				InfoDisplay.levelInformation(gameManager, g);
 			}
 			if (levelComplete) {
 				g.setColor(Color.GREEN);
@@ -436,7 +371,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				initialPoint = new Point2d((int) Math.round(ball.getCenter().x
 						+ screenXShift), (int) Math.round(ball.getCenter().y
 						+ screenYShift));
-				g.setColor(Color.WHITE);
 				double angle = CalcHelp.getAngle(initialPoint, terminalPoint);
 				g.setColor(Color.white);
 				if (initialPoint.getDistance(terminalPoint) <= MaxInitialMagnitude) {
@@ -456,69 +390,23 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				ResultantDrawer.draw(currentLevel, g);
 			}
 			if (gamePaused) {
-				g.setFont(AuthorFont);
-				g.setColor(Color.red);
-				g.drawString("PAUSED", 422, 50);
+				InfoDisplay.drawPaused(g);
 			}
 		} else {
 			screenXShift = 0.0;
 			screenYShift = 0.0;
 			drawLevel(g);
-			MenuScreen.draw(menuLevel, settings, g);
+			MenuScreen.draw(currentLevel, settings, g);
 		}
 		if (settings[WarpArrowsNum]) {
 			WarpDrawer.draw(currentLevel, g);
 		}
 		if (gameWon) {
-			drawWinScreen(g);
+			InfoDisplay.drawWinScreen(gameManager, g);
 		}
-		if (levelComplete && currentLevelN == 0) {
-			g.setFont(MediumFont);
-			g.setColor(Color.WHITE);
-			g.drawString("Click to continue to the next level", 320, 60);
+		if (levelComplete) {
+			InfoDisplay.drawNextLevelMessage(g);
 		}
-	}
-
-	private void setLevelUp(int l) {
-		currentLevel = levels.get(l);
-		currentLevel.generateLevelData();
-		ball = currentLevel.getBall();
-		bodies = currentLevel.getBodies();
-		goals = currentLevel.getGoalPosts();
-		warps = currentLevel.getWarpPoints();
-		blockages = currentLevel.getBlockages();
-		stars = currentLevel.getStars();
-		followFactor = currentLevel.getFollowFactor();
-		dXShift = (500.0 - ball.getCenter().x) / followFactor;
-		dYShift = (350.0 - ball.getCenter().y) / followFactor;
-		if (l != 0) {
-			blinkingBall = true;
-		}
-		drawingInitialVelocity = false;
-		levelComplete = false;
-		trailPoints.clear();
-
-		if (showSolution)
-			points = currentLevel.getSolutionSet();
-	}
-
-	private void setLevelUp(Level l) {
-		// used only for setting up menu level
-		currentLevel = l;
-		if (!currentLevel.isInitialized()) {
-			currentLevel.generateLevelData();
-		}
-		ball = currentLevel.getBall();
-		bodies = currentLevel.getBodies();
-		goals = currentLevel.getGoalPosts();
-		warps = currentLevel.getWarpPoints();
-		blockages = currentLevel.getBlockages();
-		stars = currentLevel.getStars();
-		followFactor = currentLevel.getFollowFactor();
-		dXShift = (Width - ball.getCenter().x) / followFactor;
-		dYShift = (Height - ball.getCenter().y) / followFactor;
-		drawingInitialVelocity = false;
-		levelComplete = false;
 	}
 
 	public void resetLevel() {
@@ -532,7 +420,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private void drawLevel(Graphics2D g) {
 
 		long t = System.currentTimeMillis();
-
+		ball = currentLevel.getBall();
 		int xShift = (int) Math.round(screenXShift);
 		int yShift = (int) Math.round(screenYShift);
 
@@ -555,7 +443,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				Particle b = particles.get(i);
 
 				if (!gamePaused) {
-					for (Body bod : bodies) {
+					for (Body bod : currentLevel.getBodies()) {
 						if (bod.intersects(b)
 								|| bod.getCenter().getDistanceSquared(
 										b.getCenter()) <= (bod.getRadius() * .5)
@@ -564,23 +452,19 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 							i--;
 						}
 					}
-					for (Blockage blockage : blockages) {
+					for (Blockage blockage : currentLevel.getBlockages()) {
 						if (blockage.intersects(b.getCenter()) && i != 0) {
 							particles.remove(i);
 							i--;
 						}
 					}
-					for (GoalPost gp : goals) {
+					for (GoalPost gp : currentLevel.getGoalPosts()) {
 						if (b.intersects(gp) && i != 0) {
 							particles.remove(i);
 							i--;
 						}
 					}
-					b.setVelocity(b.getVelocity().multiply(0.99)); // (rate for
-																	// geometric
-																	// slow down
-																	// of
-																	// particles)
+					b.setVelocity(b.getVelocity().multiply(0.99));
 					b.move();
 				}
 				b.draw(screenXShift, screenYShift, g);
@@ -594,10 +478,12 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		}
 
 		currentLevel.draw((int) screenXShift, (int) screenYShift, g);
-		for (WarpPoint w : warps) {
+
+		// TODO: warp points should not need secondary drawing
+		for (WarpPoint w : currentLevel.getWarpPoints()) {
 			w.draw(xShift, yShift, g);
 		}
-		for (Body b : bodies) {
+		for (Body b : currentLevel.getBodies()) {
 			for (Moon m : b.getMoons()) {
 				m.draw(screenXShift, screenYShift, g);
 			}
@@ -617,18 +503,17 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		if (!drawingEffects) { // prevents flicker of ball on reset after
 								// effects
 			if (!ball.isLaunched()) { // stationary ball
-				if (screenXShift == dXShift && screenYShift == dYShift) {
-					Color c = ball.getColor();
-					if (blinkingBall) {
-						if (t % (TimeBetweenFlashes * 2) <= TimeBetweenFlashes) {
-							c = Color.white;
-						}
-						g.setColor(c);
-					} else {
-						g.setColor(ball.getColor());
+				Color c = ball.getColor();
+				if (blinkingBall) {
+					if (t % (TimeBetweenFlashes * 2) <= TimeBetweenFlashes) {
+						c = Color.white;
 					}
-					ball.draw(screenXShift, screenYShift, g, c);
+					g.setColor(c);
+				} else {
+					g.setColor(ball.getColor());
 				}
+				ball.draw(screenXShift, screenYShift, g, c);
+
 			} else { // moving ball
 				ball.draw(screenXShift, screenYShift, g, ball.getColor());
 			}
@@ -640,45 +525,20 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			}
 		}
 
-		if (currentLevelN == 0 && gameStarted) {
+		if (gameManager.getLevelNumber() == 1 && gameStarted) {
+			GoalPost goal = currentLevel.getGoalPosts().get(0);
 			g.setColor(Color.white);
-			g.drawString("Aim here!",
-					(int) (goals.get(0).getCenter().x - 20 + xShift),
-					(int) (goals.get(0).getCenter().y - 70 + yShift));
+			g.drawString("Aim here!", (int) (goal.getCenter().x - 20 + xShift),
+					(int) (goal.getCenter().y - 70 + yShift));
 
-			Point2d p1 = new Point2d(goals.get(0).getCenter().x - 5 + xShift,
-					goals.get(0).getCenter().y - 65 + yShift);
-			Point2d p2 = goals.get(0).getCenter()
-					.translate(xShift, yShift - goals.get(0).getRadius() - 3);
+			Point2d p1 = new Point2d(goal.getCenter().x - 5 + xShift,
+					goal.getCenter().y - 65 + yShift);
+			Point2d p2 = goal.getCenter().translate(xShift,
+					yShift - goal.getRadius() - 3);
 			GraphicEffect.drawArrow(p1, p2, 0, 5, g);
 		}
 
 	}
-
-	private void drawWinScreen(Graphics2D g) {
-		g.setColor(Color.black);
-		g.fillRect(0, 0, Width + 30, Height);
-		g.setFont(TitleFont);
-		g.setColor(Color.blue);
-		g.drawString("You win!", 140, 75);
-		g.setFont(MediumFont);
-		g.drawString("It took you a total of " + numSwingsTaken + " swings",
-				530, 75);
-		g.drawString("Level", 78, 150);
-		g.drawString("swings", 187, 150);
-		int xFactor = 200;
-		if (levels.size() > 40)
-			xFactor = 175;
-		else if (levels.size() > 50)
-			xFactor = 160;
-		else if (levels.size() > 60)
-			xFactor = 145;
-		for (int i = 0; i < levels.size(); i++) {
-			g.drawString((i + 1) + ": " + swingData[i], xFactor * (i / 10)
-					+ 140, 50 * (i % 10) + 150);
-		}
-	}
-
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == pauseItem) {
@@ -701,9 +561,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				String name = chooser.getSelectedFile().getName();
 				if (name.substring(name.length() - 3, name.length()).equals(
 						".txt")) {
-					saveGame(new File("saves/" + name));
+					DataWriter.saveGame(gameManager, new File("saves/" + name));
 				} else {
-					saveGame(new File("saves/" + name + ".txt"));
+					DataWriter.saveGame(gameManager, new File("saves/" + name + ".txt"));
 				}
 			} catch (Exception e) {
 			}
@@ -721,19 +581,21 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				chooser.getSelectedFile().getName();
 			}
 			try {
-				loadGame(chooser.getSelectedFile());
+				gameStarted = true;
+				gamePaused = false;
+				gameManager = new GameManager();
+				gameManager.loadSave(chooser.getSelectedFile());
 			} catch (Exception e) {
 			}
 
 		}
 	}
 
-	public void beginGame() {
+	public void beginGame() throws IOException {
 		gameWon = false;
-		swingData = new int[levels.size()];
 		gameStarted = true;
 		gamePaused = false;
-		setLevelUp(0);
+		gameManager.nextLevel();
 	}
 
 	public void mousePressed(MouseEvent event) {
@@ -741,9 +603,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	}
 
 	public void mouseDragged(MouseEvent event) {
-		if (!ball.isLaunched()
+		if (!currentLevel.getBall().isLaunched()
 				&& !gamePaused
-				&& initialPoint.getDistance(new Point2d(event.getPoint())) > 2 * GraphicEffect.ArrowDistanceFromBall
+				&& initialPoint.getDistance(new Point2d(event.getPoint())) > 2 * 4
+				// 4 is 1 above typical ball radius, so it is used here
 				&& !drawingEffects) {
 			terminalPoint = new Point2d(event.getPoint().getX(), event
 					.getPoint().getY());
@@ -759,13 +622,12 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	}
 
 	public void mouseReleased(MouseEvent event) {
+		trailPoints.clear();
 		blinkingBall = false; // the first launch will disable all blinking
 								// (reset upon getting to next level)
 		if (!gamePaused && !ball.isLaunched() && !drawingEffects
 				&& drawingInitialVelocity) {
-			numSwingsTaken++;
-			swingData[currentLevelN]++; // since currentLevel 5 corresponds to
-										// index 4 in the array
+			gameManager.swingTaken();
 			launchMagnitude = initialPoint.getDistance(terminalPoint);
 			launchAngle = CalcHelp.getAngle(initialPoint, terminalPoint);
 			if (launchAngle < 0)
@@ -775,60 +637,35 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			if (launchMagnitude > MaxInitialMagnitude)
 				launchMagnitude = MaxInitialMagnitude;
 
-			gameWriter.println("Ball launched. Point: (" + event.getX() + ", "
-					+ event.getY() + "). Magnitude: " + launchMagnitude
-					+ ", Angle: " + Math.toDegrees(launchAngle));
+			GravityGolf.DataWriter.ballLaunched(event.getPoint(),
+					launchMagnitude, launchAngle);
 			double xLength = Math.cos(launchAngle) * launchMagnitude;
 			double yLength = -Math.sin(launchAngle) * launchMagnitude;
-			ball.setVelocity(new Vector2d(xLength / 200, yLength / 200)); // 200
-																			// is
-																			// a
-																			// constant
-																			// -
-																			// only
-																			// used
-																			// here
+			ball.setVelocity(new Vector2d(xLength / 200, yLength / 200));
 			ball.setLaunched(true);
 		}
 
 		if (levelComplete) {
-			loadNextLevel();
+			levelComplete = false;
+			blinkingBall = true;
+			boolean moreLevels = gameManager.nextLevel();
+			trailPoints.clear();
+			if (moreLevels) {
+				ball.setLaunched(false);
+			} else {
+				gameWon = true;
+				gamePaused = true;
+			}
 		}
 
 		drawingInitialVelocity = false;
-	}
-
-	public void itemStateChanged(ItemEvent event) {
-		for (int i = 0; i < settingsBoxes.length; i++) {
-			if (event.getSource() == settingsBoxes[i]) {
-				settings[i] = settingsBoxes[i].getState();
-				break;
-			}
-		}
 	}
 
 	public boolean isGameStarted() {
 		return gameStarted;
 	}
 
-	public boolean getSetting(int n) {
-		return settings[n];
-	}
-
-	public void setSetting(int n, boolean b) {
-		settings[n] = b;
-		settingsBoxes[n].setState(settings[n]);
-	}
-
-	public void switchSetting(int n) {
-		settings[n] = !settings[n];
-		settingsBoxes[n].setState(settings[n]);
-	}
-
-	public void closeGameWriter() {
-		gameWriter.close();
-	}
-
+	// TODO: move to DataWriter
 	public void printSettings() throws IOException {
 		PrintWriter settingsWriter = new PrintWriter("settings.txt");
 		settingsWriter.println("vectors = "
@@ -854,72 +691,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		settingsWriter.close();
 	}
 
-	private void saveGame(File file) throws IOException {
-		PrintWriter saveWriter = new PrintWriter(file);
-		for (int i = 0; i < levels.size(); i++) {
-			saveWriter.print(DataWriter.encode(swingData[i], i) + " ");
-		}
-		saveWriter.print(DataWriter.encode(currentLevelN, levels.size()) + " ");
-		saveWriter.print(DataWriter.encode(numSwingsTaken, levels.size() + 1));
-		saveWriter.close();
-		gameWriter.println("Game saved to " + file.getName() + ".");
-	}
-
-	private void loadGame(File file) throws IOException {
-
-		int totalswingimport = 0;
-		int level = 0;
-		boolean cheatingDetected = false;
-		Scanner infile = new Scanner(file);
-
-		int[] swingImport = new int[0];
-
-		try {
-
-			swingImport = new int[levels.size()];
-			int swingSum = 0;
-			for (int i = 0; i < levels.size(); i++) {
-				swingImport[i] = DataReader.decode((long) infile.nextInt(), i);
-				if (swingImport[i] < 0) {
-					cheatingDetected = true;
-					break;
-				}
-				swingSum += swingImport[i];
-			}
-			level = DataReader.decode(infile.nextInt(), levels.size());
-			if (level < 0 || level > levels.size()) {
-				cheatingDetected = true;
-			}
-			totalswingimport = DataReader.decode(infile.nextInt(),
-					levels.size() + 1);
-			if (totalswingimport != swingSum) {
-				cheatingDetected = true;
-			}
-
-		} catch (Exception e) {
-			System.out.println(e);
-			e.printStackTrace();
-			gameWriter.println(file.getName() + " failed to load.");
-			gameWriter.println(e);
-		}
-
-		if (!cheatingDetected) {
-			currentLevelN = level;
-			numSwingsTaken = totalswingimport;
-			swingData = swingImport;
-			setLevelUp(currentLevelN);
-			gameStarted = true;
-			gamePaused = false;
-			gameWriter.println(file.getName() + " loaded successfully.");
-
-		} else {
-			JOptionPane.showMessageDialog(null,
-					"Cheating detected; will not load file",
-					"Cheating Detected", JOptionPane.ERROR_MESSAGE);
-			gameWriter.println(file.getName()
-					+ "failed to load - likely cheating.");
-		}
-		infile.close();
+	public void switchSetting(int index) {
+		settings[index] = !settings[index];
+		settingsBoxes[index].setSelected(settings[index]);
 	}
 
 	public void safeQuit() {
