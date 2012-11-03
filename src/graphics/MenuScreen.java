@@ -3,6 +3,7 @@ package graphics;
 import game.GamePanel;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -11,12 +12,12 @@ import structures.Blockage;
 import structures.Body;
 import structures.GoalPost;
 import structures.Level;
+import structures.Vector2d;
 import structures.WarpPoint;
 
 /**
- * 
- * @author Sean
- *
+ * Class for the Menu Screen functions.
+ * @author Sean Lewis
  */
 public final class MenuScreen {
 
@@ -27,26 +28,33 @@ public final class MenuScreen {
 			"S: hide stars", "V: show gravity vectors",
 			"D: show gravity resultant", "T: show ball trail",
 			"E: show special effects" };
+	private static Level menuLevel = null;
 
 	/**
-	 * 
-	 * @return
+	 * Returns the start level that the game uses.
+	 * @return the menu Level
 	 */
 	public static Level getMenuLevel() {
-		Ball b = new Ball(340, 335, 3, Color.red);
-		ArrayList<Body> bod = new ArrayList<Body>();
-		bod.add(new Body(495, 335, 100, Color.magenta));
-		ArrayList<WarpPoint> ws = new ArrayList<WarpPoint>();
-		ArrayList<GoalPost> gs = new ArrayList<GoalPost>();
-		ArrayList<Blockage> bs = new ArrayList<Blockage>();
-		return new Level(b, bod, ws, gs, bs, 0, 3.5);
+		if (menuLevel == null) {
+			Ball b = new Ball(340, 335, 3, Color.red);
+			ArrayList<Body> bod = new ArrayList<Body>();
+			bod.add(new Body(495, 335, 100, Color.magenta));
+			ArrayList<WarpPoint> ws = new ArrayList<WarpPoint>();
+			ArrayList<GoalPost> gs = new ArrayList<GoalPost>();
+			ArrayList<Blockage> bs = new ArrayList<Blockage>();
+			b.setLaunched(true);
+			b.accelerate(new Vector2d(0.0, 1.8));
+			menuLevel = new Level(b, bod, ws, gs, bs, 0, 3.5);
+			menuLevel.generateLevelData();
+		}
+		return menuLevel;
 	}
-	
+
 	/**
-	 * 
-	 * @param menuLevel
-	 * @param settings
-	 * @param g
+	 * Draws the menu screen and its information.
+	 * @param menuLevel the level that is displayed
+	 * @param settings the current settings in the game
+	 * @param g the Graphics component to draw with
 	 */
 	public static void draw(Level menuLevel, boolean[] settings, Graphics g) {
 		if (settings[GamePanel.VectorsNum]) {
@@ -57,10 +65,10 @@ public final class MenuScreen {
 		}
 
 		g.setColor(Color.blue);
-		g.setFont(GamePanel.TitleFont);
+		g.setFont(new Font("Tahoma", Font.ITALIC, 80));
 		g.drawString("Gravity Golf", 275, 100);
 
-		g.setFont(GamePanel.MediumFont);
+		g.setFont(new Font("Times new Roman", Font.ITALIC, 25));
 		g.setColor(Color.blue);
 		if (settings[GamePanel.VectorsNum]) {
 			instructionStrings[6] = instructionStrings[6].replace("show",
@@ -98,7 +106,7 @@ public final class MenuScreen {
 			g.drawString(instructionStrings[i], 700, 60 * (i - 5) + 235);
 		}
 
-		g.setFont(GamePanel.SmallFont);
+		g.setFont(new Font("Times new Roman", Font.PLAIN, 12));
 		g.setColor(Color.green);
 		g.drawString(
 				"Your goal is to give the ball an initial velocity that allows it reach the white goal.",
