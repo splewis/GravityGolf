@@ -106,7 +106,7 @@ public final class MenuScreen {
 			g.drawString(instructionStrings[i], 700, 60 * (i - 5) + 235);
 		}
 
-		g.setFont(new Font("Times new Roman", Font.PLAIN, 12));
+		g.setFont(new Font("Times new Roman", Font.ITALIC, 20));
 		g.setColor(Color.green);
 		g.drawString(
 				"Your goal is to give the ball an initial velocity that allows it reach the white goal.",
@@ -115,7 +115,7 @@ public final class MenuScreen {
 		g.setColor(Color.white);
 		g.drawString("Press Space to begin", 373, 630);
 		g.drawString("0.01", 10, 630);
-		g.drawString("11/1/2012", 10, 660);
+		g.drawString("11/3/2012", 10, 660);
 	}
 
 }
