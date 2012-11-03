@@ -85,7 +85,10 @@ public class Body extends CircularShape {
 		if (colors == null || dist == null)
 			computeColoring();
 		if (radius < 10) {
-			draw((int) Math.round(dx), (int) Math.round(dy), g);
+			g.setColor(color);
+			g.fillOval((int) Math.round(center.x - radius + dx),
+					(int) Math.round(center.y - radius + dy ),
+					diameter, diameter);
 		} else {
 			g2.setPaint(new RadialGradientPaint(new Point2D.Double(
 					center.x + dx, center.y + dy), radius + extraRadius, dist,
