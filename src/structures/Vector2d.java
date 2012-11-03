@@ -104,7 +104,7 @@ public class Vector2d {
 
 	/**
 	 * Returns the dot product (scalar multiplication) of this and another
-	 * vector
+	 * vector.
 	 * @param v a vector
 	 * @return the dot product
 	 */
@@ -122,7 +122,7 @@ public class Vector2d {
 	}
 
 	/**
-	 * Returns the projection of this vector onto v
+	 * Returns the projection of this vector onto v.
 	 * @param v a vector
 	 * @return the projection onto v
 	 */
@@ -132,17 +132,16 @@ public class Vector2d {
 	}
 
 	/**
-	 * Returns the projection of this vector in the direction of an angle
+	 * Returns the projection of this vector in the direction of an angle.
 	 * @param t an angle
 	 * @return the projection directed in t's direction
-	 * @deprecated use the projection method with vector parameter instead
 	 */
 	public Vector2d projection(double t) {
 		return new Vector2d(length * Math.cos(angle - t), t, true);
 	}
 
 	/**
-	 * Returns the horizontal component of this vector
+	 * Returns the horizontal component of this vector.
 	 * @return the horizontal component
 	 */
 	public double getXComponent() {
