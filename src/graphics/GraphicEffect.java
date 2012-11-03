@@ -13,34 +13,27 @@ public abstract class GraphicEffect {
 	/**
 	 * 
 	 */
-	public static final int ArrowDistanceFromBall = 4;
-	
-	/**
-	 * 
-	 */
-	public static final int ArrowSize = 12;
-	
-	/**
-	 * 
-	 */
 	public static final int ArrowLength = 200;
 
 	/**
-	 * 
-	 * @param p1
-	 * @param p2
-	 * @param g
+	 * Draws an arrow between two points with default properties: offest of 4
+	 * and arrow head length of 12.
+	 * @param p1 the initial point
+	 * @param p2 the terminal point
+	 * @param g the Graphics Component to draw with
 	 */
 	public static void drawArrow(Point2d p1, Point2d p2, Graphics g) {
-		GraphicEffect.drawArrow(p1, p2, ArrowDistanceFromBall, ArrowSize, g);
+		GraphicEffect.drawArrow(p1, p2, 4, 12, g);
 	}
 
 	/**
-	 * @param p1
-	 * @param p2
-	 * @param drawingOffset
-	 * @param arrowSize
-	 * @param g
+	 * Draws an arrow between two points.
+	 * @param p1 the initial point
+	 * @param p2 the terminal point
+	 * @param drawingOffset the offset distance from the initial to start
+	 *        drawing the point
+	 * @param arrowSize the length of each tail at the terminal point
+	 * @param g the Graphics component to draw with
 	 */
 	public static void drawArrow(Point2d p1, Point2d p2, int drawingOffset,
 			int arrowSize, Graphics g) {
