@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -36,6 +35,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	public static final int ResultantNum = 2;
 	public static final int TrailNum = 3;
 	public static final int WarpArrowsNum = 4;
+	public static final int[] DEFAULT_SETTINGS = {
+		1, 0, 0, 1, 0, 3
+	};
 	// User-set settings
 	private boolean settings[] = new boolean[5];
 	ArrayList<Point2d> trailPoints = new ArrayList<Point2d>(); 
@@ -52,7 +54,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private GameManager gameManager;
 	// Current Level data storage
 	boolean errorFound;
-	// private ArrayList<Level> levels;
 	private Level currentLevel;
 	private Ball ball;
 	boolean levelComplete;
@@ -64,9 +65,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private Thread animator;
 	private volatile boolean running;
 	private int paints;
-	// private boolean gameOver;
-	// If ArrowAngle is changed, the drawArrow() method must be updated - see
-	// its comments for details.
 	// Special effect values
 	static final int SpecialEffectTime = 1000; // ms
 	double[] shakeValues; // random values for screen shake, set on each
@@ -108,9 +106,17 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	JMenuItem saveItem = new JMenuItem("Save current game");
 	JMenu loadMenu = new JMenu("Load");
 	JMenuItem loadItem = new JMenuItem("Load game");
+	
+	
+	
 
 	public GamePanel() throws IOException {
 		gameManager = new GameManager();
+		int[] importedSettings = DataReader.getSettings();
+		for (int i = 0; i < settings.length; i++) {
+			settings[i] = (importedSettings[i] == 1);
+		}
+		speed = importedSettings[settings.length];
 		currentLevel = gameManager.getCurrentLevel();
 		initializeMenu();
 		initialPoint = currentLevel.getBall().getCenter();
@@ -119,11 +125,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		setDoubleBuffered(true);
 		setBackground(Color.black);
 
-		int[] importedSettings = new DataReader().getSettings();
-		for (int i = 0; i < settings.length; i++) {
-			settings[i] = (importedSettings[i] == 1);
-		}
-		speed = importedSettings[settings.length];
 	}
 
 	private void initializeMenu() {
@@ -131,6 +132,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			settingsMenu.add(settingsBoxes[i]);
 			settingsBoxes[i].addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
+					if(e.getSource() == settingsBoxes[TrailNum]) {
+						trailPoints.clear();
+					}
 					for (int i = 0; i < settingsBoxes.length; i++) {
 						settings[i] = settingsBoxes[i].getState();
 					}
@@ -665,32 +669,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		return gameStarted;
 	}
 
-	// TODO: move to DataWriter
-	public void printSettings() throws IOException {
-		PrintWriter settingsWriter = new PrintWriter("settings.txt");
-		settingsWriter.println("vectors = "
-				+ (settings[VectorsNum] ? "yes" : "no"));
-		settingsWriter.println("resultant = "
-				+ (settings[ResultantNum] ? "yes" : "no"));
-		settingsWriter
-				.println("trail = " + (settings[TrailNum] ? "yes" : "no"));
-		settingsWriter.println("effects = "
-				+ (settings[EffectsNum] ? "yes" : "no"));
-		settingsWriter.println("warpArrows = "
-				+ (settings[WarpArrowsNum] ? "yes" : "no"));
-
-		int speed = 3;
-		for (int i = 0; i < speedButtons.length; i++) {
-			if (speedButtons[i].isSelected()) {
-				speed = i;
-				break;
-			}
-		}
-
-		settingsWriter.println("speed = " + speed);
-		settingsWriter.close();
-	}
-
 	public void switchSetting(int index) {
 		settings[index] = !settings[index];
 		settingsBoxes[index].setSelected(settings[index]);
@@ -698,7 +676,14 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	public void safeQuit() {
 		try {
-			printSettings();
+			int speed = 3;
+			for (int i = 0; i < speedButtons.length; i++) {
+				if (speedButtons[i].isSelected()) {
+					speed = i;
+					break;
+				}
+			}
+			DataWriter.printSettings(settings, speed);
 		} catch (IOException e) {
 		}
 		running = false;

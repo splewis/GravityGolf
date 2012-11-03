@@ -2,6 +2,7 @@ package game;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import structures.*;
@@ -32,7 +33,7 @@ public class DataWriter {
 
 	/**
 	 * Writes that a level was finished.
-	 * @param levelNumber the level that was finished 
+	 * @param levelNumber the level that was finished
 	 * @param swings the swings taken on that level
 	 */
 	public void levelFinished(int levelNumber, int swings) {
@@ -134,6 +135,50 @@ public class DataWriter {
 				game.getNumberOfLevels() + 1));
 		saveWriter.close();
 		GravityGolf.DataWriter.gameSaved(file.getName());
+	}
+
+	/**
+	 * Prints the current game settings to settings.txt.
+	 * @throws IOException if settings.txt cannot be written to
+	 */
+	public static void printSettings(boolean[] settings, int speed)
+			throws IOException {
+		PrintWriter settingsWriter = new PrintWriter("settings.txt");
+		
+		settingsWriter.println("effects = "
+				+ (settings[GamePanel.EffectsNum] ? "yes" : "no"));
+		settingsWriter.println("vectors = "
+				+ (settings[GamePanel.VectorsNum] ? "yes" : "no"));
+		settingsWriter.println("resultant = "
+				+ (settings[GamePanel.ResultantNum] ? "yes" : "no"));
+		settingsWriter.println("trail = "
+				+ (settings[GamePanel.TrailNum] ? "yes" : "no"));
+		settingsWriter.println("warpArrows = "
+				+ (settings[GamePanel.WarpArrowsNum] ? "yes" : "no"));
+
+		settingsWriter.println("speed = " + speed);
+		settingsWriter.close();
+	}
+
+	/**
+	 * Prints the current game settings to settings.txt.
+	 * @throws IOException if settings.txt cannot be written to
+	 */
+	public static void printSettings(int[] settings) throws IOException {
+		PrintWriter settingsWriter = new PrintWriter("settings.txt");
+		settingsWriter.println("effects = "
+				+ (settings[GamePanel.EffectsNum] == 1 ? "yes" : "no"));
+		settingsWriter.println("vectors = "
+				+ (settings[GamePanel.VectorsNum] == 1 ? "yes" : "no"));
+		settingsWriter.println("resultant = "
+				+ (settings[GamePanel.ResultantNum] == 1 ? "yes" : "no"));
+		settingsWriter.println("trail = "
+				+ (settings[GamePanel.TrailNum] == 1 ? "yes" : "no"));
+		settingsWriter.println("warpArrows = "
+				+ (settings[GamePanel.WarpArrowsNum] == 1 ? "yes" : "no"));
+
+		settingsWriter.println("speed = " + settings[settings.length - 1]);
+		settingsWriter.close();
 	}
 
 }

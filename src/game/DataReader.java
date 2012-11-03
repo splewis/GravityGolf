@@ -36,7 +36,6 @@ package game;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -54,6 +53,7 @@ public class DataReader {
 
 	private PrintWriter pw;
 	private boolean errorFound = false;
+
 
 	/**
 	 * @param mainFile
@@ -76,9 +76,9 @@ public class DataReader {
 	 * @return
 	 * @throws IOException
 	 */
-	public int[] getSettings() throws IOException {
+	public static int[] getSettings() throws IOException {
 
-		int[] settings = { 0, 0, 0, 1, 0, 3 };
+		int[] settings = GamePanel.DEFAULT_SETTINGS;
 		try {
 			Scanner infile = new Scanner(new File("settings.txt"));
 			int i = 0;
@@ -89,21 +89,10 @@ public class DataReader {
 			settings[5] = Integer.parseInt(l.substring(l.indexOf("=") + 1));
 			infile.close();
 		} catch (Exception e) {
-			writeDefaultSettings();
+			settings = GamePanel.DEFAULT_SETTINGS;
+			DataWriter.printSettings(settings);
 		}
 		return settings;
-	}
-
-	public static void writeDefaultSettings() throws FileNotFoundException {
-		PrintWriter settingsWriter = new PrintWriter(new File("settings.txt"));
-		settingsWriter.println("vectors = no");
-		settingsWriter.println("resultant = no");
-		settingsWriter.println("trail = no");
-		settingsWriter.println("effects = yes");
-		settingsWriter.println("warpArrows = no");
-		settingsWriter.println("speed = 3");
-		settingsWriter.close();
-
 	}
 
 	private ArrayList<Level> readFile(File file) throws IOException {
@@ -367,8 +356,6 @@ public class DataReader {
 		if (str.equals("violet"))
 			return new Color(127, 0, 255);
 
-		// TODO: error handling
-
 		String r = str.substring(str.indexOf("(") + 1, str.indexOf(","));
 		String g = str.substring(str.indexOf(",") + 1, str.lastIndexOf(","));
 		String b = str.substring(str.lastIndexOf(",") + 1, str.indexOf(")"));
@@ -405,6 +392,5 @@ public class DataReader {
 		}
 		return (int) (value + 6 * key * key) / 8;
 	}
-
 	
 }
