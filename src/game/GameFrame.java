@@ -62,7 +62,11 @@ public class GameFrame extends JFrame implements KeyListener {
 			break;
 		case KeyEvent.VK_SPACE:
 			if (!gp.gameStarted) {
-				gp.beginGame();
+				try {
+					gp.beginGame();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			break;
 		case KeyEvent.VK_RIGHT:
