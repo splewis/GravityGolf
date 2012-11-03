@@ -7,17 +7,16 @@ import structures.Level;
 import structures.Point2d;
 
 /**
- * 
- * @author Sean
- *
+ * Holder class for the trail drawing effect
+ * @author Sean Lewis
  */
 public final class TrailEffect extends GraphicEffect {
 
 	/**
-	 * 
-	 * @param trailPoints
-	 * @param level
-	 * @param g
+	 * Draws the trail effect.
+	 * @param trailPoints the list of points in the trail
+	 * @param level the current Level
+	 * @param g the Graphics component to draw with
 	 */
 	public static void draw(ArrayList<Point2d> trailPoints, Level level,
 			Graphics g) {
