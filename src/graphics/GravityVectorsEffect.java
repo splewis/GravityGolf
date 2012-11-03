@@ -12,12 +12,17 @@ import structures.Moon;
 import structures.Point2d;
 
 /**
+ * Holder class for gravitational vectors effect.
  * @author Sean Lewis
  */
 public final class GravityVectorsEffect extends GraphicEffect {
 
+	/**
+	 * Draws the vectors from the ball.
+	 * @param level the current Level in the game
+	 * @param g the Graphics component to draw with
+	 */
 	public static void draw(Level level, Graphics g) {
-
 		List<Body> bodies = level.getBodies();
 		Ball ball = level.getBall();
 		double screenXShift = level.getScreenXShift();
@@ -36,7 +41,7 @@ public final class GravityVectorsEffect extends GraphicEffect {
 					+ screenYShift);
 			Point2d ballPt = new Point2d(ballCent.x + screenXShift, ballCent.y
 					+ screenYShift);
-			drawArrow(ballPt, p2, ArrowDistanceFromBall, ArrowSize, g);
+			drawArrow(ballPt, p2, g);
 
 			for (Moon m : b.getMoons()) {
 				Point2d moonCent = m.getCenter();
@@ -46,7 +51,7 @@ public final class GravityVectorsEffect extends GraphicEffect {
 				p2 = new Point2d(ballCent.x + screenXShift + length
 						* Math.cos(angle), ballCent.y + length
 						* -Math.sin(angle) + screenYShift);
-				drawArrow(ballPt, p2, ArrowDistanceFromBall, ArrowSize, g);
+				drawArrow(ballPt, p2, g);
 			}
 
 		}
