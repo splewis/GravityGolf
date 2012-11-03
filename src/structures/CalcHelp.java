@@ -3,8 +3,6 @@ package structures;
 import java.awt.Color;
 import java.util.Random;
 
-import structures.Body;
-
 /**
  * Class that provides several frequently used methods across classes
  * @author Sean Lewis
@@ -120,24 +118,6 @@ public final class CalcHelp {
 		return g * strength / location.getDistanceSquared(sourceLocation);
 	}
 
-	// TODO: once dependences are removed, remove this method
-	@Deprecated
-	public static double getAcceleration(Body b1, Body b2, double g) {
-		return getAcceleration(b1.getCenter(), b2, g);
-	}
-
-	// TODO: once dependences are removed, remove this method
-	@Deprecated
-	public static double getAcceleration(Point2d p1, Particle p, double g) {
-		return g * p.getRadius() / getDistanceSquared(p1, p.getCenter());
-	}
-
-	// TODO: once dependences are removed, remove this method
-	@Deprecated
-	public static double getAcceleration(Point2d p, Body b, double g) {
-		return g * b.getMass() / getDistanceSquared(p, b.getCenter());
-	}
-
 	/**
 	 * Calculates the angle (in radians), formed by (0,0) and (xDif, yDif).
 	 * @param xDif the x value
@@ -165,21 +145,6 @@ public final class CalcHelp {
 		return getAngle(p2.x - p1.x, p2.y - p1.y);
 	}
 
-	@Deprecated
-	public static double getDistance(Point2d p1, Point2d p2) {
-		return Math.hypot(p1.x - p2.x, p1.y - p2.y);
-	}
-
-	@Deprecated
-	public static double getDistance(java.awt.Point p1, java.awt.Point p2) {
-		return Math.hypot(p1.getX() - p2.getX(), p1.getY() - p2.getY());
-	}
-
-	@Deprecated
-	public static double getDistanceSquared(Point2d p1, Point2d p2) {
-		return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
-	}
-
 	/**
 	 * Returns a new Color with each component randomly shifted by at most d.
 	 * The values are adjusted so that the new Color is valid.
@@ -204,18 +169,6 @@ public final class CalcHelp {
 			b = color.getBlue();
 
 		return new Color(r, g, b);
-	}
-
-	// TODO: once dependences are removed, remove this method
-	@Deprecated
-	public static boolean intersects(Point2d p1, Point2d p2, int r1, int r2) {
-		return getDistanceSquared(p1, p2) < Math.pow((r1 + r2), 2);
-	}
-
-	// TODO: once dependences are removed, remove this method
-	@Deprecated
-	public static boolean intersects(Point2d p1, Point2d p2, int r) {
-		return getDistanceSquared(p1, p2) < r * r;
 	}
 
 	/**
