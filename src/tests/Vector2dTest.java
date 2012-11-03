@@ -42,7 +42,7 @@ public class Vector2dTest {
 		v1 = new Vector2d(1, 0);
 		v2 = new Vector2d(0, 1);
 		proj = new Vector2d(0, 0);
-		assertEquals(true, v1.projection(v2).equals(proj, epsilon));			
+		assertEquals(true, v1.projection(v2).equals(proj, epsilon));	
 	}
 	
 }
