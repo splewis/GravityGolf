@@ -97,6 +97,11 @@ public class GameManager {
 	 * @return true if the next level was loaded, false is no more levels exist.
 	 */
 	public boolean nextLevel() {
+		
+		// deletes last level from the memory
+		if (currentLevelIndex >= 0) {
+			levels.set(currentLevelIndex, null);
+		}
 		currentLevelIndex++;
 		if (currentLevelIndex >= levels.size()) {
 			GravityGolf.DataWriter.gameFinished(totalSwings);
@@ -166,6 +171,7 @@ public class GameManager {
 			GravityGolf.DataWriter.println(file.getName()
 					+ " loaded successfully.");
 			infile.close();
+			levels.get(currentLevelIndex).generateLevelData();
 			return true;
 
 		}
