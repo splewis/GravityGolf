@@ -6,14 +6,15 @@ import java.util.ArrayList;
 import structures.*;
 
 /**
+ * Holder class for the Warp Drawing effect.
  * @author Sean Lewis
  */
 public final class WarpDrawer extends GraphicEffect {
 
 	/**
-	 * 
-	 * @param level
-	 * @param g
+	 * Draws the warp arrows effect.
+	 * @param level the current Level
+	 * @param g the Graphics component to draw with
 	 */
 	public static void draw(Level level, Graphics g) {
 		g.setColor(Color.white);
