@@ -6,14 +6,15 @@ import java.util.List;
 import structures.*;
 
 /**
+ * Holder class for drawing the gravitational resultant effect.
  * @author Sean Lewis
  */
 public final class ResultantDrawer extends GraphicEffect {
 
 	/**
-	 * 
-	 * @param level
-	 * @param g
+	 * Draws the gravitational resultant from the ball.
+	 * @param level the level in the game
+	 * @param g the Graphics component to draw with
 	 */
 	public static void draw(Level level, Graphics g) {
 
@@ -50,7 +51,7 @@ public final class ResultantDrawer extends GraphicEffect {
 		Point2d tempPt1 = new Point2d(ball.getCenter().x + screenXShift,
 				ball.getCenter().y + screenYShift);
 		Point2d tempPt2 = new Point2d(tempPt1.x + totalX, tempPt1.y + totalY);
-		drawArrow(tempPt1, tempPt2, ArrowDistanceFromBall, ArrowSize, g);
+		drawArrow(tempPt1, tempPt2, g);
 	}
 
 }
