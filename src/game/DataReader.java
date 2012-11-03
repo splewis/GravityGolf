@@ -47,6 +47,7 @@ import javax.swing.JOptionPane;
 import structures.*;
 
 /**
+ * Provides functionality for reading input level files and settings files.
  * @author Sean Lewis
  */
 public class DataReader {
