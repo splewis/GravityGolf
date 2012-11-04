@@ -10,26 +10,26 @@ import java.awt.Color;
  * @author Sean Lewis
  */
 public class Moon extends Body {
-	// Constant rate of moon angular velocity (radians per update)
-	private double deltaAngle = 0.0;
 	// Parameters:
 	private final int startingAngle;
 	private final int startingDistance;
+
 	// Higher parameters: (sourced from the body the moon is attached to)
 	private final Point2d bodyCenter;
 	private final int bodyMass;
 	private final int bodyRadius;
-	// Parameter-dependent:
 
 	// Variables:
 	private double currentAngle;
 
 	/**
-	 * @param initialAngle
-	 * @param distanceFromBody
-	 * @param radius
-	 * @param color
-	 * @param orbitingBody
+	 * Creates a new moon.
+	 * @param initialAngle the initial angle formed from the Body the moon is
+	 *        attached to
+	 * @param distanceFromBody the distance the moon will stay at from the Body
+	 * @param radius the radius of the Moon
+	 * @param color the Color of the Moon
+	 * @param orbitingBody the Body the Moon will orbit
 	 */
 	public Moon(int initialAngle, int distanceFromBody, int radius,
 			Color color, Body orbitingBody) {
@@ -43,6 +43,7 @@ public class Moon extends Body {
 		bodyMass = (int) orbitingBody.getMass();
 		setCenter(bodyCenter.translate(Math.cos(currentAngle)
 				* distanceFromBody, -Math.sin(currentAngle) * distanceFromBody));
+		computeColoring();
 	}
 
 	/**
@@ -50,11 +51,10 @@ public class Moon extends Body {
 	 * @param g the gravitational constant
 	 */
 	public void move(double g) {
-		if (deltaAngle == 0.0) {
-			deltaAngle = .0075 * Math.sqrt(g * bodyMass
-					/ (startingDistance + bodyRadius + radius));
-			// F_c = F_g -> mv^2/r = GMm /r^2 -> v^2/r=GM/r^2 -> v^2 = GM/r
-		}
+		double deltaAngle = .0075 * Math.sqrt(g * bodyMass
+				/ (startingDistance + bodyRadius + radius));
+		// F_c = F_g -> mv^2/r = GMm /r^2 -> v^2/r=GM/r^2 -> v^2 = GM/r
+
 		currentAngle -= deltaAngle;
 		setCenter(bodyCenter.translate(Math.cos(currentAngle)
 				* startingDistance, -Math.sin(currentAngle) * startingDistance));

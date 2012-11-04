@@ -56,43 +56,40 @@ public class Body extends CircularShape {
 		setColor(color);
 		this.mass = mass;
 		moons = new ArrayList<Moon>();
+		computeColoring();
 
 	}
 
 	/**
-	 * 
+	 * Computes the color ratios for the Body (dist and extraRadius).
 	 */
 	protected void computeColoring() {
-		dist = new float[] { 0.93f, 0.97f, 1.0f };
-		if (radius < 60) {
+		dist = new float[] { 0.94f, 0.96f, 1.0f };
+		if (radius < 30) {
+			dist[0] = 0.80f;
+			dist[1] = 0.90f;
+
+		} else if (radius < 60) {
 			dist[0] = 0.88f;
 			dist[1] = 0.95f;
-			extraRadius = (int) (radius / 8.0 - 3.0);
-		} else if (radius > 150) {
-			dist[0] = 0.95f;
-			dist[1] = 0.98f;
-			extraRadius = (int) ((dist[2] - dist[1]) * (radius / 2.0));
 		}
+		extraRadius = (int) ((dist[2] - dist[1]) * (radius / 2.0));
 		colors = new Color[3];
 		colors[0] = color;
 		colors[1] = Color.WHITE;
 		colors[2] = Color.BLACK;
 	}
 
-	
 	public void draw(double dx, double dy, Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		if (colors == null || dist == null)
-			computeColoring();
 		if (radius < 10) {
 			g.setColor(color);
 			g.fillOval((int) Math.round(center.x - radius + dx),
-					(int) Math.round(center.y - radius + dy ),
-					diameter, diameter);
+					(int) Math.round(center.y - radius + dy), diameter,
+					diameter);
 		} else {
-			g2.setPaint(new RadialGradientPaint(new Point2D.Double(
-					center.x + dx, center.y + dy), radius + extraRadius, dist,
-					colors));
+			g2.setPaint(new RadialGradientPaint(new Point2D.Double(center.x
+					+ dx, center.y + dy), radius + extraRadius, dist, colors));
 			g2.fillOval((int) Math.round(center.x - radius + dx - extraRadius),
 					(int) Math.round(center.y - radius + dy - extraRadius),
 					diameter + 2 * extraRadius, diameter + 2 * extraRadius);
@@ -141,7 +138,7 @@ public class Body extends CircularShape {
 	}
 
 	/**
-	 * 
+	 * Returns the description of the Body and its attached moons.
 	 */
 	public String toString() {
 		String str = "body(";

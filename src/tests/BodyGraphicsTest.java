@@ -60,6 +60,7 @@ public class BodyGraphicsTest extends JFrame {
 			int r = deltaSize * i + smallestSize;
 			Body b = new Body(centerX, centerY, r, c);
 			bodies.add(b);
+			// adds twice the radius and space between 
 			centerX += 2 * deltaSize * (i + 1) + smallestSize + 10;
 		}
 	}

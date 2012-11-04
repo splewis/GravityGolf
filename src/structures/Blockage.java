@@ -10,7 +10,6 @@ package structures;
 import game.DataReader;
 import java.awt.Color;
 import java.awt.GradientPaint;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
@@ -86,16 +85,6 @@ public class Blockage {
 	 */
 	public void draw(Graphics2D g) {
 		draw(0, 0, g);
-	}
-
-	/**
-	 * @param dx
-	 * @param dy
-	 * @param g
-	 */
-	public void basicDraw(int dx, int dy, Graphics g) {
-		g.setColor(color);
-		g.fillRect(drawX + dx, drawY + dy, drawXSize, drawYSize);
 	}
 
 	/**

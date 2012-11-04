@@ -11,7 +11,8 @@ import structures.Point2d;
 public abstract class GraphicEffect {
 
 	/**
-	 * 
+	 * Constant value that multiplies the length of drawn arrows so they are
+	 * longer.
 	 */
 	public static final int ArrowLength = 200;
 
@@ -50,7 +51,6 @@ public abstract class GraphicEffect {
 				(int) Math.round(p2.y));
 
 		double angle = ang - Math.PI / 4;
-
 		double cosine = Math.cos(angle);
 		double sine = Math.sin(angle);
 

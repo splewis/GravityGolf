@@ -64,25 +64,29 @@ public class Level {
 		gravityStrength = 0.0;
 	}
 
-	public Level(Ball b, ArrayList<Body> bod, ArrayList<WarpPoint> ws,
-			ArrayList<GoalPost> gs, ArrayList<Blockage> bs, double ff, double g) {
+	/**
+	 * Creates a new level
+	 */
+	public Level(Ball ball, ArrayList<Body> bodies, ArrayList<WarpPoint> warps,
+			ArrayList<GoalPost> goals, ArrayList<Blockage> blockages,
+			double followfactor, double gravityStrength) {
 		levelIndex = numLevels;
 		numLevels++;
-		ball = b;
-		bodies = bod;
-		goals = gs;
-		warps = ws;
-		blockages = bs;
-		blockageRects = new ArrayList<Rectangle>();
+		this.ball = ball;
+		this.bodies = bodies;
+		this.goals = goals;
+		this.warps = warps;
+		this.blockages = blockages;
+		this.blockageRects = new ArrayList<Rectangle>();
 		for (Blockage bl : blockages) {
-			blockageRects.add(new Rectangle(bl.getDrawX(), bl.getDrawY(), bl
+			this.blockageRects.add(new Rectangle(bl.getDrawX(), bl.getDrawY(), bl
 					.getDrawXSize(), bl.getDrawYSize()));
 		}
-		followFactor = ff;
-		gravityStrength = g;
-		screenXShift = (followFactor == 0) ? 0
+		this.followFactor = followfactor;
+		this.gravityStrength = gravityStrength;
+		this.screenXShift = (followFactor == 0) ? 0
 				: ((500 - ball.getCenter().x) / followFactor);
-		screenYShift = (followFactor == 0) ? 0
+		this.screenYShift = (followFactor == 0) ? 0
 				: ((350 - ball.getCenter().y) / followFactor);
 	}
 
@@ -160,8 +164,8 @@ public class Level {
 		draw(0, 0, g);
 	}
 
-	public void draw(int xs, int ys, Graphics2D g) {
-		g.drawImage(image, xs + xMin - extraX, ys + yMin - extraY, null);
+	public void draw(int xShift, int yShift, Graphics2D g) {
+		g.drawImage(image, xShift + xMin - extraX, yShift + yMin - extraY, null);
 	}
 
 	public void clearBallLocation() {
@@ -446,9 +450,7 @@ public class Level {
 		System.out.println((System.currentTimeMillis() - t1) / 1000.0 + " s");
 	}
 
-	/*
-	 * Runs with O(n^2) runtime Returns UNSHIFTED points
-	 */
+	
 	public ArrayList<java.awt.Point> getSolutionSet() {
 		if (solutions != null) {
 			return solutions;
