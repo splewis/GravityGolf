@@ -17,6 +17,10 @@ import java.util.Scanner;
  */
 public class Level {
 
+	/**
+	 * The total number of levels in the game.
+	 */
+	// TODO: this dependency should be removed
 	public static int numLevels = 0;
 
 	private int levelIndex = 0;
@@ -79,8 +83,8 @@ public class Level {
 		this.blockages = blockages;
 		this.blockageRects = new ArrayList<Rectangle>();
 		for (Blockage bl : blockages) {
-			this.blockageRects.add(new Rectangle(bl.getDrawX(), bl.getDrawY(), bl
-					.getDrawXSize(), bl.getDrawYSize()));
+			this.blockageRects.add(new Rectangle(bl.getDrawX(), bl.getDrawY(),
+					bl.getDrawXSize(), bl.getDrawYSize()));
 		}
 		this.followFactor = followfactor;
 		this.gravityStrength = gravityStrength;
@@ -90,13 +94,10 @@ public class Level {
 				: ((350 - ball.getCenter().y) / followFactor);
 	}
 
-	public boolean isInitialized() {
-		return image != null;
-	}
-
+	/**
+	 * Performs all level computation so that it can be drawn.
+	 */
 	public void generateLevelData() {
-
-		stars = new ArrayList<Star>();
 		if (followFactor == 0) {
 			// arbitrary values, see formula below - using 1 would lead to
 			// division by 0, and using numbers <1.25 would make a huge area
@@ -125,12 +126,16 @@ public class Level {
 							/ oneMinusInverse);
 		}
 
-		double area = (xMax - xMin) * (yMax - yMin) + 10000;
-		int numStars = (int) (area / StarFactor);
-		for (int i = 0; i < numStars; i++) {
-			int x = CalcHelp.randomInteger(xMin - extraX, xMax + extraX);
-			int y = CalcHelp.randomInteger(yMin - extraY, yMax + extraY);
-			stars.add(new Star(x, y));
+		// stars are never recalculated
+		if (stars == null) {
+			stars = new ArrayList<Star>();
+			double area = (xMax - xMin) * (yMax - yMin) + 10000;
+			int numStars = (int) (area / StarFactor);
+			for (int i = 0; i < numStars; i++) {
+				int x = CalcHelp.randomInteger(xMin - extraX, xMax + extraX);
+				int y = CalcHelp.randomInteger(yMin - extraY, yMax + extraY);
+				stars.add(new Star(x, y));
+			}
 		}
 
 		image = new BufferedImage(xMax - xMin + extraX * 2, yMax - yMin
@@ -156,28 +161,46 @@ public class Level {
 		}
 	}
 
+	/**
+	 * Returns the ArrayList of stars.
+	 * @return the ArrayList of stars
+	 */
 	public ArrayList<Star> getStars() {
 		return stars;
 	}
-
+	
+	/**
+	 * Draws the Level with no translation.
+	 * @param g the Graphics component to draw with
+	 */
 	public void draw(Graphics2D g) {
+		assert image != null;		
 		draw(0, 0, g);
 	}
 
+	/**
+	 * Draws the Level.
+	 * @param xShift the horizontal translation
+	 * @param yShift the vertical translation
+	 * @param g the Graphics component to draw with
+	 */
 	public void draw(int xShift, int yShift, Graphics2D g) {
+		assert image != null;		
 		g.drawImage(image, xShift + xMin - extraX, yShift + yMin - extraY, null);
 	}
 
-	public void clearBallLocation() {
-		while (getIntersectingBody() != null || isOutOfBounds()) {
-			ball.move(ball.getVelocity().multiply(0.1));
-		}
-	}
-
+	/**
+	 * Returns the Ball for this level.
+	 * @return the Ball
+	 */
 	public Ball getBall() {
 		return ball;
 	}
 
+	/**
+	 * Returns the ArrayList of Bodies.
+	 * @return the ArrayList of Bodies.
+	 */
 	public ArrayList<Body> getBodies() {
 		return bodies;
 	}
@@ -204,17 +227,19 @@ public class Level {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the ArrayList of Blockages.
+	 * @return the ArrayList of Blockages.
 	 */
 	public ArrayList<Blockage> getBlockages() {
 		return blockages;
 	}
 
 	/**
-	 * 
-	 * @param shape
-	 * @return
+	 * Returns a blockage a shape is intersecting with, or null if there are
+	 * none.
+	 * @param shape a parameter
+	 * @return a blockage a shape is intersecting with, or null if there are
+	 *         none
 	 */
 	public Blockage getBlockageIntersection(CircularShape shape) {
 		for (Blockage b : blockages) {
@@ -225,26 +250,50 @@ public class Level {
 		return null;
 	}
 
+	/**
+	 * Returns the follow factor.
+	 * @return the follow factor
+	 */
 	public double getFollowFactor() {
 		return followFactor;
 	}
 
+	/**
+	 * Returns the ArrayList of GoalPosts.
+	 * @return the ArrayList of GoalPosts
+	 */
 	public ArrayList<GoalPost> getGoalPosts() {
 		return goals;
 	}
 
+	/**
+	 * Returns the gravitational constant for this level.
+	 * @return the gravitational constant for this level
+	 */
 	public double getGravityStrength() {
 		return gravityStrength;
 	}
 
+	/**
+	 * Returns the current horizontal screen shift distance.
+	 * @return the current horizontal screen shift distance
+	 */
 	public double getScreenXShift() {
 		return screenXShift;
 	}
 
+	/**
+	 * Returns the current vertical screen shift distance.
+	 * @return the current vertical screen shift distance
+	 */
 	public double getScreenYShift() {
 		return screenYShift;
 	}
 
+	/**
+	 * Returns the ArrayList of WarpPoints.
+	 * @return the ArrayList of WarpPoints
+	 */
 	public ArrayList<WarpPoint> getWarpPoints() {
 		return warps;
 	}
@@ -255,7 +304,7 @@ public class Level {
 				|| p.y + screenYShift > GamePanel.Height - 20;
 	}
 
-	private boolean isOutOfBounds() {	
+	private boolean isOutOfBounds() {
 		return isOutOfBounds(ball.getCenter());
 	}
 
@@ -267,6 +316,10 @@ public class Level {
 		return y + screenYShift < 0 || y + screenYShift > GamePanel.Height - 20;
 	}
 
+	/**
+	 * Returns if the ball is in the goal post, i.e. has won.
+	 * @return if the user was won this level
+	 */
 	public boolean inGoalPost() {
 		for (GoalPost g : goals) {
 			if (ball.intersects(g)) {
@@ -276,6 +329,9 @@ public class Level {
 		return false;
 	}
 
+	/**
+	 * Resets the ball to its starting position.
+	 */
 	public void reset() {
 		ball.resetLocation();
 		ball.setLaunched(false);
@@ -285,10 +341,17 @@ public class Level {
 				: ((350 - ball.getCenter().y) / followFactor);
 	}
 
+	/**
+	 * Returns if the ball should be reset.
+	 * @return if the ball should be reset
+	 */
 	public boolean timeToReset() {
 		return isOutOfBounds() || (getIntersectingBody() != null);
 	}
 
+	/**
+	 * Updates the level state a single step.
+	 */
 	public void updateLevel() {
 		double sumXForce = 0.0;
 		double sumYForce = 0.0;
@@ -325,9 +388,9 @@ public class Level {
 				Vector2d v_p = v_i.projection(Math.atan((ball.getCenter().y - b
 						.getCenter().y)
 						/ (ball.getCenter().x - b.getCenter().x)));
-				
+
 				// TODO: projection clean up - what is going on here?
-				
+
 				Vector2d v_f = v_i.subtract(v_p.multiply(2));
 				ball.setVelocity(v_f);
 				while (ball.intersects(b)) {
@@ -413,6 +476,10 @@ public class Level {
 				: ((350 - ball.getCenter().y) / followFactor);
 	}
 
+	/**
+	 * Performs the computation for possible input points to win the level.
+	 * @param max the maximum length for the inital vector
+	 */
 	public void calculateSolutionSet(double max) {
 		solutions = new ArrayList<java.awt.Point>();
 		long t1 = System.currentTimeMillis();
@@ -450,7 +517,11 @@ public class Level {
 		System.out.println((System.currentTimeMillis() - t1) / 1000.0 + " s");
 	}
 
-	
+	/**
+	 * Returns the solution set for this Level, as already defined in
+	 * levels/data/levelX.txt
+	 * @return the solution set
+	 */
 	public ArrayList<java.awt.Point> getSolutionSet() {
 		if (solutions != null) {
 			return solutions;
@@ -458,6 +529,7 @@ public class Level {
 
 		solutions = new ArrayList<java.awt.Point>();
 		try {
+			// TODO: bad dependency on levelIndex here
 			Scanner infile = new Scanner(new File("levels/data/level"
 					+ (levelIndex + 1) + ".txt"));
 			while (infile.hasNext()) {
@@ -473,21 +545,34 @@ public class Level {
 
 	}
 
-	public boolean possibleWin(java.awt.Point p, double max) {
+	/**
+	 * Returns if the user clicking this point would result in a win.
+	 * @param clickedPoint the screen point the user clicked
+	 * @param max the maximum initial vector length
+	 * @return if this point results in a win
+	 */
+	public boolean possibleWin(java.awt.Point clickedPoint, double max) {
 		// for a screen (game) coordinate
-		return possibleWin(
-				new Point2d(p).translate(-screenXShift, -screenYShift), max);
+		return possibleWin(new Point2d(clickedPoint).translate(-screenXShift,
+				-screenYShift), max);
 	}
 
-	public boolean possibleWin(Point2d p, double max) {
+	/**
+	 * Returns if the user inputting this point (raw level data - all
+	 * translation data stripped) woudl result in a win.
+	 * @param translatedPoint the input point
+	 * @param max the maximum initial vector length
+	 * @return if this point results in a win
+	 */
+	public boolean possibleWin(Point2d translatedPoint, double max) {
 		// for non-translated points
-		if (!onScreen(p))
+		if (!onScreen(translatedPoint))
 			return false;
-		double mag = p.getDistance(ball.getCenter());
+		double mag = translatedPoint.getDistance(ball.getCenter());
 		if (mag > max) {
 			mag = max;
 		}
-		double ang = CalcHelp.getAngle(ball.getCenter(), p);
+		double ang = CalcHelp.getAngle(ball.getCenter(), translatedPoint);
 		Level cloneLevel = new Level(new Ball((int) ball.getCenter().x,
 				(int) ball.getCenter().y, ball.getRadius(), ball.getColor()),
 				bodies, warps, goals, blockages, followFactor, gravityStrength);
@@ -511,11 +596,14 @@ public class Level {
 		}
 	}
 
-	public boolean onScreen(Point2d p) {
+	private boolean onScreen(Point2d p) {
 		return p.x + screenXShift > 0 && p.x + screenXShift < 1000
 				&& p.y + screenYShift > 0 && p.y + screenYShift < 700;
 	}
 
+	/**
+	 * Returns the String representation of this Level.
+	 */
 	public String toString() {
 		String str = ball.toString() + "\n";
 		for (Body b : bodies) {

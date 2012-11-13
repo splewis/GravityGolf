@@ -7,7 +7,6 @@ import java.util.Random;
  * Class that provides several frequently used methods across classes
  * @author Sean Lewis
  */
-
 public final class CalcHelp {
 
 	private static final Random randomGenerator = new Random();
