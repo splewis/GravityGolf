@@ -57,7 +57,6 @@ public class Body extends CircularShape {
 		this.mass = mass;
 		moons = new ArrayList<Moon>();
 		computeColoring();
-		System.out.println(hashCode());
 	}
 
 	/**
@@ -79,7 +78,6 @@ public class Body extends CircularShape {
 		colors[1] = Color.WHITE;
 		colors[2] = Color.BLACK;
 	}
-
 	public void draw(double dx, double dy, Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		if (radius < 10) {
@@ -156,7 +154,6 @@ public class Body extends CircularShape {
 	 */
 	@Override
 	public int hashCode() {
-		return (int) (center.x + center.x * center.y * radius + (mass
-				* moons.size() + 1)) + radius*radius;
+		return toString().hashCode();
 	}
 }

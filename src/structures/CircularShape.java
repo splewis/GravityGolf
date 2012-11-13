@@ -154,12 +154,4 @@ public abstract class CircularShape {
 		return distSquared < Math.pow((getRadius() + circle.getRadius()), 2);
 	}
 
-	/**
-	 * Returns the hash for this object.
-	 */
-	@Override
-	public int hashCode() {
-		return (int) (center.x + center.y + radius + center.x * center.y
-				* radius + diameter * diameter);
-	}
 }

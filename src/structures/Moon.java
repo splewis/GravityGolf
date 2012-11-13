@@ -69,6 +69,6 @@ public class Moon extends Body {
 	}
 	
 	public int hashCode() {
-		return super.hashCode() + startingDistance;
+		return toString().hashCode();
 	}
 }

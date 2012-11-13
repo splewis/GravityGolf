@@ -31,7 +31,7 @@ public class GoalPost extends CircularShape {
 	}
 
 	public int hashCode() {
-		return super.hashCode();
+		return toString().hashCode();
 	}
 	
 }

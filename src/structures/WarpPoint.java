@@ -54,6 +54,6 @@ public class WarpPoint extends CircularShape {
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return toString().hashCode();
 	}
 }

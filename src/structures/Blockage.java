@@ -189,6 +189,6 @@ public class Blockage {
 	 */
 	@Override
 	public int hashCode() {
-		return (int) (centerX + centerX * centerX + xSize * ySize + xSize + ySize);
+		return toString().hashCode();
 	}
 }

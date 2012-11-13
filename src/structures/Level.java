@@ -482,7 +482,6 @@ public class Level {
 	 */
 	public void calculateSolutionSet(double max) {
 		solutions = new ArrayList<java.awt.Point>();
-		long t1 = System.currentTimeMillis();
 		double sqr = max * max;
 		for (int x = (int) (ball.getCenter().x - max); x <= (int) (ball
 				.getCenter().x + max); x++) {
@@ -514,7 +513,6 @@ public class Level {
 			pw.println(p.x + " " + p.y);
 		}
 		pw.close();
-		System.out.println((System.currentTimeMillis() - t1) / 1000.0 + " s");
 	}
 
 	/**
@@ -602,6 +600,17 @@ public class Level {
 	}
 
 	/**
+	 * @return
+	 */
+	public int estimateDifficulty() {
+		int solutionsFound = 0;
+
+		// TODO: implementation
+
+		return solutionsFound;
+	}
+
+	/**
 	 * Returns the String representation of this Level.
 	 */
 	public String toString() {
@@ -625,31 +634,8 @@ public class Level {
 	/**
 	 * Returns the hash value for the level.
 	 */
+	@Override
 	public int hashCode() {
-		long sum = 0L;
-		int count = 0;		
-		
-		sum += ball.hashCode();
-		count++;
-
-		for (Body b : bodies) {
-			sum += b.hashCode();
-			count++;
-		}
-		for (WarpPoint w : warps) {
-			sum += w.hashCode();
-			count++;
-		}
-		for (Blockage b : blockages) {
-			sum += b.hashCode();
-			count++;
-		}
-		for (GoalPost g : goals) {
-			sum += g.hashCode();
-			count++;
-		}
-		sum += followFactor * gravityStrength;
-
-		return (int) (sum / count);
+		return toString().hashCode();
 	}
 }
