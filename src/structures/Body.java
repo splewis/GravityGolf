@@ -57,7 +57,7 @@ public class Body extends CircularShape {
 		this.mass = mass;
 		moons = new ArrayList<Moon>();
 		computeColoring();
-
+		System.out.println(hashCode());
 	}
 
 	/**
@@ -140,6 +140,7 @@ public class Body extends CircularShape {
 	/**
 	 * Returns the description of the Body and its attached moons.
 	 */
+	@Override
 	public String toString() {
 		String str = "body(";
 		str += Math.round(center.x) + ", " + Math.round(center.y) + ", "
@@ -150,4 +151,12 @@ public class Body extends CircularShape {
 		return str;
 	}
 
+	/**
+	 * Returns a hash value for this Body.
+	 */
+	@Override
+	public int hashCode() {
+		return (int) (center.x + center.x * center.y * radius + (mass
+				* moons.size() + 1)) + radius*radius;
+	}
 }

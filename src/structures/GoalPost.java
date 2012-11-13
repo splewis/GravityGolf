@@ -30,4 +30,8 @@ public class GoalPost extends CircularShape {
 		return "goal(" + center.x + ", " + center.y + ", " + radius + ")";
 	}
 
+	public int hashCode() {
+		return super.hashCode();
+	}
+	
 }

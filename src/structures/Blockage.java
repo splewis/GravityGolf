@@ -178,9 +178,17 @@ public class Blockage {
 	/**
 	 * Returns the formatted description of the blockage.
 	 */
+	@Override
 	public String toString() {
 		return "rect(" + centerX + ", " + centerY + ", " + xSize + ", " + ySize
 				+ ", " + DataReader.getColorDisplay(color) + ")";
 	}
 
+	/**
+	 * Returns a hash code for this Ball.
+	 */
+	@Override
+	public int hashCode() {
+		return (int) (centerX + centerX * centerX + xSize * ySize + xSize + ySize);
+	}
 }

@@ -52,4 +52,8 @@ public class WarpPoint extends CircularShape {
 		return "warp(" + center.x + ", " + center.y + ")";
 	}
 
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

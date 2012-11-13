@@ -126,4 +126,12 @@ public class Ball extends MovableCircularShape {
 		return str;
 	}
 
+	@Override
+	/**
+	 * Returns a hash code for this Ball.
+	 */
+	public int hashCode() {
+		return (int) (startingLocation.x + startingLocation.x
+				* startingLocation.y * radius + radius * radius);
+	}
 }

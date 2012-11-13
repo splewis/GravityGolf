@@ -168,13 +168,13 @@ public class Level {
 	public ArrayList<Star> getStars() {
 		return stars;
 	}
-	
+
 	/**
 	 * Draws the Level with no translation.
 	 * @param g the Graphics component to draw with
 	 */
 	public void draw(Graphics2D g) {
-		assert image != null;		
+		assert image != null;
 		draw(0, 0, g);
 	}
 
@@ -185,7 +185,7 @@ public class Level {
 	 * @param g the Graphics component to draw with
 	 */
 	public void draw(int xShift, int yShift, Graphics2D g) {
-		assert image != null;		
+		assert image != null;
 		g.drawImage(image, xShift + xMin - extraX, yShift + yMin - extraY, null);
 	}
 
@@ -622,4 +622,34 @@ public class Level {
 		return str;
 	}
 
+	/**
+	 * Returns the hash value for the level.
+	 */
+	public int hashCode() {
+		long sum = 0L;
+		int count = 0;		
+		
+		sum += ball.hashCode();
+		count++;
+
+		for (Body b : bodies) {
+			sum += b.hashCode();
+			count++;
+		}
+		for (WarpPoint w : warps) {
+			sum += w.hashCode();
+			count++;
+		}
+		for (Blockage b : blockages) {
+			sum += b.hashCode();
+			count++;
+		}
+		for (GoalPost g : goals) {
+			sum += g.hashCode();
+			count++;
+		}
+		sum += followFactor * gravityStrength;
+
+		return (int) (sum / count);
+	}
 }
