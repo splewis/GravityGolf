@@ -39,6 +39,8 @@ public abstract class GraphicEffect {
 	public static void drawArrow(Point2d p1, Point2d p2, int drawingOffset,
 			int arrowSize, Graphics g) {
 
+		
+		
 		double ang = CalcHelp.getAngle(p1, p2);
 
 		// Shifts away from the center of the ball, so the line starts a little

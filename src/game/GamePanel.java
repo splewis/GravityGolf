@@ -30,22 +30,16 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	public static final int ArrowLength = 200; // affects how large drawn
 												// vectors are relative to those
 
-	public static final int EffectsNum = 0;		
+	public static final int EffectsNum = 0;
 	public static final int VectorsNum = 1;
 	public static final int ResultantNum = 2;
 	public static final int TrailNum = 3;
 	public static final int WarpArrowsNum = 4;
-	public static final int[] DEFAULT_SETTINGS = {
-		1, 0, 0, 1, 0, 3
-	};
+	public static final int[] DEFAULT_SETTINGS = { 1, 0, 0, 1, 0, 3 };
 	// User-set settings
 	private boolean settings[] = new boolean[5];
-	ArrayList<Point2d> trailPoints = new ArrayList<Point2d>(); 
-	
-	boolean drawingEffects;
-	boolean blinkingBall = true;
-	long effectStartTime; // stores time of collision for effects
-	ArrayList<Particle> particles;
+
+	private boolean blinkingBall = true;
 	// Game data
 	private double launchAngle, launchMagnitude;
 	private Point2d initialPoint, terminalPoint; // for the initial velocity
@@ -66,19 +60,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private volatile boolean running;
 	private int paints;
 	// Special effect values
-	static final int SpecialEffectTime = 1000; // ms
-	double[] shakeValues; // random values for screen shake, set on each
-							// collision
 	static final int TimeBetweenFlashes = 250; // ms
 
-	// display
-	static final String[] instructionStrings = { "H: Help", "P: pause",
-			"R: reset", "Right arrow: speed up",
-			"Left arrow: slow down",
-			// break
-			"S: hide stars", "V: show gravity vectors",
-			"D: show gravity resultant", "T: show ball trail",
-			"E: show special effects" };
 	// Menu Components
 	JMenuBar menuBar = new JMenuBar();
 	JMenu settingsMenu = new JMenu("Settings");
@@ -106,9 +89,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	JMenuItem saveItem = new JMenuItem("Save current game");
 	JMenu loadMenu = new JMenu("Load");
 	JMenuItem loadItem = new JMenuItem("Load game");
-	
-	
-	
 
 	public GamePanel() throws IOException {
 		gameManager = new GameManager();
@@ -132,8 +112,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			settingsMenu.add(settingsBoxes[i]);
 			settingsBoxes[i].addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					if(e.getSource() == settingsBoxes[TrailNum]) {
-						trailPoints.clear();
+					if (e.getSource() == settingsBoxes[TrailNum]) {
+						TrailEffect.resetPoints();
 					}
 					for (int i = 0; i < settingsBoxes.length; i++) {
 						settings[i] = settingsBoxes[i].getState();
@@ -229,9 +209,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					period = 5;
 					break;
 				}
-
 			}
-
 			repaint();
 
 			long dt = System.currentTimeMillis() - t;
@@ -274,55 +252,19 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				currentLevel.updateLevel();
 			}
 			if (settings[TrailNum] && ball.isLaunched() && paints > 2) {
-				trailPoints.add(new Point2d(ball.getCenter().x, ball
+				TrailEffect.addTrailPoint(new Point2d(ball.getCenter().x, ball
 						.getCenter().y));
 			}
-			if (currentLevel.timeToReset() && !drawingEffects
-					&& settings[EffectsNum]) {
-				Body intersected = currentLevel.getIntersectingBody();
-				particles = ball.generateParticles(intersected);
-				shakeValues = new double[6];
-				double speed = ball.getVelocity().getLength();
-				
-				if (speed < .25)
-					speed = .25;
-				if (speed > 2.5)
-					speed = 2.5;
+			if (currentLevel.timeToReset() && settings[EffectsNum]) {
 
-				double shakeFactor = 3 * speed / currentLevel.getFollowFactor();
-				if (currentLevel.getFollowFactor() == 0.0)
-					shakeFactor = 25 * speed;
-				// 1st value is multiplicative factor
-				// TODO: make based of rate at which screen shifts
-				int sign1 = -1;
-				if (ball.getCenter().x + screenXShift < 0) {
-					sign1 = 1;
-				} else if (ball.getCenter().x + screenXShift > 0) {
-					sign1 = CalcHelp.randomSign();
+				if (!CollisionEffect.started()) {
+					CollisionEffect.start(currentLevel);
 				}
-				shakeValues[0] = CalcHelp.randomDouble(35, 40) * shakeFactor
-						* sign1;
-
-				int sign2 = -1;
-				if (ball.getCenter().y + screenYShift < 0) {
-					sign2 = 1;
-				} else if (ball.getCenter().y + screenYShift > 0) {
-					sign2 = CalcHelp.randomSign();
+				if (!CollisionEffect.running()) {
+					CollisionEffect.kill();
+					resetLevel();
 				}
-				shakeValues[3] = CalcHelp.randomDouble(35, 40) * shakeFactor
-						* sign2;
 
-				// 2nd value is sinusoidal factor
-				shakeValues[1] = CalcHelp.randomDouble(45, 50);
-				shakeValues[4] = CalcHelp.randomDouble(45, 50);
-
-				// 3rd value is exponential factor
-				shakeValues[2] = CalcHelp.randomDouble(-.0035, -.0045);
-				shakeValues[5] = CalcHelp.randomDouble(-.0035, -.0045);
-
-				ball.setLaunched(false);
-				effectStartTime = System.currentTimeMillis();
-				drawingEffects = true;
 			} else if (!levelComplete && currentLevel.inGoalPost() && !gameWon) {
 				levelComplete = true;
 			} else if (currentLevel.timeToReset() && !settings[EffectsNum]) {
@@ -355,7 +297,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				textColor = Color.green;
 			} else if (drawingInitialVelocity) {
 				textColor = Color.white;
-			} else if (drawingEffects) {
+			} else if (CollisionEffect.running()) {
 				textColor = Color.red;
 			}
 			if (textColor != null && terminalPoint != null) {
@@ -387,10 +329,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					GraphicEffect.drawArrow(initialPoint, tempTerminalPoint, g);
 				}
 			}
-			if (settings[VectorsNum] && !drawingEffects) {
+			if (settings[VectorsNum] && !CollisionEffect.running()) {
 				GravityVectorsEffect.draw(currentLevel, g);
 			}
-			if (settings[ResultantNum] && !drawingEffects) {
+			if (settings[ResultantNum] && !CollisionEffect.running()) {
 				ResultantDrawer.draw(currentLevel, g);
 			}
 			if (gamePaused) {
@@ -415,8 +357,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	public void resetLevel() {
 		levelComplete = false;
-		drawingEffects = false;
-		trailPoints.clear();
+		CollisionEffect.kill();
+		TrailEffect.resetPoints();
 		currentLevel.reset();
 		drawingInitialVelocity = false;
 	}
@@ -428,54 +370,13 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		int xShift = (int) Math.round(screenXShift);
 		int yShift = (int) Math.round(screenYShift);
 
-		int dt = (int) (t - effectStartTime);
-		if (gamePaused) {
-			effectStartTime = t;
-		}
-		if (settings[EffectsNum] && dt < SpecialEffectTime && drawingEffects) {
-			// Dampened harmonic motion on collision
-			if (!gamePaused) {
-				screenXShift += (shakeValues[0] * Math.sin(dt / shakeValues[1]) * Math
-						.exp(shakeValues[2] * dt));
-				xShift = (int) Math.round(screenXShift);
-				screenYShift += (shakeValues[3] * Math.sin(dt / shakeValues[4]) * Math
-						.exp(shakeValues[5] * dt));
-				yShift = (int) Math.round(screenYShift);
-			}
-
-			for (int i = 0; i < particles.size(); i++) {
-				Particle b = particles.get(i);
-
-				if (!gamePaused) {
-					for (Body bod : currentLevel.getBodies()) {
-						if (bod.intersects(b)
-								|| bod.getCenter().getDistanceSquared(
-										b.getCenter()) <= (bod.getRadius() * .5)
-										* (bod.getRadius() * .5) && i != 0) {
-							particles.remove(i);
-							i--;
-						}
-					}
-					for (Blockage blockage : currentLevel.getBlockages()) {
-						if (blockage.intersects(b.getCenter()) && i != 0) {
-							particles.remove(i);
-							i--;
-						}
-					}
-					for (GoalPost gp : currentLevel.getGoalPosts()) {
-						if (b.intersects(gp) && i != 0) {
-							particles.remove(i);
-							i--;
-						}
-					}
-					b.setVelocity(b.getVelocity().multiply(0.99));
-					b.move();
-				}
-				b.draw(screenXShift, screenYShift, g);
-			}
-
+		if (settings[EffectsNum] && CollisionEffect.running()
+				&& CollisionEffect.running()) {
+			int[] newShifts = CollisionEffect.update(g);
+			screenXShift = newShifts[0];
+			screenYShift = newShifts[1];
 		} else {
-			if ((drawingEffects || !(settings[EffectsNum])
+			if ((CollisionEffect.running() || !(settings[EffectsNum])
 					&& currentLevel.timeToReset())) {
 				resetLevel();
 			}
@@ -494,7 +395,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		}
 
 		if (settings[TrailNum] && ball.isLaunched()) {
-			TrailEffect.draw(trailPoints, currentLevel, g);
+			TrailEffect.draw(currentLevel, g);
 		}
 
 		if (showSolution) {
@@ -504,8 +405,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			}
 		}
 
-		if (!drawingEffects) { // prevents flicker of ball on reset after
-								// effects
+		if (!CollisionEffect.running()) { // prevents flicker of ball on reset
+											// after
+			// effects
 			if (!ball.isLaunched()) { // stationary ball
 				Color c = ball.getColor();
 				if (blinkingBall) {
@@ -523,13 +425,14 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			}
 		}
 
-		if (settings[EffectsNum] && dt < SpecialEffectTime && drawingEffects) {
-			for (Particle p : particles) {
-				p.draw(screenXShift, screenYShift, g);
-			}
-		}
+		// if (settings[EffectsNum] && dt < SpecialEffectTime && drawingEffects)
+		// {
+		// for (Particle p : particles) {
+		// p.draw(screenXShift, screenYShift, g);
+		// }
+		// }
 
-		if (gameManager.getLevelNumber() == 1 && gameStarted) {
+		if (gameManager.getLevelNumber() == 1 && gameStarted && gameManager.getCurrentLevelSwings() == 0) {
 			GoalPost goal = currentLevel.getGoalPosts().get(0);
 			g.setColor(Color.white);
 			g.drawString("Aim here!", (int) (goal.getCenter().x - 20 + xShift),
@@ -567,13 +470,14 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 						".txt")) {
 					DataWriter.saveGame(gameManager, new File("saves/" + name));
 				} else {
-					DataWriter.saveGame(gameManager, new File("saves/" + name + ".txt"));
+					DataWriter.saveGame(gameManager, new File("saves/" + name
+							+ ".txt"));
 				}
 			} catch (Exception e) {
 			}
 
 		} else if (event.getSource() == loadItem) {
-			killSpecialEffects();
+			CollisionEffect.kill();
 			JFileChooser chooser = new JFileChooser(
 					System.getProperty("user.dir") + "/saves");
 			chooser.setApproveButtonText("Load");
@@ -611,7 +515,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				&& !gamePaused
 				&& initialPoint.getDistance(new Point2d(event.getPoint())) > 2 * 4
 				// 4 is 1 above typical ball radius, so it is used here
-				&& !drawingEffects) {
+				&& !CollisionEffect.running()) {
 			terminalPoint = new Point2d(event.getPoint().getX(), event
 					.getPoint().getY());
 			launchMagnitude = initialPoint.getDistance(terminalPoint);
@@ -626,10 +530,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	}
 
 	public void mouseReleased(MouseEvent event) {
-		trailPoints.clear();
+		TrailEffect.resetPoints();
 		blinkingBall = false; // the first launch will disable all blinking
 								// (reset upon getting to next level)
-		if (!gamePaused && !ball.isLaunched() && !drawingEffects
+		if (!gamePaused && !ball.isLaunched() && !CollisionEffect.running()
 				&& drawingInitialVelocity) {
 			gameManager.swingTaken();
 			launchMagnitude = initialPoint.getDistance(terminalPoint);
@@ -653,7 +557,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			levelComplete = false;
 			blinkingBall = true;
 			boolean moreLevels = gameManager.nextLevel();
-			trailPoints.clear();
+			TrailEffect.resetPoints();
 			if (moreLevels) {
 				ball.setLaunched(false);
 			} else {
@@ -669,9 +573,15 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		return gameStarted;
 	}
 
+	public boolean isPaused() {
+		return gamePaused;
+	}
+
 	public void switchSetting(int index) {
 		settings[index] = !settings[index];
 		settingsBoxes[index].setSelected(settings[index]);
+		if (index == TrailNum)
+			TrailEffect.resetPoints();
 	}
 
 	public void safeQuit() {
@@ -689,10 +599,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		running = false;
 	}
 
-	private void killSpecialEffects() {
-		effectStartTime = effectStartTime - SpecialEffectTime - 1;
-		drawingEffects = false;
-	}
 
 	public void mouseClicked(MouseEvent event) {
 	}
@@ -704,6 +610,12 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	}
 
 	public void mouseMoved(MouseEvent event) {
+	}
+
+	public void pause() {
+		if (!CollisionEffect.running()) {
+			gamePaused = !gamePaused;
+		}
 	}
 
 }

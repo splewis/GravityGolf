@@ -28,7 +28,7 @@ public class Particle extends MovableCircularShape {
 	public void draw(double dx, double dy, Graphics g) {
 		g.setColor(color);
 		g.fillOval((int) Math.round(center.x - 0.5 + dx),
-				(int) Math.round(center.y - 0.5 + dy), 1, 1);
+				(int) Math.round(center.y - 0.5 + dy), 0, 1);
 	}
 
 }

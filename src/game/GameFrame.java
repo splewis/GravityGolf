@@ -46,7 +46,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			gp.switchSetting(GamePanel.EffectsNum);
 			break;
 		case KeyEvent.VK_P:
-			gp.gamePaused = !gp.gamePaused;
+			gp.pause();
 			break;
 		case KeyEvent.VK_R:
 			if (gp.isGameStarted()) {
@@ -55,7 +55,6 @@ public class GameFrame extends JFrame implements KeyListener {
 			break;
 		case KeyEvent.VK_T:
 			gp.switchSetting(GamePanel.TrailNum);
-			gp.trailPoints.clear();
 			break;
 		case KeyEvent.VK_V:
 			gp.switchSetting(GamePanel.VectorsNum);

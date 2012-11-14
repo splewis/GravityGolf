@@ -600,11 +600,14 @@ public class Level {
 	}
 
 	/**
-	 * @return
+	 * Returns a fast estimation of the difficulty of the level. A higher number
+	 * means the level is easier.
+	 * @return a very conservative estimation of the number of level solutions
+	 *         that exist.
 	 */
 	public int estimateDifficulty() {
 		int solutionsFound = 0;
-
+		Point2d ballPoint = ball.getCenter();
 		// TODO: implementation
 
 		return solutionsFound;
