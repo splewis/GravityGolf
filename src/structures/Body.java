@@ -30,6 +30,15 @@ public class Body extends CircularShape {
 	}
 
 	/**
+	 * Initializes a Body based on an already-defined CircularShape.
+	 * @param shape a parameter
+	 */
+	public Body(CircularShape shape) {
+		this((int) shape.center.x, (int) shape.center.y, shape.radius,
+				shape.color);
+	}
+
+	/**
 	 * Initializes a new Body at a center point and radius with a color. Since
 	 * no mass is specified, the radius is used as the mass.
 	 * @param centerX the center x coordinate
@@ -67,7 +76,9 @@ public class Body extends CircularShape {
 		if (radius < 30) {
 			dist[0] = 0.80f;
 			dist[1] = 0.90f;
-
+		} else if (radius < 45) {
+			dist[0] = 0.84f;
+			dist[1] = 0.92f;
 		} else if (radius < 60) {
 			dist[0] = 0.88f;
 			dist[1] = 0.95f;
@@ -78,6 +89,7 @@ public class Body extends CircularShape {
 		colors[1] = Color.WHITE;
 		colors[2] = Color.BLACK;
 	}
+
 	public void draw(double dx, double dy, Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		if (radius < 10) {

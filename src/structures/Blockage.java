@@ -13,7 +13,9 @@ import java.awt.Rectangle;
 public class Blockage {
 
 	// Parameters:
-	private final int centerX, centerY;
+	private final int centerX, centerY; // TODO: rework to use the standard
+										// point based system only (no x, y int
+										// data fields)
 	private final Point2d center;
 	private final int xSize, ySize;
 	private final Color color;

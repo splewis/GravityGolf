@@ -370,9 +370,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		int xShift = (int) Math.round(screenXShift);
 		int yShift = (int) Math.round(screenYShift);
 
-		if (settings[EffectsNum] && CollisionEffect.running()
-				&& CollisionEffect.running()) {
-			int[] newShifts = CollisionEffect.update(g);
+		if (settings[EffectsNum] && CollisionEffect.running()) {
+			int[] newShifts = CollisionEffect.update();
 			screenXShift = newShifts[0];
 			screenYShift = newShifts[1];
 		} else {
@@ -432,6 +431,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		// }
 		// }
 
+		// TODO: needs adjustment with collision positioning
 		if (gameManager.getLevelNumber() == 1 && gameStarted && gameManager.getCurrentLevelSwings() == 0) {
 			GoalPost goal = currentLevel.getGoalPosts().get(0);
 			g.setColor(Color.white);
@@ -443,6 +443,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			Point2d p2 = goal.getCenter().translate(xShift,
 					yShift - goal.getRadius() - 3);
 			GraphicEffect.drawArrow(p1, p2, 0, 5, g);
+		}
+		
+		if(settings[EffectsNum] && CollisionEffect.running()) {
+			CollisionEffect.draw(g);
 		}
 
 	}

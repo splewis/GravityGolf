@@ -1,5 +1,6 @@
 package graphics;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import structures.*;
@@ -13,6 +14,8 @@ public final class CollisionEffect extends GraphicEffect {
 	private static ArrayList<Particle> particles;
 	private static double[] shakeValues;
 	private static boolean started = false;
+	private static int xShift;
+	private static int yShift;
 
 	/**
 	 * Starts the effect.
@@ -25,7 +28,7 @@ public final class CollisionEffect extends GraphicEffect {
 		int currentYShift = (int) currentLevel.getScreenYShift();
 		Ball ball = currentLevel.getBall();
 		Body intersected = currentLevel.getIntersectingBody();
-		particles = ball.generateParticles(intersected);
+		particles = Particle.generateParticles(ball, intersected);
 		shakeValues = new double[6];
 		double speed = ball.getVelocity().getLength();
 
@@ -72,7 +75,7 @@ public final class CollisionEffect extends GraphicEffect {
 	 * @param g The Graphics component the particles are being drawn with.
 	 * @return the new screenX and screenY shift values
 	 */
-	public static int[] update(Graphics g) {
+	public static int[] update() {
 		double screenXShift = currentLevel.getScreenXShift();
 		double screenYShift = currentLevel.getScreenYShift();
 		long elapsedTime = elapsedTime();
@@ -111,10 +114,15 @@ public final class CollisionEffect extends GraphicEffect {
 			p.move();
 
 		}
+		xShift = (int) screenXShift;
+		yShift = (int) screenYShift;
+		return new int[] { xShift, yShift };
+	}
+
+	public static void draw(Graphics g) {
 		for (Particle p : particles) {
-			p.draw(screenXShift, screenYShift, g);
+			p.draw(xShift, yShift, g);
 		}
-		return new int[] { (int) screenXShift, (int) screenYShift };
 	}
 
 	private static long elapsedTime() {
@@ -140,6 +148,78 @@ public final class CollisionEffect extends GraphicEffect {
 	public static void kill() {
 		startTime = 0L;
 		started = false;
+	}
+
+	/**
+	 * Internal Particle class for 1-pixel sized CircularShapes.
+	 */
+	static class Particle extends MovableCircularShape {
+
+		public Particle(int xPosition, int yPosition, double xSpeed,
+				double ySpeed, Color color) {
+			setCenter(new Point2d(xPosition, yPosition));
+			setVelocity(new Vector2d(xSpeed, ySpeed));
+			setColor(color);
+			setRadius(1);
+		}
+
+		public void draw(double dx, double dy, Graphics g) {
+			g.setColor(color);
+			g.fillOval((int) Math.round(center.x - 0.5 + dx),
+					(int) Math.round(center.y - 0.5 + dy), 1, 1);
+		}
+
+		/**
+		 * Internal routine for generating the List of particles on collision.
+		 */
+		public static ArrayList<Particle> generateParticles(Ball ball, Body body) {
+			double cX = ball.getCenter().x;
+			double cY = ball.getCenter().y;
+			double speed = ball.getVelocity().getLength()
+					* ((body != null) ? (body.getRadius() / 100.0) : 1);
+			if (speed < .50)
+				speed = .50;
+			if (speed > 2.50)
+				speed = 2.50;
+			if (body != null) {
+				double max = Math.pow(body.getRadius() + ball.getRadius(), 2);
+				while (body.getCenter().getDistanceSquared(new Point2d(cX, cY)) < max) {
+					cX -= ball.getVelocity().getXComponent();
+					cY -= ball.getVelocity().getYComponent();
+				}
+			}
+
+			ArrayList<Particle> particles = new ArrayList<Particle>();
+			int num = (int) (300 * speed);
+			if (num < 150)
+				num = 150;
+			else if (num > 400)
+				num = 400;
+
+			for (int i = 0; i < num; i++) {
+				double angle = (Math.random() * 2 * Math.PI);
+				int x = (int) cX;
+				int y = (int) cY;
+				double xSpeed = 0.75 * (Math.random() * speed * Math.cos(angle));
+				double ySpeed = 0.75 * (Math.random() * speed * Math.sin(angle));
+				Color c;
+				double randomInteger = (Math.random());
+				if (body == null) {
+					c = CalcHelp.getShiftedColor(ball.getColor(), 100);
+				} else if (randomInteger < 0.3) {
+					c = CalcHelp.getShiftedColor(body.getColor(), 100);
+				} else if (randomInteger < 0.40) {
+					c = CalcHelp.getShiftedColor(new Color(230, 130, 70), 100);
+				} else {
+					c = CalcHelp.getShiftedColor(ball.getColor(), 100);
+				}
+
+				Particle newParticle = new Particle(x, y, xSpeed, ySpeed, c);
+				particles.add(newParticle);
+			}
+			return particles;
+		}
+
 	}
 
 }

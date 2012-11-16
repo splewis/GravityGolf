@@ -1,6 +1,8 @@
 package structures;
 
 import game.GamePanel;
+
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -35,12 +37,12 @@ public class Level {
 	private static final int extraY = 100;
 
 	private Ball ball;
-	private final ArrayList<Body> bodies;
-	private final ArrayList<GoalPost> goals;
-	private final ArrayList<WarpPoint> warps;
-	private final ArrayList<Blockage> blockages;
-	private final ArrayList<Rectangle> blockageRects;
-	private final double followFactor, gravityStrength;
+	private ArrayList<Body> bodies;
+	private ArrayList<GoalPost> goals;
+	private ArrayList<WarpPoint> warps;
+	private ArrayList<Blockage> blockages;
+	private ArrayList<Rectangle> blockageRects;
+	private double followFactor, gravityStrength;
 
 	private double screenXShift, screenYShift;
 	private boolean ballInWarp, hittingBlockage;
@@ -77,15 +79,29 @@ public class Level {
 		levelIndex = numLevels;
 		numLevels++;
 		this.ball = ball;
+		
 		this.bodies = bodies;
+		if(this.bodies == null)
+			this.bodies = new ArrayList<Body>();
+		
 		this.goals = goals;
+		if(this.goals == null)
+			this.goals = new ArrayList<GoalPost>();
+		
 		this.warps = warps;
+		if(this.warps == null)
+			this.warps = new ArrayList<WarpPoint>();
+		
 		this.blockages = blockages;
-		this.blockageRects = new ArrayList<Rectangle>();
-		for (Blockage bl : blockages) {
+		if(this.blockages == null) 
+			this.blockages = new ArrayList<Blockage>();		
+		this.blockageRects = new ArrayList<Rectangle>();		
+		
+		for (Blockage bl : this.blockages) {
 			this.blockageRects.add(new Rectangle(bl.getDrawX(), bl.getDrawY(),
 					bl.getDrawXSize(), bl.getDrawYSize()));
 		}
+		
 		this.followFactor = followfactor;
 		this.gravityStrength = gravityStrength;
 		this.screenXShift = (followFactor == 0) ? 0
@@ -173,7 +189,7 @@ public class Level {
 	 * Draws the Level with no translation.
 	 * @param g the Graphics component to draw with
 	 */
-	public void draw(Graphics2D g) {
+	public void draw(Graphics g) {
 		assert image != null;
 		draw(0, 0, g);
 	}
@@ -184,7 +200,7 @@ public class Level {
 	 * @param yShift the vertical translation
 	 * @param g the Graphics component to draw with
 	 */
-	public void draw(int xShift, int yShift, Graphics2D g) {
+	public void draw(int xShift, int yShift, Graphics g) {
 		assert image != null;
 		g.drawImage(image, xShift + xMin - extraX, yShift + yMin - extraY, null);
 	}
@@ -469,7 +485,6 @@ public class Level {
 			ball.accelerate(new Vector2d(sumXForce, sumYForce));
 			ball.move();
 		}
-
 		screenXShift = (followFactor == 0) ? 0
 				: ((500 - ball.getCenter().x) / followFactor);
 		screenYShift = (followFactor == 0) ? 0
@@ -606,9 +621,37 @@ public class Level {
 	 *         that exist.
 	 */
 	public int estimateDifficulty() {
+		return solutionsInRange(10, 50) + solutionsInRange(95, 105)
+				+ solutionsInRange(295, 301);
+	}
+
+	private int solutionsInRange(int a, int b) {
 		int solutionsFound = 0;
-		Point2d ballPoint = ball.getCenter();
-		// TODO: implementation
+		int ballX = (int) ball.getCenter().x;
+		int ballY = (int) ball.getCenter().y;
+		
+		// scan left
+		for (int x = ballX - b; x <= ballX - a; x++) {
+			if (xOutOfBounds(x))
+				continue;
+			for (int y = ballY - b; y <= ballY + b; y++) {
+				if (yOutOfBounds(y))
+					continue;
+				if (possibleWin(new Point2d(x, y), 300))
+					solutionsFound++;
+			}
+		}
+		
+		for (int x = ballX + a; x <= ballX + b; x++) {
+			if (xOutOfBounds(x))
+				continue;
+			for (int y = ballY - b; y <= ballY + b; y++) {
+				if (yOutOfBounds(y))
+					continue;
+				if (possibleWin(new Point2d(x, y), 300))
+					solutionsFound++;
+			}
+		}
 
 		return solutionsFound;
 	}
