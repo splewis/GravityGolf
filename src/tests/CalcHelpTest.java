@@ -46,24 +46,6 @@ public class CalcHelpTest {
 		assertEquals(4, CalcHelp.quadrant(3 * Math.PI / 2), epsilon);
 	}
 
-	@Test
-	public void primeTest() {
-		assertEquals(false, CalcHelp.isPrime(-6));
-		assertEquals(false, CalcHelp.isPrime(-5));
-		assertEquals(false, CalcHelp.isPrime(-1));
-		assertEquals(false, CalcHelp.isPrime(0));
-		assertEquals(false, CalcHelp.isPrime(1));
-		assertEquals(true, CalcHelp.isPrime(2));
-		assertEquals(true, CalcHelp.isPrime(3));
-		assertEquals(false, CalcHelp.isPrime(4));
-		assertEquals(true, CalcHelp.isPrime(5));
-		assertEquals(false, CalcHelp.isPrime(100));
-		assertEquals(false, CalcHelp.isPrime(123456));
-		assertEquals(false, CalcHelp.isPrime(2 * 3 * 5 * 7 * 100));
-		assertEquals(true, CalcHelp.isPrime(409));
-		assertEquals(true, CalcHelp.isPrime(Integer.MAX_VALUE));
-	}
-
 	public void angleTest() {
 		double dx, dy, angle;
 		Point2d p1, p2;

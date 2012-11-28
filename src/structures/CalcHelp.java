@@ -42,22 +42,6 @@ public final class CalcHelp {
 		return new Color(newR, newG, newB);
 	}
 
-	/**
-	 * Calculates if a number is prime.
-	 * @param num a number
-	 * @return if num is prime
-	 */
-	public static boolean isPrime(int num) {
-		if (num <= 1) {
-			return false;
-		}
-		double sq = Math.sqrt(num);
-		for (int i = 2; i <= sq; i++) {
-			if (num % i == 0)
-				return false;
-		}
-		return true;
-	}
 
 	/**
 	 * Returns a random (with normal distribution) double.

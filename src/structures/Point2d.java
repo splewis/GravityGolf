@@ -1,11 +1,13 @@
 package structures;
 
+import java.io.Serializable;
+
 /**
  * Mathematical structure for representing Cartesian points with double
  * precision.
  * @author Sean Lewis
  */
-public class Point2d {
+public class Point2d implements Serializable {
 
 	/**
 	 * The origin point (0,0).

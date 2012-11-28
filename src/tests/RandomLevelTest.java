@@ -44,7 +44,7 @@ public class RandomLevelTest extends JPanel {
 		level = Randomizer.randomLevel();
 		level.generateLevelData();
 		System.out.println(level);
-		System.out.println(level.estimateDifficulty());
+	//	System.out.println(level.estimateDifficulty());
 	}
 
 	@Override

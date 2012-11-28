@@ -54,7 +54,6 @@ public class DataReader {
 	private PrintWriter pw;
 	private boolean errorFound = false;
 
-
 	/**
 	 * @param mainFile
 	 * @return
@@ -364,33 +363,4 @@ public class DataReader {
 				Integer.parseInt(b));
 	}
 
-
-	/**
-	 * Returns the decoded value of value through the key.
-	 * @param value the input value
-	 * @param key the unique input key
-	 * @return the decoded value
-	 */
-	public static int decode(long value, int key) {
-		if (CalcHelp.isPrime(key)) {
-			return (int) ((value - key * key * key) / 3);
-		}
-		if (key % 6 == 0) {
-			return (int) (value / (key + 5) - key);
-		}
-		if (key % 4 == 0) {
-			return (int) (value - key) / -15;
-		}
-		if (key % 5 == 0) {
-			return (int) Math.sqrt(value - key);
-		}
-		if (key % 7 == 0) {
-			return (int) (value - key * key * key);
-		}
-		if (key % 2 == 0) {
-			return (int) (value + key * key + 20) / 10;
-		}
-		return (int) (value + 6 * key * key) / 8;
-	}
-	
 }

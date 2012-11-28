@@ -1,11 +1,14 @@
 package game;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
-import javax.swing.JOptionPane;
 import structures.*;
 import graphics.*;
 
@@ -124,63 +127,88 @@ public class GameManager {
 
 	/**
 	 * Loads a file into the game.
-	 * @param file the file to read from
-	 * @return if the file was successfully loaded
-	 * @throws FileNotFoundException if the file could not be read from
+	 * @param fileName the file to read from
+	 * @throws IOException
 	 */
-	public boolean loadSave(File file) throws FileNotFoundException {
-		int totalswingimport = 0;
-		int level = 0;
-		boolean cheatingDetected = false;
-		Scanner infile = new Scanner(file);
+	public static GameManager loadSave(File fileName) throws IOException {
+		GameManager result = new GameManager();
+		DataHolder d = new DataHolder();
+		d = d.loadSave(fileName);
+		result.currentLevelIndex = d.currentLevelIndex;
+		result.swingData = d.swingData;
+		result.totalSwings = d.totalSwings;
+		result.levels.get(result.currentLevelIndex).generateLevelData();
+		return result;
+	}
 
-		int[] swingImport = new int[0];
+	/**
+	 * Saves the game state to a file.
+	 * @param fileName the file name to save to
+	 */
+	public void save(String fileName) {
+		DataHolder d = new DataHolder();
+		d.currentLevelIndex = currentLevelIndex;
+		d.swingData = swingData;
+		d.totalSwings = totalSwings;
+		DataHolder.save(d, fileName);
+	}
 
-		try {
-			swingImport = new int[levels.size()];
-			int swingSum = 0;
-			for (int i = 0; i < levels.size(); i++) {
-				swingImport[i] = DataReader.decode((long) infile.nextInt(), i);
-				if (swingImport[i] < 0) {
-					cheatingDetected = true;
-					break;
+	private static class DataHolder implements Serializable {
+		int currentLevelIndex;
+		int[] swingData;
+		int totalSwings;
+
+		public DataHolder loadSave(File fileName) throws FileNotFoundException {
+			FileInputStream fin = null;
+			ObjectInputStream oin = null;
+			DataHolder result = null;
+			try {
+				fin = new FileInputStream(fileName);
+				oin = new ObjectInputStream(fin);
+				result = (DataHolder) oin.readObject();
+			} catch (IOException e) {
+				System.out.println(e);
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				System.out.println(e);
+			} catch (ClassCastException e) {
+				System.out.println(e);
+			} finally {
+				try {
+					if (oin != null)
+						oin.close();
+					else if (fin != null)
+						fin.close();
+				} catch (IOException e) {
+					System.out.println(e);
+					e.printStackTrace();
 				}
-				swingSum += swingImport[i];
 			}
-			level = DataReader.decode(infile.nextInt(), levels.size());
-			if (level < 0 || level > levels.size()) {
-				cheatingDetected = true;
-			}
-			totalswingimport = DataReader.decode(infile.nextInt(),
-					levels.size() + 1);
-			if (totalswingimport != swingSum) {
-				cheatingDetected = true;
-			}
-
-		} catch (Exception e) {
-			System.out.println(e);
-			e.printStackTrace();
-			GravityGolf.DataWriter.println(file.getName() + " failed to load.");
-			GravityGolf.DataWriter.println(e.toString());
+			return result;
 		}
-		if (!cheatingDetected) {
-			currentLevelIndex = level;
-			totalSwings = totalswingimport;
-			swingData = swingImport;
-			GravityGolf.DataWriter.println(file.getName()
-					+ " loaded successfully.");
-			infile.close();
-			levels.get(currentLevelIndex).generateLevelData();
-			return true;
 
+		public static void save(DataHolder d, String fileName) {
+			FileOutputStream fout = null;
+			ObjectOutputStream oout = null;
+			try {
+				fout = new FileOutputStream(fileName);
+				oout = new ObjectOutputStream(fout);
+				oout.writeObject(d);
+			} catch (IOException e) {
+				System.out.println(e);
+				e.printStackTrace();
+			} finally {
+				try {
+					if (oout != null)
+						oout.close();
+					else if (fout != null)
+						fout.close();
+				} catch (IOException e) {
+					System.out.println(e);
+					e.printStackTrace();
+				}
+			}
 		}
-		JOptionPane.showMessageDialog(null,
-				"Cheating detected; will not load file", "Cheating Detected",
-				JOptionPane.ERROR_MESSAGE);
-		GravityGolf.DataWriter.println(file.getName()
-				+ "failed to load - likely cheating.");
-		infile.close();
-		return false;
 	}
 
 }

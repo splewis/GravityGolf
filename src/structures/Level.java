@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,7 +18,7 @@ import java.util.Scanner;
  * A Level is the generic structure for each level's storage information.
  * @author Sean Lewis
  */
-public class Level {
+public class Level implements Serializable {
 
 	/**
 	 * The total number of levels in the game.
@@ -79,29 +80,29 @@ public class Level {
 		levelIndex = numLevels;
 		numLevels++;
 		this.ball = ball;
-		
+
 		this.bodies = bodies;
-		if(this.bodies == null)
+		if (this.bodies == null)
 			this.bodies = new ArrayList<Body>();
-		
+
 		this.goals = goals;
-		if(this.goals == null)
+		if (this.goals == null)
 			this.goals = new ArrayList<GoalPost>();
-		
+
 		this.warps = warps;
-		if(this.warps == null)
+		if (this.warps == null)
 			this.warps = new ArrayList<WarpPoint>();
-		
+
 		this.blockages = blockages;
-		if(this.blockages == null) 
-			this.blockages = new ArrayList<Blockage>();		
-		this.blockageRects = new ArrayList<Rectangle>();		
-		
+		if (this.blockages == null)
+			this.blockages = new ArrayList<Blockage>();
+		this.blockageRects = new ArrayList<Rectangle>();
+
 		for (Blockage bl : this.blockages) {
 			this.blockageRects.add(new Rectangle(bl.getDrawX(), bl.getDrawY(),
 					bl.getDrawXSize(), bl.getDrawYSize()));
 		}
-		
+
 		this.followFactor = followfactor;
 		this.gravityStrength = gravityStrength;
 		this.screenXShift = (followFactor == 0) ? 0
@@ -629,7 +630,7 @@ public class Level {
 		int solutionsFound = 0;
 		int ballX = (int) ball.getCenter().x;
 		int ballY = (int) ball.getCenter().y;
-		
+
 		// scan left
 		for (int x = ballX - b; x <= ballX - a; x++) {
 			if (xOutOfBounds(x))
@@ -641,7 +642,7 @@ public class Level {
 					solutionsFound++;
 			}
 		}
-		
+
 		for (int x = ballX + a; x <= ballX + b; x++) {
 			if (xOutOfBounds(x))
 				continue;

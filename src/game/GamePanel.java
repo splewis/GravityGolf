@@ -6,7 +6,6 @@ import structures.Point2d;
 import graphics.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -82,6 +81,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			new JRadioButtonMenuItem("Light speed") };
 	ButtonGroup speedButtonGroup = new ButtonGroup();
 
+	private static final String SAVE_EXTENSION = "sav";
 	JMenu controlMenu = new JMenu("Control");
 	JMenuItem pauseItem = new JMenuItem("Pause game");
 	JMenuItem resetLevelItem = new JMenuItem("Reset level");
@@ -432,7 +432,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		// }
 
 		// TODO: needs adjustment with collision positioning
-		if (gameManager.getLevelNumber() == 1 && gameStarted && gameManager.getCurrentLevelSwings() == 0) {
+		if (gameManager.getLevelNumber() == 1 && gameStarted
+				&& gameManager.getCurrentLevelSwings() == 0) {
 			GoalPost goal = currentLevel.getGoalPosts().get(0);
 			g.setColor(Color.white);
 			g.drawString("Aim here!", (int) (goal.getCenter().x - 20 + xShift),
@@ -444,8 +445,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					yShift - goal.getRadius() - 3);
 			GraphicEffect.drawArrow(p1, p2, 0, 5, g);
 		}
-		
-		if(settings[EffectsNum] && CollisionEffect.running()) {
+
+		if (settings[EffectsNum] && CollisionEffect.running()) {
 			CollisionEffect.draw(g);
 		}
 
@@ -462,20 +463,19 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					System.getProperty("user.dir") + "/saves");
 			chooser.setApproveButtonText("Save");
 			chooser.setDialogTitle("Save");
-			chooser.setFileFilter(new FileNameExtensionFilter(".txt files",
-					"txt"));
+			chooser.setFileFilter(new FileNameExtensionFilter("."
+					+ SAVE_EXTENSION + " files", SAVE_EXTENSION));
 			int returnVal = chooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				chooser.getSelectedFile().getName();
 			}
 			try {
 				String name = chooser.getSelectedFile().getName();
-				if (name.substring(name.length() - 3, name.length()).equals(
-						".txt")) {
-					DataWriter.saveGame(gameManager, new File("saves/" + name));
+				if (name.substring(name.length() - 4, name.length()).equals(
+						"." + SAVE_EXTENSION)) {
+					gameManager.save("saves/" + name);
 				} else {
-					DataWriter.saveGame(gameManager, new File("saves/" + name
-							+ ".txt"));
+					gameManager.save("saves/" + name + "." + SAVE_EXTENSION);
 				}
 			} catch (Exception e) {
 			}
@@ -486,8 +486,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					System.getProperty("user.dir") + "/saves");
 			chooser.setApproveButtonText("Load");
 			chooser.setDialogTitle("Load");
-			chooser.setFileFilter(new FileNameExtensionFilter(".txt files",
-					"txt"));
+			chooser.setFileFilter(new FileNameExtensionFilter("."
+					+ SAVE_EXTENSION + " files", SAVE_EXTENSION));
 			int returnVal = chooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				chooser.getSelectedFile().getName();
@@ -495,8 +495,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			try {
 				gameStarted = true;
 				gamePaused = false;
-				gameManager = new GameManager();
-				gameManager.loadSave(chooser.getSelectedFile());
+				gameManager = GameManager.loadSave(chooser.getSelectedFile());
 			} catch (Exception e) {
 			}
 
@@ -602,7 +601,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		}
 		running = false;
 	}
-
 
 	public void mouseClicked(MouseEvent event) {
 	}
