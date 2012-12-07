@@ -7,6 +7,10 @@ import org.junit.Test;
 import structures.CalcHelp;
 import structures.Point2d;
 
+/**
+ * JUnit tests for critical methods in the <code>CalcHelp<code> class.
+ * @author Sean Lewis\
+ */
 public class CalcHelpTest {
 
 	static final double epsilon = 1e-8;
@@ -120,5 +124,5 @@ public class CalcHelpTest {
 		angle = 11 * Math.PI / 6;
 		assertEquals(angle, CalcHelp.getAngle(p1, p2), epsilon);
 	}
-	
+
 }

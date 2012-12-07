@@ -85,4 +85,5 @@ public class Ball extends MovableCircularShape {
 	public int hashCode() {
 		return toString().hashCode();
 	}
+	
 }

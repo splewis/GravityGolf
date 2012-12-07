@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	public static final int Height = 700;
 
 	boolean showSolution = false;
-	ArrayList<java.awt.Point> points = new ArrayList<java.awt.Point>();
+	private ArrayList<java.awt.Point> points = new ArrayList<java.awt.Point>();
 
 	// Game Components
 	public static final int MaxInitialMagnitude = 300;
@@ -49,8 +49,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	boolean errorFound;
 	private Level currentLevel;
 	private Ball ball;
-	boolean levelComplete;
-	double screenXShift, screenYShift;
+	private boolean levelComplete;
+	private double screenXShift, screenYShift;
 
 	// Graphics Components
 	// Main components
@@ -422,14 +422,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			} else { // moving ball
 				ball.draw(screenXShift, screenYShift, g, ball.getColor());
 			}
-		}
-
-		// if (settings[EffectsNum] && dt < SpecialEffectTime && drawingEffects)
-		// {
-		// for (Particle p : particles) {
-		// p.draw(screenXShift, screenYShift, g);
-		// }
-		// }
+		}	
 
 		// TODO: needs adjustment with collision positioning
 		if (gameManager.getLevelNumber() == 1 && gameStarted

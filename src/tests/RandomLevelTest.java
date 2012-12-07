@@ -11,6 +11,10 @@ import javax.swing.JPanel;
 import structures.Level;
 import structures.Randomizer;
 
+/**
+ * Procedurally generates random levels on any keyboard-button pushing.
+ * @author Sean Lewis
+ */
 public class RandomLevelTest extends JPanel {
 
 	private static Level level = null;
@@ -39,12 +43,11 @@ public class RandomLevelTest extends JPanel {
 	public RandomLevelTest() {
 		setSize(getWidth(), getHeight());
 	}
-	
+
 	private static void newLevel() {
 		level = Randomizer.randomLevel();
 		level.generateLevelData();
 		System.out.println(level);
-	//	System.out.println(level.estimateDifficulty());
 	}
 
 	@Override
@@ -57,7 +60,7 @@ public class RandomLevelTest extends JPanel {
 				RenderingHints.VALUE_STROKE_NORMALIZE);
 		g.setRenderingHint(RenderingHints.KEY_RENDERING,
 				RenderingHints.VALUE_RENDER_QUALITY);
-		
+
 		if (level != null) {
 			level.draw(g);
 			level.getBall().draw(g);

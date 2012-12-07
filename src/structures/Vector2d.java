@@ -1,7 +1,5 @@
 package structures;
 
-import java.io.Serializable;
-
 /**
  * Representation of a two dimensional mathematical vector. Supports typical
  * operations on vectors in an immutable fashion. <li>Note that the angle of a
@@ -9,7 +7,7 @@ import java.io.Serializable;
  * x-axis. <li>Angles are always stored in radians.
  * @author Sean Lewis
  */
-public class Vector2d implements Serializable {
+public class Vector2d {
 
 	private double xComp;
 	private double yComp;

@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,7 +17,7 @@ import java.util.Scanner;
  * A Level is the generic structure for each level's storage information.
  * @author Sean Lewis
  */
-public class Level implements Serializable {
+public class Level {
 
 	/**
 	 * The total number of levels in the game.

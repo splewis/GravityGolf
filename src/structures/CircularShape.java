@@ -2,7 +2,6 @@ package structures;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.Serializable;
 
 /**
  * Abstraction for any object that is to be drawn in a circular way. Supports
@@ -10,7 +9,7 @@ import java.io.Serializable;
  * Geometry variables.
  * @author Sean Lewis
  */
-public abstract class CircularShape implements Serializable  {
+public abstract class CircularShape {
 
 	/**
 	 * The current center point for the circle.

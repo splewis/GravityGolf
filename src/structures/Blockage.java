@@ -5,13 +5,12 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.io.Serializable;
 
 /**
  * A Blockage is a rectangular shape that blocks the motion of a ball. *
  * @author Sean Lewis
  */
-public class Blockage implements Serializable {
+public class Blockage {
 
 	// Parameters:
 	private final int centerX, centerY; // TODO: rework to use the standard

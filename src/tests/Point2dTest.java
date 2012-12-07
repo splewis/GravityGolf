@@ -6,6 +6,10 @@ import org.junit.Test;
 
 import structures.Point2d;
 
+/**
+ * JUnit test suite for non-trivial operations on <code>Point2d</code> objects.
+ * @author Sean Lewis
+ */
 public class Point2dTest {
 
 	static final double epsilon = 1e-8;

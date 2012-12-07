@@ -13,6 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import structures.*;
 
+/**
+ * Tests for providing a graphical visualization of the
+ * <code>CollsionEffects<\code> effect.
+ * @author Sean Lewis
+ */
 public class CollisionEffectsTest extends JPanel {
 
 	private static Level level;
@@ -47,7 +52,9 @@ public class CollisionEffectsTest extends JPanel {
 	private static void start() {
 		CollisionEffect.kill();
 		level.reset();
-		level.getBall().setVelocity(new Vector2d(2.5, 0));
+		double xSpeed = CalcHelp.gaussianDouble(3.5, 1);
+		double ySpeed = CalcHelp.randomDouble(-1, 1);
+		level.getBall().setVelocity(new Vector2d(xSpeed, ySpeed));
 		level.getBall().setLaunched(true);
 	}
 
@@ -85,15 +92,16 @@ public class CollisionEffectsTest extends JPanel {
 
 			if (CollisionEffect.running()) {
 				int[] vals = CollisionEffect.update();
-				xS += vals[0];
-				yS += vals[1];
+				xS = vals[0];
+				yS = vals[1];
 			} else {
 				CollisionEffect.kill();
 			}
+
 			level.draw((int) xS, (int) yS, g);
 			if (CollisionEffect.running()) {
 				CollisionEffect.draw(g);
-			} else if(!CollisionEffect.running() && level.timeToReset()) {
+			} else if (!CollisionEffect.running() && level.timeToReset()) {
 				level.reset();
 			} else {
 				level.getBall().draw(xS, yS, g);

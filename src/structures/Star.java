@@ -2,14 +2,13 @@ package structures;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.Serializable;
 
 /**
  * A Star is a visual component that is simply a colored circle that is drawn in
  * the background.
  * @author Sean Lewis
  */
-public class Star implements Serializable  {
+public class Star {
 
 	private java.awt.Point point;
 	private Color color;
