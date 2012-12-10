@@ -28,7 +28,7 @@ public class GameManager {
 	 * @throws IOException
 	 */
 	public GameManager() throws IOException {
-		DataReader reader = new DataReader();
+		DataHandler reader = new DataHandler();
 		levels = reader.getLevelData("levels/levels.txt");
 		currentLevelIndex = -1;
 		swingData = new int[levels.size()];
@@ -107,12 +107,9 @@ public class GameManager {
 		}
 		currentLevelIndex++;
 		if (currentLevelIndex >= levels.size()) {
-			GravityGolf.DataWriter.gameFinished(totalSwings);
 			return false;
 		}
 		levels.get(currentLevelIndex).generateLevelData();
-		GravityGolf.DataWriter.levelFinished(currentLevelIndex + 1,
-				swingData[currentLevelIndex]);
 		return true;
 	}
 

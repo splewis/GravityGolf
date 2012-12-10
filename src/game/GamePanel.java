@@ -92,7 +92,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	public GamePanel() throws IOException {
 		gameManager = new GameManager();
-		int[] importedSettings = DataReader.getSettings();
+		int[] importedSettings = DataHandler.getSettings();
 		for (int i = 0; i < settings.length; i++) {
 			settings[i] = (importedSettings[i] == 1);
 		}
@@ -220,7 +220,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				// System.out.println("Skip");
 			}
 		}
-		GravityGolf.DataWriter.close();
 		System.exit(0);
 	}
 
@@ -541,8 +540,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			if (launchMagnitude > MaxInitialMagnitude)
 				launchMagnitude = MaxInitialMagnitude;
 
-			GravityGolf.DataWriter.ballLaunched(event.getPoint(),
-					launchMagnitude, launchAngle);
 			double xLength = Math.cos(launchAngle) * launchMagnitude;
 			double yLength = -Math.sin(launchAngle) * launchMagnitude;
 			ball.setVelocity(new Vector2d(xLength / 200, yLength / 200));
@@ -589,7 +586,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					break;
 				}
 			}
-			DataWriter.printSettings(settings, speed);
+			DataHandler.printSettings(settings, speed);
 		} catch (IOException e) {
 		}
 		running = false;

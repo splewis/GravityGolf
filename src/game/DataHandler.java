@@ -49,21 +49,23 @@ import structures.*;
  * Provides functionality for reading input level files and settings files.
  * @author Sean Lewis
  */
-public class DataReader {
+public class DataHandler {
 
 	private PrintWriter pw;
-	private boolean errorFound = false;
+	private boolean errorFound;
 
 	/**
-	 * @param mainFile
-	 * @return
-	 * @throws IOException
+	 * Reads in all level data from the file and returns an ArrayList of the
+	 * levels.
+	 * @param fileName the file all information is in
+	 * @return ArrayList of constructed levels
+	 * @throws IOException if any input error occurred
 	 */
-	public ArrayList<Level> getLevelData(String mainFile) throws IOException {
+	public ArrayList<Level> getLevelData(String fileName) throws IOException {
 		pw = new PrintWriter(new File("logs/datalog.txt"));
 		ArrayList<Level> levels = new ArrayList<Level>();
 		long startTime = System.currentTimeMillis();
-		levels.addAll(readFile(new File(mainFile)));
+		levels.addAll(readFile(new File(fileName)));
 		pw.println();
 		pw.println("Done reading all data. Took "
 				+ (System.currentTimeMillis() - startTime) + " ms.");
@@ -72,10 +74,10 @@ public class DataReader {
 	}
 
 	/**
-	 * @return
-	 * @throws IOException
+	 * Reads in the settings from the settings file.
+	 * @return the int array of settings parameters.
 	 */
-	public static int[] getSettings() throws IOException {
+	public static int[] getSettings() {
 
 		int[] settings = GamePanel.DEFAULT_SETTINGS;
 		try {
@@ -89,7 +91,11 @@ public class DataReader {
 			infile.close();
 		} catch (Exception e) {
 			settings = GamePanel.DEFAULT_SETTINGS;
-			DataWriter.printSettings(settings);
+			try {
+				DataHandler.printSettings(settings);
+			} catch (IOException io) {
+				io.printStackTrace();
+			}
 		}
 		return settings;
 	}
@@ -119,7 +125,7 @@ public class DataReader {
 					// Read ball data in
 					if (line.substring(0, 4).equals("ball")) {
 
-						data = line.substring(5, line.length() - 1).split(",");
+					data = line.substring(5, line.length() - 1).split(",");
 						int x = Integer.parseInt(data[0]);
 						int y = Integer.parseInt(data[1]);
 						int r;
@@ -130,7 +136,7 @@ public class DataReader {
 						} else {
 							r = 3;
 							c = Color.red;
-						}
+						}	
 						b = new Ball(x, y, r, c);
 					} else if (line.substring(0, 4).equals("refl")) {
 
@@ -324,7 +330,7 @@ public class DataReader {
 
 	/**
 	 * Reads in a Sting representation of a Color and creates the appropriate
-	 * Color object.
+	 * Color object. 
 	 * @param str a parameter
 	 * @return the Color object specified by the input String
 	 */
@@ -361,6 +367,50 @@ public class DataReader {
 
 		return new Color(Integer.parseInt(r), Integer.parseInt(g),
 				Integer.parseInt(b));
+	}
+
+	/**
+	 * Prints the current game settings to settings.txt.
+	 * @throws IOException if settings.txt cannot be written to
+	 */
+	public static void printSettings(boolean[] settings, int speed)
+			throws IOException {
+		PrintWriter settingsWriter = new PrintWriter("settings.txt");
+
+		settingsWriter.println("effects = "
+				+ (settings[GamePanel.EffectsNum] ? "yes" : "no"));
+		settingsWriter.println("vectors = "
+				+ (settings[GamePanel.VectorsNum] ? "yes" : "no"));
+		settingsWriter.println("resultant = "
+				+ (settings[GamePanel.ResultantNum] ? "yes" : "no"));
+		settingsWriter.println("trail = "
+				+ (settings[GamePanel.TrailNum] ? "yes" : "no"));
+		settingsWriter.println("warpArrows = "
+				+ (settings[GamePanel.WarpArrowsNum] ? "yes" : "no"));
+
+		settingsWriter.println("speed = " + speed);
+		settingsWriter.close();
+	}
+
+	/**
+	 * Prints the current game settings to settings.txt.
+	 * @throws IOException if settings.txt cannot be written to
+	 */
+	public static void printSettings(int[] settings) throws IOException {
+		PrintWriter settingsWriter = new PrintWriter("settings.txt");
+		settingsWriter.println("effects = "
+				+ (settings[GamePanel.EffectsNum] == 1 ? "yes" : "no"));
+		settingsWriter.println("vectors = "
+				+ (settings[GamePanel.VectorsNum] == 1 ? "yes" : "no"));
+		settingsWriter.println("resultant = "
+				+ (settings[GamePanel.ResultantNum] == 1 ? "yes" : "no"));
+		settingsWriter.println("trail = "
+				+ (settings[GamePanel.TrailNum] == 1 ? "yes" : "no"));
+		settingsWriter.println("warpArrows = "
+				+ (settings[GamePanel.WarpArrowsNum] == 1 ? "yes" : "no"));
+
+		settingsWriter.println("speed = " + settings[settings.length - 1]);
+		settingsWriter.close();
 	}
 
 }

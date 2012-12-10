@@ -1,6 +1,6 @@
 package structures;
 
-import game.DataReader;
+import game.DataHandler;
 
 import java.awt.Color;
 
@@ -65,7 +65,7 @@ public class Moon extends Body {
 	 */
 	public String toString() {
 		return "moon(" + startingAngle + ", " + startingDistance + ", "
-				+ radius + ", " + DataReader.getColorDisplay(color) + ")";
+				+ radius + ", " + DataHandler.getColorDisplay(color) + ")";
 	}
 	
 	public int hashCode() {

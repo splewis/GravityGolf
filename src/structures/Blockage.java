@@ -1,6 +1,6 @@
 package structures;
 
-import game.DataReader;
+import game.DataHandler;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
@@ -183,7 +183,7 @@ public class Blockage {
 	@Override
 	public String toString() {
 		return "rect(" + centerX + ", " + centerY + ", " + xSize + ", " + ySize
-				+ ", " + DataReader.getColorDisplay(color) + ")";
+				+ ", " + DataHandler.getColorDisplay(color) + ")";
 	}
 
 	/**

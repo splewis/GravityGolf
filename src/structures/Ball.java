@@ -1,11 +1,14 @@
 package structures;
 
-import game.DataReader;
+import game.DataHandler;
 import java.awt.Color;
 
 /**
  * Represents the Movable Ball for the game. Supports resetting operations and
  * capable of generating particles from a collision with another Body.
+ * <p>
+ * The ball's text format is as follows:
+ * <li>ball(centerX, centerY, radius, color)
  * @author Sean Lewis
  */
 public class Ball extends MovableCircularShape {
@@ -18,6 +21,30 @@ public class Ball extends MovableCircularShape {
 	 */
 	public Ball() {
 		this(0, 0, 3, Color.red);
+	}
+
+	/**
+	 * Constructs a Ball in the Ball's text format.
+	 * @param spec
+	 */
+	public Ball(String spec) {
+		String[] data = spec.substring(5, spec.length() - 1).split(",");
+		int x = Integer.parseInt(data[0]);
+		int y = Integer.parseInt(data[1]);
+		int r;
+		Color c;
+		if (data.length > 2) {
+			r = Integer.parseInt(data[2]);
+			c = DataHandler.readColor(data[3]);
+		} else {
+			r = 3;
+			c = Color.red;
+		}
+		setCenter(new Point2d(x, y));
+		startingLocation = new Point2d(x, y);
+		setRadius(r);
+		setColor(c);
+		setVelocity(new Vector2d(0, 0));
 	}
 
 	/**
@@ -69,12 +96,12 @@ public class Ball extends MovableCircularShape {
 	}
 
 	/**
-	 * Returns the description of the Ball object.
+	 * Returns the text-formatted description for the Ball.
 	 */
 	public String toString() {
 		String str = "ball(";
 		str += startingLocation.x + ", " + startingLocation.y + ", " + radius
-				+ ", " + DataReader.getColorDisplay(color) + ")";
+				+ ", " + DataHandler.getColorDisplay(color) + ")";
 		return str;
 	}
 
@@ -85,5 +112,5 @@ public class Ball extends MovableCircularShape {
 	public int hashCode() {
 		return toString().hashCode();
 	}
-	
+
 }

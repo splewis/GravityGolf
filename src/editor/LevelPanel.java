@@ -2,32 +2,12 @@ package editor;
 
 import structures.*;
 import graphics.*;
-
-import game.DataReader;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
+import game.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -137,7 +117,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 	public Color selectedColor() {
 		for (int i = 0; i < colorItems.length; i++) {
 			if (colorItems[i].isSelected()) {
-				return DataReader.readColor(colorItems[i].getText()
+				return DataHandler.readColor(colorItems[i].getText()
 						.toLowerCase());
 			}
 		}

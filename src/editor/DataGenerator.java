@@ -27,7 +27,7 @@ public class DataGenerator extends JFrame {
 	 * @throws IOException
 	 */
 	public DataGenerator() throws IOException {
-		DataReader reader = new DataReader();
+		DataHandler reader = new DataHandler();
 		levels = reader.getLevelData("levels/levels.txt");
 
 		button.addActionListener(new ActionListener() {

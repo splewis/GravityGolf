@@ -15,10 +15,10 @@ public class GravityGolf {
 	/**
 	 * Game log tracker. Outputs to logs\gamelog.txt
 	 */
-	public static DataWriter DataWriter;
+	public static DataHandler DataWriter;
 	
 	public static void main(String[] args) throws IOException {
-		DataWriter = new DataWriter();
+		DataWriter = new DataHandler();
 		final GameFrame gf = new GameFrame();
 		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gf.addWindowListener(new WindowAdapter() {
