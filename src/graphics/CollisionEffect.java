@@ -155,7 +155,7 @@ public final class CollisionEffect extends GraphicEffect {
 	 */
 	static class Particle extends MovableCircularShape {
 
-		public Particle(int xPosition, int yPosition, double xSpeed,
+		public Particle(double xPosition, double yPosition, double xSpeed,
 				double ySpeed, Color color) {
 			setCenter(new Point2d(xPosition, yPosition));
 			setVelocity(new Vector2d(xSpeed, ySpeed));
@@ -173,19 +173,21 @@ public final class CollisionEffect extends GraphicEffect {
 		 * Internal routine for generating the List of particles on collision.
 		 */
 		public static ArrayList<Particle> generateParticles(Ball ball, Body body) {
-			double cX = ball.getCenter().x;
-			double cY = ball.getCenter().y;
+			double centerX = ball.getCenter().x;
+			double centerY = ball.getCenter().y;
+			
 			double speed = ball.getVelocity().getLength()
 					* ((body != null) ? (body.getRadius() / 100.0) : 1);
+			
 			if (speed < .50)
 				speed = .50;
 			if (speed > 2.50)
 				speed = 2.50;
 			if (body != null) {
 				double max = Math.pow(body.getRadius() + ball.getRadius(), 2);
-				while (body.getCenter().getDistanceSquared(new Point2d(cX, cY)) < max) {
-					cX -= ball.getVelocity().getXComponent();
-					cY -= ball.getVelocity().getYComponent();
+				while (body.getCenter().getDistanceSquared(new Point2d(centerX, centerY)) < max) {
+					centerX -= ball.getVelocity().getXComponent();
+					centerY -= ball.getVelocity().getYComponent();
 				}
 			}
 
@@ -198,25 +200,24 @@ public final class CollisionEffect extends GraphicEffect {
 
 			for (int i = 0; i < num; i++) {
 				double angle = (Math.random() * 2 * Math.PI);
-				int x = (int) cX;
-				int y = (int) cY;
 				double xSpeed = 0.75 * (Math.random() * speed * Math.cos(angle));
 				double ySpeed = 0.75 * (Math.random() * speed * Math.sin(angle));
-				Color c;
-				double randomInteger = (Math.random());
-				if (body == null) {
+				
+				Color c;				
+				double rand = Math.random();
+				if (body == null)
 					c = CalcHelp.getShiftedColor(ball.getColor(), 100);
-				} else if (randomInteger < 0.3) {
+				else if (rand < 0.3)
 					c = CalcHelp.getShiftedColor(body.getColor(), 100);
-				} else if (randomInteger < 0.40) {
+				else if (rand < 0.40)
 					c = CalcHelp.getShiftedColor(new Color(230, 130, 70), 100);
-				} else {
-					c = CalcHelp.getShiftedColor(ball.getColor(), 100);
-				}
+				else
+					c = CalcHelp.getShiftedColor(ball.getColor(), 100);				
 
-				Particle newParticle = new Particle(x, y, xSpeed, ySpeed, c);
+				Particle newParticle = new Particle(centerX, centerY, xSpeed, ySpeed, c);
 				particles.add(newParticle);
 			}
+			
 			return particles;
 		}
 
