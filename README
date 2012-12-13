@@ -10,3 +10,6 @@ Some of the small features of the game:
  - Speed settings
  - All settings made persistant for a user (saved to and reloaded from settings.txt)
  - Save/load game support
+ 
+ A built release-version of the game can be found at https://dl.dropbox.com/u/76035852/Gravity%20Golf.zip. 
+ GravityGolf.jar launches the game.
