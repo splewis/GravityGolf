@@ -677,11 +677,4 @@ public class Level {
 		return str;
 	}
 
-	/**
-	 * Returns the hash value for the level.
-	 */
-	@Override
-	public int hashCode() {
-		return toString().hashCode();
-	}
 }

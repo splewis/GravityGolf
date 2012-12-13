@@ -1,38 +1,8 @@
-/**
- *  DataReader provides the functionality for the importing of level and setting data.
- *  
- *	Input angles are in DEGREES, all calculations within the program use RADIANS. 
- *  Data file input syntax:
- *		Moons must be below the body to which they are to be attached to.
- *		Custom colors may be defined using "Color(r#, g#, b#)".
- *			Acceptable colors: red, black, blue, cyan, gray, green, magenta, orange, pink, yellow, purple, violet
- *		Spaces do not matter in the file.
- *		Levels MUST be finished with the level() line.
- *		"Comments" may be put in the file; the line should start with a "//" if it is a comment.
- *
- *		ball(centerX, centerY, radius, color)
- *			OR ball(centerX, centerY) to make a ball with constant radius 3 and color red
- *		body(centerX, centerY, radius, color)
- *		body(centerX, centerY, radius, color, mass)
- *		refl(centerX, centerY, radius, color) <----  creates a "reflector" body
- *		moon(startingAngle, distanceFromBody, radius, color)
- *		warp(centerX, centerY)
- *		rect(centerX, centerY, xLength/2, yLength/2, color)
- *		rec2(leftX  , topY   , width    , height   , color)
- *		goal(centerX, centerY, radius)
- *		level(followFactor, gravityStrengthFactor)
- *			OR level(gravityStrengthFactor) - followFactor is set to 0
- *			OR level() - followFactor set to 0 and gravityStrengthFactor set to 1
- *
- *		followFactor and gravityStrengthFactor are the ONLY VALUES that may be DOUBLES.
- *			As followFactor DECREASES, the screen will follow the ball more (1 = always on center of the ball)
- *			As followFactor INCREEASES, the screen will follow the ball less
- *          If followFactor is 0, screen shifting is disabled
- *
- *
- */
-
 package game;
+
+/*
+ * See levelSyntax.txt for explicit specifications of level syntax.
+ */
 
 import java.awt.Color;
 import java.io.File;
@@ -46,7 +16,10 @@ import javax.swing.JOptionPane;
 import structures.*;
 
 /**
- * Provides functionality for reading input level files and settings files.
+ * A DataHandler is an object that can read in level-information from text files
+ * and create the appropriate in-game constructs. It provides static methods for
+ * the handling of settings and control over a <code>String</code> to Color (and
+ * vice versa) mapping is implemented.
  * @author Sean Lewis
  */
 public class DataHandler {
@@ -125,7 +98,7 @@ public class DataHandler {
 					// Read ball data in
 					if (line.substring(0, 4).equals("ball")) {
 
-					data = line.substring(5, line.length() - 1).split(",");
+						data = line.substring(5, line.length() - 1).split(",");
 						int x = Integer.parseInt(data[0]);
 						int y = Integer.parseInt(data[1]);
 						int r;
@@ -136,7 +109,7 @@ public class DataHandler {
 						} else {
 							r = 3;
 							c = Color.red;
-						}	
+						}
 						b = new Ball(x, y, r, c);
 					} else if (line.substring(0, 4).equals("refl")) {
 
@@ -330,11 +303,14 @@ public class DataHandler {
 
 	/**
 	 * Reads in a Sting representation of a Color and creates the appropriate
-	 * Color object. 
+	 * Color object. If the color could not be read (i.e. the input string is
+	 * not a valid color representation) null is returned.
 	 * @param str a parameter
 	 * @return the Color object specified by the input String
 	 */
 	public static Color readColor(String str) {
+		if (str == null || str.length() == 0)
+			return null;			
 		str = str.toLowerCase();
 		if (str.equals("red"))
 			return Color.red;
@@ -360,13 +336,16 @@ public class DataHandler {
 			return new Color(128, 0, 128);
 		if (str.equals("violet"))
 			return new Color(127, 0, 255);
-
-		String r = str.substring(str.indexOf("(") + 1, str.indexOf(","));
-		String g = str.substring(str.indexOf(",") + 1, str.lastIndexOf(","));
-		String b = str.substring(str.lastIndexOf(",") + 1, str.indexOf(")"));
-
-		return new Color(Integer.parseInt(r), Integer.parseInt(g),
-				Integer.parseInt(b));
+		try {		
+			String r = str.substring(str.indexOf("(") + 1, str.indexOf(","));
+			String g = str.substring(str.indexOf(",") + 1, str.lastIndexOf(","));
+			String b = str.substring(str.lastIndexOf(",") + 1, str.indexOf(")"));
+			return new Color(Integer.parseInt(r), Integer.parseInt(g),
+					Integer.parseInt(b));
+		} catch(Exception e) {
+			return null;			
+		}
+		
 	}
 
 	/**

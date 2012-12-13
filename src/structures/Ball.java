@@ -104,13 +104,5 @@ public class Ball extends MovableCircularShape {
 				+ ", " + DataHandler.getColorDisplay(color) + ")";
 		return str;
 	}
-
-	@Override
-	/**
-	 * Returns a hash code for this Ball.
-	 */
-	public int hashCode() {
-		return toString().hashCode();
-	}
-
+	
 }

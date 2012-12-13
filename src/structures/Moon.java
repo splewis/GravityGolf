@@ -68,7 +68,4 @@ public class Moon extends Body {
 				+ radius + ", " + DataHandler.getColorDisplay(color) + ")";
 	}
 	
-	public int hashCode() {
-		return toString().hashCode();
-	}
 }

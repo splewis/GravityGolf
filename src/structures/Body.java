@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
- * A Body is the default class for an object that is representing a Planet.
+ * A Body is the default class for an object that is representing a Planet. 
  * @author Sean Lewis
  */
 public class Body extends CircularShape {
@@ -161,11 +161,4 @@ public class Body extends CircularShape {
 		return str;
 	}
 
-	/**
-	 * Returns a hash value for this Body.
-	 */
-	@Override
-	public int hashCode() {
-		return toString().hashCode();
-	}
 }

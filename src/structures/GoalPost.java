@@ -29,9 +29,5 @@ public class GoalPost extends CircularShape {
 	public String toString() {
 		return "goal(" + center.x + ", " + center.y + ", " + radius + ")";
 	}
-
-	public int hashCode() {
-		return toString().hashCode();
-	}
 	
 }

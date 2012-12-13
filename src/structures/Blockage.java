@@ -7,7 +7,11 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 /**
- * A Blockage is a rectangular shape that blocks the motion of a ball. *
+ * A Blockage is a rectangular shape that blocks the motion of a ball.
+ * <p>
+ * The format for the Blockage toString method is as follows:
+ * <p>
+ * rect(centerX, centerY, width/2, height/2, color)
  * @author Sean Lewis
  */
 public class Blockage {
@@ -186,11 +190,4 @@ public class Blockage {
 				+ ", " + DataHandler.getColorDisplay(color) + ")";
 	}
 
-	/**
-	 * Returns a hash code for this Ball.
-	 */
-	@Override
-	public int hashCode() {
-		return toString().hashCode();
-	}
 }

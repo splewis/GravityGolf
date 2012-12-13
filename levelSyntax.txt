@@ -1,0 +1,62 @@
+General syntax requirements:
+	Comments may be placed into a file by starting the line with //
+	All values must be integers unless otherwise specified.
+	Colors may be input via one of the following Strings: red, black, blue, cyan, gray, green, magenta, orange, pink, yellow, purple, or violet
+	Colors may be put in via rgb components using the following syntax, using no quotes: "Color(r#, g#, b#)". For example, Color(255, 0, 0) creates red.
+
+	The basic unit of a file input is the level. Each level is defined seperateley. 
+	Each level ends with the level() line. This is what seperates each level.
+
+
+Ball syntax:
+	ball(centerX, centerY, radius, color)
+     or ball(centerX, centerY)
+	The latter creates a ball with the default radius and color values. 
+	There may be multiple balls in a level file, but the last encountered one will be the Ball loaded to the level.
+
+
+Body (Planet) syntax:
+	body(centerX, centerY, radius, color)
+	body(centerX, centerY, radius, color, mass)
+	refl(centerX, centerY, radius, color)
+	refl(centerX, centerY, radius, color, mass)
+
+	The first is the preferred way of creating planets. This forces the mass to be proportional to the radius.
+	The last two commands create a "reflector" body. When a ball collides with one of these bodies, it bounces off instead of failing the level.
+	
+
+Moon syntax:
+	moon(startingAngle, distanceFromBody, radius, color)
+	The body that a moon will be attached to is the body it is defined after.
+
+
+WarpPoint syntax:
+	warp(centerX, centerY)
+
+
+
+Blockage syntax:
+	rect(centerX, centerY, xLength/2, yLength/2, color)
+	rec2(leftX  , topY   , width    , height   , color)
+	The first defines the blockage rectangle in terms of its center.
+	The second defines the blockage in terms of its top left and lengths. 
+
+
+GoalPost syntax:
+	goal(centerX, centerY, radius)
+
+
+Level syntax:
+	level(followFactor, gravityStrengthFactor)
+	level(gravityStrengthFactor)
+	level()	
+
+	The first is the preferred way of setting the level parameters.
+	The second sets the follow factor equal to 0.
+	The last sets the follow factor to 0 and the gravity factor to 1.
+
+	Note that these parameters are the ONLY values that may (and often should) be decimal-precision.
+	
+	If followFactor is 0, screen shifting is disabled.
+	As followFactor DECREASES, the screen will follow the ball more (1 = always on center of the ball)
+	As followFactor INCREEASES, the screen will follow the ball less.
