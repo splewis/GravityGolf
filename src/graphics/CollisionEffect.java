@@ -41,7 +41,6 @@ public final class CollisionEffect extends GraphicEffect {
 		if (currentLevel.getFollowFactor() == 0.0)
 			shakeFactor = 25 * speed;
 		// 1st value is multiplicative factor
-		// TODO: make based of rate at which screen shifts
 		int sign1 = -1;
 		if (ball.getCenter().x + currentXShift < 0) {
 			sign1 = 1;

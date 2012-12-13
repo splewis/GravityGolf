@@ -44,8 +44,7 @@ public class Randomizer {
 
 		int x = CalcHelp.gaussianInteger(xMean, 15);
 		int y = CalcHelp.gaussianInteger(yMean, 15);
-		
-		// TODO: make sure ball is on screen with shifts accounted for 		
+				
 		return new Ball(x, y, 3);
 	}
 
