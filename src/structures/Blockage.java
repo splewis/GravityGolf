@@ -17,9 +17,6 @@ import java.awt.Rectangle;
 public class Blockage {
 
 	// Parameters:
-	private final int centerX, centerY; // TODO: rework to use the standard
-										// point based system only (no x, y int
-										// data fields)
 	private final Point2d center;
 	private final int xSize, ySize;
 	private final Color color;
@@ -38,8 +35,6 @@ public class Blockage {
 	 * @param color the color
 	 */
 	public Blockage(int centerX, int centerY, int xSize, int ySize, Color color) {
-		this.centerX = centerX;
-		this.centerY = centerY;
 		center = new Point2d(centerX, centerY);
 		this.xSize = xSize;
 		this.ySize = ySize;
@@ -62,9 +57,7 @@ public class Blockage {
 		xSize = drawXSize / 2;
 		drawYSize = Math.abs(p1.y - p2.y);
 		ySize = drawYSize / 2;
-		centerX = (p1.x + p2.x) / 2;
-		centerY = (p1.y + p2.y) / 2;
-		center = new Point2d(centerX, centerY);
+		center = new Point2d((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 		this.color = color;
 		drawX = Math.min(p1.x, p2.x);
 		drawY = Math.min(p1.y, p2.y);
@@ -97,7 +90,7 @@ public class Blockage {
 	 * @return the x center coordinate
 	 */
 	public int getCenterX() {
-		return centerX;
+		return (int) center.x;
 	}
 
 	/**
@@ -105,7 +98,7 @@ public class Blockage {
 	 * @return the y center coordinate
 	 */
 	public int getCenterY() {
-		return centerY;
+		return (int) center.y;
 	}
 
 	/**
@@ -186,8 +179,9 @@ public class Blockage {
 	 */
 	@Override
 	public String toString() {
-		return "rect(" + centerX + ", " + centerY + ", " + xSize + ", " + ySize
-				+ ", " + DataHandler.getColorDisplay(color) + ")";
+		return "rect(" + getCenterX() + ", " + getCenterY() + ", " + xSize
+				+ ", " + ySize + ", " + DataHandler.getColorDisplay(color)
+				+ ")";
 	}
 
 }
