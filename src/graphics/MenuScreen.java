@@ -114,8 +114,8 @@ public final class MenuScreen {
 
 		g.setColor(Color.white);
 		g.drawString("Press Space to begin", 373, 630);
-		g.drawString("0.01", 10, 630);
-		g.drawString("11/3/2012", 10, 660);
+		g.drawString("1.00", 10, 630);
+		g.drawString("12/12/2012", 10, 660);
 	}
 
 }

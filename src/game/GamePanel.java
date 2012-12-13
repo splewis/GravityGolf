@@ -12,6 +12,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import structures.*;
 
 /**
+ * Panel-level control for the game. Runs animation and event handling
+ * (launching the ball on mouse clicks).
  * @author Sean Lewis
  */
 public class GamePanel extends JPanel implements ActionListener, MouseListener,
@@ -50,23 +52,23 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	// Graphics Components
 	// Main components
-	int speed = 2;
+	int speed = 2; // default speed = 2
 	private Thread animator;
 	private volatile boolean running;
 	private int paints;
 	// Special effect values
-	static final int TimeBetweenFlashes = 250; // ms
+	private static final int TimeBetweenFlashes = 250; // ms
 
 	// Menu Components
 	JMenuBar menuBar = new JMenuBar();
-	JMenu settingsMenu = new JMenu("Settings");
-	JCheckBoxMenuItem[] settingsBoxes = {
+	private JMenu settingsMenu = new JMenu("Settings");
+	private JCheckBoxMenuItem[] settingsBoxes = {
 			new JCheckBoxMenuItem("Collision Effects"),
 			new JCheckBoxMenuItem("Gravity Vectors"),
 			new JCheckBoxMenuItem("Gravity Resultant"),
 			new JCheckBoxMenuItem("Baill Trail"),
 			new JCheckBoxMenuItem("Warp direction arrows"), };
-	JMenu speedMenu = new JMenu("Speed");
+	private JMenu speedMenu = new JMenu("Speed");
 
 	JRadioButtonMenuItem[] speedButtons = {
 			new JRadioButtonMenuItem("Very Slow"),
@@ -75,17 +77,20 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			new JRadioButtonMenuItem("Fast"),
 			new JRadioButtonMenuItem("Very Fast"),
 			new JRadioButtonMenuItem("Light speed") };
-	ButtonGroup speedButtonGroup = new ButtonGroup();
+	private ButtonGroup speedButtonGroup = new ButtonGroup();
 
 	private static final String SAVE_EXTENSION = "sav";
-	JMenu controlMenu = new JMenu("Control");
-	JMenuItem pauseItem = new JMenuItem("Pause game");
-	JMenuItem resetLevelItem = new JMenuItem("Reset level");
-	JMenu saveMenu = new JMenu("Save");
-	JMenuItem saveItem = new JMenuItem("Save current game");
-	JMenu loadMenu = new JMenu("Load");
-	JMenuItem loadItem = new JMenuItem("Load game");
-
+	private JMenu controlMenu = new JMenu("Control");
+	private JMenuItem pauseItem = new JMenuItem("Pause game");
+	private JMenuItem resetLevelItem = new JMenuItem("Reset level");
+	private JMenu saveMenu = new JMenu("Save");
+	private JMenuItem saveItem = new JMenuItem("Save current game");
+	private JMenu loadMenu = new JMenu("Load");
+	private JMenuItem loadItem = new JMenuItem("Load game");
+	
+	/**
+	 * Initializes the game panel and game. 
+	 */
 	public GamePanel() {
 		gameManager = new GameManager();
 		int[] importedSettings = DataHandler.getSettings();
@@ -103,6 +108,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	}
 
+	/**
+	 * Internal routine for constructing all menu objects.
+	 */
 	private void initializeMenu() {
 		for (int i = 0; i < settingsBoxes.length; i++) {
 			settingsMenu.add(settingsBoxes[i]);
@@ -151,11 +159,15 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	}
 
+	@Override
 	public void addNotify() {
 		super.addNotify();
 		startGame();
 	}
-
+	
+	/**
+	 * Starts the game animation.
+	 */
 	public void startGame() {
 		if (animator == null || !running) {
 			animator = new Thread(this);
@@ -163,6 +175,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		}
 	}
 
+	/**
+	 * Animation driving method.
+	 */
+	@Override
 	public void run() {
 		int period = 7;
 		running = true;
@@ -218,27 +234,11 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		System.exit(0);
 	}
 
-	private void gameUpdate(int n) {
-		for (int i = 0; i < n; i++) {
-			gameUpdate();
-		}
-	}
-
-	private void sleep(long ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {
-			System.out.println(e);
-			e.printStackTrace();
-		}
-	}
-
-	/*
+	/**
 	 * Handles extra game logic - Sets initial special effect collision time -
 	 * Updates the level if current level is completed
 	 */
 	private void gameUpdate() {
-
 		if (!gameManager.isGameOver()) {
 			currentLevel = gameManager.getCurrentLevel();
 			ball = currentLevel.getBall();
@@ -268,6 +268,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	}
 
+	/**
+	 * Drawing method for the game.
+	 */
+	@Override
 	public void paintComponent(Graphics gr) {
 		Graphics2D g = (Graphics2D) gr;
 		super.paintComponent(g);
@@ -287,13 +291,14 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			drawLevel(g);
 
 			Color textColor = null;
-			if (ball.isLaunched()) {
+			
+			if (ball.isLaunched())
 				textColor = Color.green;
-			} else if (drawingInitialVelocity) {
+			else if (drawingInitialVelocity)
 				textColor = Color.white;
-			} else if (CollisionEffect.running()) {
+			else if (CollisionEffect.running())
 				textColor = Color.red;
-			}
+			
 			if (textColor != null && terminalPoint != null) {
 				InfoDisplay.vectorInformation(terminalPoint, launchMagnitude,
 						launchAngle, textColor, g);
@@ -323,32 +328,32 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					GraphicEffect.drawArrow(initialPoint, tempTerminalPoint, g);
 				}
 			}
-			if (settings[VectorsNum] && !CollisionEffect.running()) {
+			
+			if (settings[VectorsNum] && !CollisionEffect.running())
 				GravityVectorsEffect.draw(currentLevel, g);
-			}
-			if (settings[ResultantNum] && !CollisionEffect.running()) {
+			if (settings[ResultantNum] && !CollisionEffect.running())
 				ResultantDrawer.draw(currentLevel, g);
-			}
-			if (gamePaused) {
-				InfoDisplay.drawPaused(g);
-			}
+			if (gamePaused)
+				InfoDisplay.drawPaused(g);			
+			
 		} else {
 			screenXShift = 0.0;
 			screenYShift = 0.0;
 			drawLevel(g);
 			MenuScreen.draw(currentLevel, settings, g);
 		}
-		if (settings[WarpArrowsNum]) {
+		
+		if (settings[WarpArrowsNum])
 			WarpDrawer.draw(currentLevel, g);
-		}
-		if (gameWon) {
+		if (gameWon)
 			InfoDisplay.drawWinScreen(gameManager, g);
-		}
-		if (levelComplete) {
-			InfoDisplay.drawNextLevelMessage(g);
-		}
+		if (levelComplete)
+			InfoDisplay.drawNextLevelMessage(g);		
 	}
 
+	/**
+	 * Resets the game to the start of the current level.
+	 */
 	public void resetLevel() {
 		levelComplete = false;
 		CollisionEffect.kill();
@@ -357,6 +362,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		drawingInitialVelocity = false;
 	}
 
+	/**
+	 * Internal routine for interfacing with the level's drawing mechanisms.
+	 */
 	private void drawLevel(Graphics2D g) {
 
 		long t = System.currentTimeMillis();
@@ -390,7 +398,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		if (settings[TrailNum] && ball.isLaunched()) {
 			TrailEffect.draw(currentLevel, g);
 		}
-	
+
 		if (!CollisionEffect.running()) { // prevents flicker of ball on reset
 											// after
 			// effects
@@ -409,9 +417,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			} else { // moving ball
 				ball.draw(screenXShift, screenYShift, g, ball.getColor());
 			}
-		}	
+		}
 
-		// TODO: needs adjustment with collision positioning
 		if (gameManager.getLevelNumber() == 1 && gameStarted
 				&& gameManager.getCurrentLevelSwings() == 0) {
 			GoalPost goal = currentLevel.getGoalPosts().get(0);
@@ -432,6 +439,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	}
 
+	/**
+	 * Handles event-driven occurrences: saving, loading, pausing, resetting
+	 */
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == pauseItem) {
 			gamePaused = !gamePaused;
@@ -482,17 +493,22 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		}
 	}
 
-	public void beginGame() throws IOException {
+	/**
+	 * Starts the game for the user.
+	 */
+	public void beginGame() {
 		gameWon = false;
 		gameStarted = true;
 		gamePaused = false;
 		gameManager.nextLevel();
 	}
 
+	@Override
 	public void mousePressed(MouseEvent event) {
 		mouseDragged(event);
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent event) {
 		if (!currentLevel.getBall().isLaunched()
 				&& !gamePaused
@@ -512,6 +528,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent event) {
 		TrailEffect.resetPoints();
 		blinkingBall = false; // the first launch will disable all blinking
@@ -550,10 +567,16 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		drawingInitialVelocity = false;
 	}
 
+	/**
+	 * Returns if the game has been started yet.
+	 */
 	public boolean isGameStarted() {
 		return gameStarted;
 	}
 
+	/**
+	 * Returns if the game is currently paused.
+	 */
 	public boolean isPaused() {
 		return gamePaused;
 	}
@@ -580,22 +603,57 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		running = false;
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent event) {
+		// do nothing
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent event) {
+		// do nothing
 	}
 
+	@Override
 	public void mouseExited(MouseEvent event) {
+		// do nothing
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent event) {
+		// do nothing
 	}
 
+	/**
+	 * Pauses the current game.
+	 */
 	public void pause() {
 		if (!CollisionEffect.running()) {
 			gamePaused = !gamePaused;
 		}
 	}
 
+	/**
+	 * Convenience method for multiple game updates.
+	 * @param n number of times to update
+	 */
+	private void gameUpdate(int n) {
+		for (int i = 0; i < n; i++) {
+			gameUpdate();
+		}
+	}
+
+	/**
+	 * Convinces method for sleeping in the current thread.
+	 * @param ms number of milliseconds to sleep
+	 */
+	private void sleep(long ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+	}
+
+	
 }

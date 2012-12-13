@@ -11,7 +11,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * @author Sean
+ * @author Sean Lewis
  */
 class LevelPanel extends JPanel implements ActionListener, MouseListener,
 		MouseMotionListener, ItemListener {
