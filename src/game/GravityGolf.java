@@ -1,12 +1,12 @@
 package game;
 
-import java.io.IOException;
 import javax.swing.JFrame;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
+ * 
  * @author Sean Lewis
  */
 
@@ -17,7 +17,7 @@ public class GravityGolf {
 	 */
 	public static DataHandler DataWriter;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args)  {
 		DataWriter = new DataHandler();
 		final GameFrame gf = new GameFrame();
 		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,4 +29,5 @@ public class GravityGolf {
 			}
 		});
 	}
+	
 }

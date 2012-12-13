@@ -20,14 +20,6 @@ import java.util.Scanner;
 public class Level {
 
 	/**
-	 * The total number of levels in the game.
-	 */
-	// TODO: this dependency should be removed
-	public static int numLevels = 0;
-
-	private int levelIndex = 0;
-
-	/**
 	 * A constant for how many stars should be put in the level. As the number
 	 * increased, there are more stars.
 	 */
@@ -76,8 +68,6 @@ public class Level {
 	public Level(Ball ball, ArrayList<Body> bodies, ArrayList<WarpPoint> warps,
 			ArrayList<GoalPost> goals, ArrayList<Blockage> blockages,
 			double followfactor, double gravityStrength) {
-		levelIndex = numLevels;
-		numLevels++;
 		this.ball = ball;
 
 		this.bodies = bodies;
@@ -401,12 +391,9 @@ public class Level {
 			// Reflector collision and resolution
 			if (b.isReflector() && b.intersects(ball)) {
 				Vector2d v_i = ball.getVelocity();
-				Vector2d v_p = v_i.projection(Math.atan((ball.getCenter().y - b
-						.getCenter().y)
-						/ (ball.getCenter().x - b.getCenter().x)));
-
-				// TODO: projection clean up - what is going on here?
-
+				double dy = ball.getCenter().y - b.getCenter().y;
+				double dx = ball.getCenter().x - b.getCenter().x;
+				Vector2d v_p = v_i.projection(Math.atan(dy / dx));
 				Vector2d v_f = v_i.subtract(v_p.multiply(2));
 				ball.setVelocity(v_f);
 				while (ball.intersects(b)) {
@@ -415,6 +402,7 @@ public class Level {
 			}
 		}
 
+		// Warp checking:
 		boolean inAnyWarp = false;
 		for (int i = 0; i < warps.size(); i++) {
 			WarpPoint wp = warps.get(i);
@@ -442,6 +430,7 @@ public class Level {
 			ballInWarp = false;
 		}
 
+		// Blockage checking:
 		boolean thisTime = false;
 		for (Rectangle r : blockageRects) {
 			if (r.contains(ball.getCenter().getIntegerPoint())) {
@@ -460,14 +449,13 @@ public class Level {
 					} else {
 						// Else: pick the bigger side: if rect X > rect Y -
 						// vertical
-						if (r.getWidth() > r.getHeight()) {
+						if (r.getWidth() > r.getHeight())
 							ySpeed *= -1;
-						} else {
-							xSpeed *= -1;
-						}
+						else
+							xSpeed *= -1;						
 					}
+					
 					hittingBlockage = true;
-
 					if (!timeToReset()) {
 						ball.setVelocity(new Vector2d(xSpeed, ySpeed));
 						while (getBlockageIntersection(ball) != null) {
@@ -495,34 +483,31 @@ public class Level {
 	 * Performs the computation for possible input points to win the level.
 	 * @param max the maximum length for the inital vector
 	 */
-	public void calculateSolutionSet(double max) {
+	public void calculateSolutionSet(double max, PrintWriter pw) {
 		solutions = new ArrayList<java.awt.Point>();
 		double sqr = max * max;
-		for (int x = (int) (ball.getCenter().x - max); x <= (int) (ball
-				.getCenter().x + max); x++) {
+		
+		// iterate over all possible x values
+		int leftX = (int) (ball.getCenter().x - max);
+		int rightX = (int) (ball.getCenter().x + max);
+		for (int x = leftX; x <= rightX; x++) {
 			if (xOutOfBounds(x)) {
 				continue;
 			}
-			for (int y = (int) (ball.getCenter().y - max); y <= (int) (ball
-					.getCenter().y + max); y++) {
-				if (yOutOfBounds(y)) {
-					continue;
-				}
+
+			// iterate over all possible y values
+			int bottomY = (int) (ball.getCenter().y - max);
+			int topY = (int) (ball.getCenter().y + max);
+			for (int y = bottomY; y <= topY; y++) {
 				Point2d p = new Point2d(x, y);
+				if (yOutOfBounds(y) || isOutOfBounds(p)) 
+					continue;				
 				if (Math.pow(p.x - ball.getCenter().x, 2)
 						+ Math.pow(p.y - ball.getCenter().y, 2) <= sqr) {
-
-					if (possibleWin(p, max)) {
-						solutions.add(p.getIntegerPoint());
-					}
+					if (possibleWin(p, max)) 
+						solutions.add(p.getIntegerPoint());					
 				}
 			}
-		}
-		PrintWriter pw = null;
-		try {
-			pw = new PrintWriter(new File("levels/data/level"
-					+ (levelIndex + 1) + ".txt"));
-		} catch (FileNotFoundException fnf) {
 		}
 		for (java.awt.Point p : solutions) {
 			pw.println(p.x + " " + p.y);
@@ -534,28 +519,21 @@ public class Level {
 	 * Returns the solution set for this Level, as already defined in
 	 * levels/data/levelX.txt
 	 * @return the solution set
+	 * @throws FileNotFoundException if the file could not be found
 	 */
-	public ArrayList<java.awt.Point> getSolutionSet() {
-		if (solutions != null) {
-			return solutions;
-		}
-
+	public ArrayList<java.awt.Point> getSolutionSet(String fileName)
+			throws FileNotFoundException {
+		if (solutions != null) 
+			return solutions;	
+		
 		solutions = new ArrayList<java.awt.Point>();
-		try {
-			// TODO: bad dependency on levelIndex here
-			Scanner infile = new Scanner(new File("levels/data/level"
-					+ (levelIndex + 1) + ".txt"));
-			while (infile.hasNext()) {
-				solutions.add(new java.awt.Point(infile.nextInt(), infile
-						.nextInt()));
-			}
-			infile.close();
-			return solutions;
-
-		} catch (Exception e) {
-			return solutions;
-		}
-
+		Scanner infile = new Scanner(new File(fileName));		
+		while (infile.hasNext()) {
+			java.awt.Point p = new java.awt.Point(infile.nextInt(), infile.nextInt());
+			solutions.add(p);
+		}		
+		infile.close();
+		return solutions;
 	}
 
 	/**
@@ -612,48 +590,6 @@ public class Level {
 	private boolean onScreen(Point2d p) {
 		return p.x + screenXShift > 0 && p.x + screenXShift < 1000
 				&& p.y + screenYShift > 0 && p.y + screenYShift < 700;
-	}
-
-	/**
-	 * Returns a fast estimation of the difficulty of the level. A higher number
-	 * means the level is easier.
-	 * @return a very conservative estimation of the number of level solutions
-	 *         that exist.
-	 */
-	public int estimateDifficulty() {
-		return solutionsInRange(10, 50) + solutionsInRange(95, 105)
-				+ solutionsInRange(295, 301);
-	}
-
-	private int solutionsInRange(int a, int b) {
-		int solutionsFound = 0;
-		int ballX = (int) ball.getCenter().x;
-		int ballY = (int) ball.getCenter().y;
-
-		// scan left
-		for (int x = ballX - b; x <= ballX - a; x++) {
-			if (xOutOfBounds(x))
-				continue;
-			for (int y = ballY - b; y <= ballY + b; y++) {
-				if (yOutOfBounds(y))
-					continue;
-				if (possibleWin(new Point2d(x, y), 300))
-					solutionsFound++;
-			}
-		}
-
-		for (int x = ballX + a; x <= ballX + b; x++) {
-			if (xOutOfBounds(x))
-				continue;
-			for (int y = ballY - b; y <= ballY + b; y++) {
-				if (yOutOfBounds(y))
-					continue;
-				if (possibleWin(new Point2d(x, y), 300))
-					solutionsFound++;
-			}
-		}
-
-		return solutionsFound;
 	}
 
 	/**

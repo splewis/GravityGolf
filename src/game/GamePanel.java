@@ -7,7 +7,6 @@ import graphics.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import structures.*;
@@ -20,9 +19,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 	public static final int Width = 1000;
 	public static final int Height = 700;
-
-	boolean showSolution = false;
-	private ArrayList<java.awt.Point> points = new ArrayList<java.awt.Point>();
 
 	// Game Components
 	public static final int MaxInitialMagnitude = 300;
@@ -90,7 +86,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	JMenu loadMenu = new JMenu("Load");
 	JMenuItem loadItem = new JMenuItem("Load game");
 
-	public GamePanel() throws IOException {
+	public GamePanel() {
 		gameManager = new GameManager();
 		int[] importedSettings = DataHandler.getSettings();
 		for (int i = 0; i < settings.length; i++) {
@@ -123,7 +119,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			settingsBoxes[i].setState(settings[i]);
 		}
 		settingsBoxes[VectorsNum].setMnemonic(KeyEvent.VK_V);
-		settingsBoxes[ResultantNum].setMnemonic(KeyEvent.VK_R);
+		settingsBoxes[ResultantNum].setMnemonic(KeyEvent.VK_D);
 		settingsBoxes[TrailNum].setMnemonic(KeyEvent.VK_T);
 		settingsBoxes[EffectsNum].setMnemonic(KeyEvent.VK_E);
 		menuBar.add(settingsMenu);
@@ -131,7 +127,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		for (int i = 0; i < speedButtons.length; i++) {
 			speedMenu.add(speedButtons[i]);
 			speedButtonGroup.add(speedButtons[i]);
-
 		}
 
 		menuBar.add(speedMenu);
@@ -395,14 +390,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		if (settings[TrailNum] && ball.isLaunched()) {
 			TrailEffect.draw(currentLevel, g);
 		}
-
-		if (showSolution) {
-			g.setColor(Color.green);
-			for (java.awt.Point p : points) {
-				g.fillRect(p.x + xShift, p.y + yShift, 1, 1);
-			}
-		}
-
+	
 		if (!CollisionEffect.running()) { // prevents flicker of ball on reset
 											// after
 			// effects

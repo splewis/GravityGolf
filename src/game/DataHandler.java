@@ -245,7 +245,7 @@ public class DataHandler {
 			// System.exit(0);
 			if (!errorFound)
 				JOptionPane.showMessageDialog(null,
-						"GravityGolf is unable to load " + file + " at line "
+						"GravityGolf was unable to load " + file + " at line "
 								+ currentLineN + ".", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			errorFound = true;

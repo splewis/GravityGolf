@@ -14,7 +14,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
 	private GamePanel gp;
 
-	public GameFrame() throws IOException {
+	public GameFrame() {
 		gp = new GamePanel();
 		if (!gp.errorFound) {
 			getContentPane().add(gp);

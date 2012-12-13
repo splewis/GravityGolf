@@ -9,6 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import structures.*;
 import graphics.*;
 
@@ -27,9 +30,15 @@ public class GameManager {
 	 * Starts the GameManager, reading in all level data.
 	 * @throws IOException
 	 */
-	public GameManager() throws IOException {
+	public GameManager() {
 		DataHandler reader = new DataHandler();
-		levels = reader.getLevelData("levels/levels.txt");
+		try {
+			levels = reader.getLevelData("levels/levels.txt");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null,
+					"The levels.txt file could not be read.",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
 		currentLevelIndex = -1;
 		swingData = new int[levels.size()];
 	}
