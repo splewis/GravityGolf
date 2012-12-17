@@ -385,7 +385,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 		currentLevel.draw((int) screenXShift, (int) screenYShift, g);
 
-		// TODO: warp points should not need secondary drawing
 		for (WarpPoint w : currentLevel.getWarpPoints()) {
 			w.draw(xShift, yShift, g);
 		}
