@@ -274,23 +274,7 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 						.getSelectedFile().getName() + ".txt"));
 				currentLevel = new Level(ball, bodies, warps, goals, blockages,
 						followFactor, gravityStrength);
-
-				pw.println(ball.toString());
-				for (Body b : bodies) {
-					pw.println(b.toString());
-				}
-				for (WarpPoint w : warps) {
-					pw.println(w.toString());
-				}
-				for (Blockage b : blockages) {
-					pw.println(b.toString());
-				}
-				for (GoalPost g : goals) {
-					pw.println(g.toString());
-				}
-				pw.println("level(" + followFactor + ", " + gravityStrength
-						+ ")");
-
+				pw.println(currentLevel.toString());
 				pw.close();
 				System.out.println(currentLevel.toString());
 			} catch (Exception e) {
