@@ -113,7 +113,11 @@ public final class CalcHelp {
 			return angle;
 		if (xDif < 0)
 			return angle + Math.PI;
-		return Math.signum(-yDif) * Math.PI / 2.0;
+		if(yDif < 0)
+			return Math.PI / 2;
+		if(yDif > 0)
+			return -Math.PI / 2;			
+		return 0;
 	}
 
 	/**
