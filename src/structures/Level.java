@@ -7,11 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * A Level is the generic structure for each level's storage information.
@@ -41,7 +37,6 @@ public class Level {
 	private ArrayList<Star> stars;
 
 	private BufferedImage image;
-	private ArrayList<java.awt.Point> solutions;
 
 	private int xMin;
 	private int xMax;
@@ -314,14 +309,6 @@ public class Level {
 		return isOutOfBounds(ball.getCenter());
 	}
 
-	private boolean xOutOfBounds(double x) {
-		return x + screenXShift < 0 || x + screenXShift > GamePanel.Width;
-	}
-
-	private boolean yOutOfBounds(double y) {
-		return y + screenYShift < 0 || y + screenYShift > GamePanel.Height - 20;
-	}
-
 	/**
 	 * Returns if the ball is in the goal post, i.e. has won.
 	 * @return if the user was won this level
@@ -478,76 +465,7 @@ public class Level {
 		screenYShift = (followFactor == 0) ? 0
 				: ((350 - ball.getCenter().y) / followFactor);
 	}
-	
-	/**
-	 * Performs the computation for possible input points to win the level.
-	 * @param max the maximum length for the initial vector
-	 */
-	public ArrayList<java.awt.Point> getSolutionSet(double max) {
-		solutions = new ArrayList<java.awt.Point>();
-		double sqr = max * max;
-		
-		// iterate over all possible x values
-		int leftX = (int) (ball.getCenter().x - max);
-		int rightX = (int) (ball.getCenter().x + max);
-		for (int x = leftX; x <= rightX; x++) {
-			if (xOutOfBounds(x)) {
-				continue;
-			}
 
-			// iterate over all possible y values
-			int bottomY = (int) (ball.getCenter().y - max);
-			int topY = (int) (ball.getCenter().y + max);
-			for (int y = bottomY; y <= topY; y++) {
-				
-				// TODO: this part in parallel
-				Point2d p = new Point2d(x, y);
-				if (yOutOfBounds(y) || isOutOfBounds(p)) 
-					continue;				
-				if (Math.pow(p.x - ball.getCenter().x, 2)
-						+ Math.pow(p.y - ball.getCenter().y, 2) <= sqr) {
-					if (possibleWin(p, max)) 
-						solutions.add(p.getIntegerPoint());					
-				}
-				
-			}
-		}
-		return solutions;
-	}
-
-	/**
-	 * Performs the computation for possible input points to win the level.
-	 * @param max the maximum length for the initial vector
-	 * @param pw the output to write the data to
-	 */
-	public void calculateSolutionSet(double max, PrintWriter pw) {
-		solutions = getSolutionSet(max);
-		for (java.awt.Point p : solutions) {
-			pw.println(p.x + " " + p.y);
-		}
-		pw.close();
-	}
-
-	/**
-	 * Returns the solution set for this Level, as already defined in
-	 * levels/data/levelX.txt
-	 * @return the solution set
-	 * @throws FileNotFoundException if the file could not be found
-	 */
-	public ArrayList<java.awt.Point> getSolutionSet(String fileName)
-			throws FileNotFoundException {
-		if (solutions != null) 
-			return solutions;	
-		
-		solutions = new ArrayList<java.awt.Point>();
-		Scanner infile = new Scanner(new File(fileName));		
-		while (infile.hasNext()) {
-			java.awt.Point p = new java.awt.Point(infile.nextInt(), infile.nextInt());
-			solutions.add(p);
-		}		
-		infile.close();
-		return solutions;
-	}
 
 	/**
 	 * Returns if the user clicking this point would result in a win.
@@ -560,10 +478,10 @@ public class Level {
 		return possibleWin(new Point2d(clickedPoint).translate(-screenXShift,
 				-screenYShift), max);
 	}
-
+	
 	/**
 	 * Returns if the user inputting this point (raw level data - all
-	 * translation data stripped) woudl result in a win.
+	 * translation data stripped) would result in a win.
 	 * @param translatedPoint the input point
 	 * @param max the maximum initial vector length
 	 * @return if this point results in a win
