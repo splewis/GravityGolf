@@ -3,16 +3,18 @@ package editor;
 import game.DataHandler;
 import game.GamePanel;
 
+import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import structures.Ball;
 import structures.Level;
@@ -28,6 +30,8 @@ public class LevelSolver {
 	
 	/**
 	 * Args input syntax:
+	 *  - put "GG all" to output all standard GG level data.
+	 *  
 	 *  - put "GG" if standard game levels are being solved:
 	 *    - if so, place numbers afterwards for which levels
 	 *    - ex: GG 1 2 3 4 5
@@ -42,9 +46,24 @@ public class LevelSolver {
 	 *    - NOTE: the first level will be level 0
 	 */
 	public static void main(String[] args) throws IOException {
-		if(args[0].equals("GG")) {
+		
+		
+		if(args[0].equals("GG") && args[1].equals("all")) {
+			System.out.println("Reading all stanard input levels.");
+			List<Level> levels = new DataHandler().getLevelData("levels/levels.txt");			
+			for(int i = 1; i < levels.size(); i++) {
+				System.out.println("Reading level " + i + ".");
+				File f = new File("levels/data/level" + i + ".txt");
+				PrintWriter pw = new PrintWriter(f);
+				LevelSolver.printSolutionSet(levels.get(i), pw);
+				pw.close();
+			}
+			
+			
+		} else if(args[0].equals("GG")) {
 			System.out.println("Reading stanard input levels.");
 			List<Level> levels = new DataHandler().getLevelData("levels/levels.txt");
+			
 			for(int i = 1; i < args.length; i++) {
 				int level = Integer.parseInt(args[i]);
 				System.out.println("Reading level " + level + ".");
@@ -53,6 +72,7 @@ public class LevelSolver {
 				LevelSolver.printSolutionSet(levels.get(i), pw);
 				pw.close();
 			}			
+			
 			
 		} else {
 			System.out.println("Reading non-stanard input levels.");
@@ -73,15 +93,13 @@ public class LevelSolver {
 	}
 
 	private static final int MAX = GamePanel.MaxInitialMagnitude;	
-	private static Vector<java.awt.Point> solutions;
 	
 	/**
 	 * Computes all solutions to the level and returns in the points in a List.
 	 * @param level the level to solve
 	 * @return all points such that level.possibleWin(p) returns true
 	 */
-	public static List<java.awt.Point> getSolutionSet(Level level) {
-		solutions = new Vector<java.awt.Point>();
+	public static Collection<java.awt.Point> getSolutionSet(Level level) {
 		Ball ball = level.getBall();
 		List<Task> tasks = new ArrayList<Task>();
 		
@@ -105,30 +123,41 @@ public class LevelSolver {
 
 		// parallel computations:
 		ExecutorService executor = Executors.newCachedThreadPool();  
-  		for(Task t : tasks)
-  			executor.execute(t);
-  		executor.shutdown();
+		for (Task t : tasks)
+			executor.execute(t);
+		executor.shutdown();
+		
+		try {
+			executor.awaitTermination(1, TimeUnit.HOURS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
   		
+  		List<java.awt.Point> solutions = new ArrayList<java.awt.Point>();
+  		for(Task t : tasks)
+  			solutions.addAll(t.getSolutions());
 		return solutions;
 	}
 	
 	/*
-	 * Inner class for computing a set of test points.
+	 * Inner class for computing a list of test points.
 	 */
 	private class Task implements Runnable {
 		private static final double sqr = MAX * MAX;
-		private List<Point2d> points;
+		private List<Point2d> inputPoints;
+		private List<Point> solutionPoints;
 		private Level level;
 		
-		public Task(Level level, List<Point2d> points) {
+		public Task(Level level, List<Point2d> inputPoints) {
 			this.level = level;
-			this.points = points;
+			this.inputPoints = inputPoints;
+			solutionPoints = new ArrayList<Point>();
 		}
 
 		public void run() {
 			Ball ball = level.getBall();
 
-			for (Point2d point : points) {
+			for (Point2d point : inputPoints) {
 				double x = point.getX();
 				double y = point.getY();
 
@@ -139,11 +168,15 @@ public class LevelSolver {
 						+ Math.pow(y - ball.getCenter().y, 2) <= sqr;
 
 				if (!outOfBounds && inShotRange) {
-					if (level.possibleWin(point, MAX))
-						solutions.add(point.getIntegerPoint());
+					if (level.possibleWin(point, MAX)) {
+						solutionPoints.add(point.getIntegerPoint());
+					}
 				}
-			}
-			
+			}			
+		}
+		
+		public Collection<Point> getSolutions() {
+			return solutionPoints;
 		}
 
 	}
@@ -153,7 +186,7 @@ public class LevelSolver {
 	 * @param solutions the solution set to print
 	 * @param pw the PrintWriter to print through
 	 */
-	public static void printSolutionSet(List<java.awt.Point> solutions,
+	public static void printSolutionSet(Collection<java.awt.Point> solutions,
 			PrintWriter pw) {
 		for (java.awt.Point p : solutions) {
 			pw.println(p.x + " " + p.y);
@@ -176,7 +209,7 @@ public class LevelSolver {
 	 * @return a List of solution points for the level
 	 * @throws FileNotFoundException if the file was not found
 	 */
-	public static List<java.awt.Point> readSolutionSet(String fileName)
+	public static Collection<java.awt.Point> readSolutionSet(String fileName)
 			throws FileNotFoundException {
 		List<java.awt.Point> solutions = new ArrayList<java.awt.Point>();
 		Scanner infile = new Scanner(new File(fileName));
