@@ -478,12 +478,12 @@ public class Level {
 		screenYShift = (followFactor == 0) ? 0
 				: ((350 - ball.getCenter().y) / followFactor);
 	}
-
+	
 	/**
 	 * Performs the computation for possible input points to win the level.
-	 * @param max the maximum length for the inital vector
+	 * @param max the maximum length for the initial vector
 	 */
-	public void calculateSolutionSet(double max, PrintWriter pw) {
+	public ArrayList<java.awt.Point> getSolutionSet(double max) {
 		solutions = new ArrayList<java.awt.Point>();
 		double sqr = max * max;
 		
@@ -499,6 +499,8 @@ public class Level {
 			int bottomY = (int) (ball.getCenter().y - max);
 			int topY = (int) (ball.getCenter().y + max);
 			for (int y = bottomY; y <= topY; y++) {
+				
+				// TODO: this part in parallel
 				Point2d p = new Point2d(x, y);
 				if (yOutOfBounds(y) || isOutOfBounds(p)) 
 					continue;				
@@ -507,8 +509,19 @@ public class Level {
 					if (possibleWin(p, max)) 
 						solutions.add(p.getIntegerPoint());					
 				}
+				
 			}
 		}
+		return solutions;
+	}
+
+	/**
+	 * Performs the computation for possible input points to win the level.
+	 * @param max the maximum length for the initial vector
+	 * @param pw the output to write the data to
+	 */
+	public void calculateSolutionSet(double max, PrintWriter pw) {
+		solutions = getSolutionSet(max);
 		for (java.awt.Point p : solutions) {
 			pw.println(p.x + " " + p.y);
 		}
