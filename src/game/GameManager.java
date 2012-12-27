@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,10 +8,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import editor.LevelSolver;
 
 import structures.*;
 import graphics.*;
@@ -22,6 +27,7 @@ import graphics.*;
 public class GameManager {
 
 	private int currentLevelIndex;
+	private List<Point> solutions;
 	private ArrayList<Level> levels;
 	private int[] swingData;
 	private int totalSwings;
@@ -97,6 +103,24 @@ public class GameManager {
 	}
 
 	/**
+	 * Returns the solution set for the current level. If the data has not been
+	 * computed, an empty list is returned.
+	 * @return the current level's solution set, if computed already
+	 */
+	public List<Point> getCurrentSolutions() {
+		if(solutions == null) {
+			String fileName = "levels/data/level" + getLevelNumber() + ".txt";
+			try {
+				solutions = LevelSolver.readSolutionSet(fileName);
+			} catch(Exception e) {
+				System.out.println("Unable to read " + fileName + ".");
+				solutions = new ArrayList<Point>();
+			} 			
+		} 
+		return solutions;
+	}
+		
+	/**
 	 * Returns if the game has been finished yet.
 	 * @return if the game is over
 	 */
@@ -110,6 +134,7 @@ public class GameManager {
 	 */
 	public boolean nextLevel() {
 
+		solutions = null;
 		// deletes last level from the memory
 		if (currentLevelIndex >= 0) {
 			levels.set(currentLevelIndex, null);

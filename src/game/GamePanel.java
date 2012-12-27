@@ -19,6 +19,8 @@ import structures.*;
 public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		MouseMotionListener, Runnable {
 
+	private static final boolean DRAW_SOLUTIONS = true;
+	
 	public static final int Width = 1000;
 	public static final int Height = 700;
 
@@ -434,6 +436,12 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 		if (settings[EffectsNum] && CollisionEffect.running()) {
 			CollisionEffect.draw(g);
+		}
+		
+		if(DRAW_SOLUTIONS && gameStarted) {
+			g.setColor(Color.GREEN);
+			for(java.awt.Point p : gameManager.getCurrentSolutions()) 
+				g.fillRect(xShift + p.x, yShift + p.y, 1, 1);
 		}
 
 	}
