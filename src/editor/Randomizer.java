@@ -1,7 +1,15 @@
-package structures;
+package editor;
 
 import java.awt.Color;
 import java.util.ArrayList;
+
+import structures.Ball;
+import structures.Blockage;
+import structures.Body;
+import structures.CalcHelp;
+import structures.GoalPost;
+import structures.Level;
+import structures.WarpPoint;
 
 /**
  * Gives functionality for the creation of randomized levels.
