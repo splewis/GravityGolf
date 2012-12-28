@@ -36,7 +36,6 @@ public class LevelSolver {
 	 *    - if so, place numbers afterwards for which levels
 	 *    - ex: GG 1 2 3 4 5
 	 *      - this solves the first 5 levels
-	 *      - (menu level is level 0)
 	 *      
 	 *  - otherwise, put "OTHER" as the first command
 	 *    - the 2nd command should be the input file 
@@ -50,10 +49,10 @@ public class LevelSolver {
 		
 		if(args[0].equals("GG") && args[1].equals("all")) {
 			System.out.println("Reading all stanard input levels.");
-			List<Level> levels = new DataHandler().getLevelData("levels/levels.txt");			
-			for(int i = 1; i < levels.size(); i++) {
-				System.out.println("Reading level " + i + ".");
-				File f = new File("levels/data/level" + i + ".txt");
+			List<Level> levels = new DataHandler().getLevelData("levels/levels.txt");	
+			for(int i = 0; i < levels.size(); i++) {
+				System.out.println("Reading level " + (i+1) + ".");
+				File f = new File("levels/data/level" + (i+1) + ".txt");
 				PrintWriter pw = new PrintWriter(f);
 				LevelSolver.printSolutionSet(levels.get(i), pw);
 				pw.close();
@@ -69,7 +68,7 @@ public class LevelSolver {
 				System.out.println("Reading level " + level + ".");
 				File f = new File("levels/data/level" + level + ".txt");
 				PrintWriter pw = new PrintWriter(f);
-				LevelSolver.printSolutionSet(levels.get(i), pw);
+				LevelSolver.printSolutionSet(levels.get(level - 1), pw);
 				pw.close();
 			}			
 			
