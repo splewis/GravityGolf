@@ -45,16 +45,26 @@ public class DataHandler {
 		pw.close();
 		return levels;
 	}
-
+	 
 	/**
-	 * Reads in the settings from the settings file.
+	 * Reads in the settings from the basic settings file.
 	 * @return the int array of settings parameters.
 	 */
 	public static int[] getSettings() {
+		return getSettings("settings.txt");
+	}
+	
+	
+	/**
+	 * Reads in the settings from an arbitrary file path.
+	 * @param fileName the file to read settings from
+	 * @return the int array of settings parameters.
+	 */
+	public static int[] getSettings(String fileName) {
 
 		int[] settings = GamePanel.DEFAULT_SETTINGS;
 		try {
-			Scanner infile = new Scanner(new File("settings.txt"));
+			Scanner infile = new Scanner(new File(fileName));
 			int i = 0;
 			while (i < 5) {
 				settings[i++] = (infile.nextLine().contains("yes")) ? (1) : (0);
@@ -63,6 +73,8 @@ public class DataHandler {
 			settings[5] = Integer.parseInt(l.substring(l.indexOf("=") + 1));
 			infile.close();
 		} catch (Exception e) {
+			System.out.println("Failed to read settings. " +
+					           "Using default settings.");
 			settings = GamePanel.DEFAULT_SETTINGS;
 			try {
 				DataHandler.printSettings(settings);

@@ -6,3 +6,4 @@ settings.txt
 .settings
 *.project
 *.classpath
+testFiles

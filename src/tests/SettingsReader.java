@@ -11,9 +11,12 @@ import org.junit.Test;
 
 public class SettingsReader {
 
+	static final String dir = "testFiles/";
+	
 	@Test
 	public void simpleRead() throws FileNotFoundException {
-		PrintWriter pw = new PrintWriter(new File("settings.txt"));
+		String fileName = dir + "simpleRead.txt";
+		PrintWriter pw = new PrintWriter(new File(fileName));
 		pw.println("effects = yes");
 		pw.println("vectors = no");
 		pw.println("resultant = no");
@@ -22,12 +25,13 @@ public class SettingsReader {
 		pw.println("speed = 3");
 		pw.close();
 		assertArrayEquals(new int[] { 1, 0, 0, 1, 0, 3 },
-				DataHandler.getSettings());
+				DataHandler.getSettings(fileName));
 	}
 
 	@Test
 	public void simpleRead_noTrail() throws FileNotFoundException {
-		PrintWriter pw = new PrintWriter(new File("settings.txt"));
+		String fileName = dir + "simpleRead_noTrail.txt";
+		PrintWriter pw = new PrintWriter(new File(fileName));
 		pw.println("effects = yes");
 		pw.println("vectors = no");
 		pw.println("resultant = no");
@@ -36,19 +40,20 @@ public class SettingsReader {
 		pw.println("speed = 3");
 		pw.close();
 		assertArrayEquals(new int[] { 1, 0, 0, 0, 0, 3 },
-				DataHandler.getSettings());
+				DataHandler.getSettings(fileName));
 	}
 
 	@Test
 	public void badRead() throws FileNotFoundException {
-		PrintWriter pw = new PrintWriter(new File("settings.txt"));
+		String fileName = dir + "badRead.txt";
+		PrintWriter pw = new PrintWriter(new File(fileName));
 		pw.println("effects = yes");
 		pw.println("vectodgagrs = no");
 		pw.println("41warpArrows = I DON'T KNOW!");
 		pw.close();
 		// test against default settings
 		assertArrayEquals(new int[] { 1, 0, 0, 1, 0, 3 },
-				DataHandler.getSettings());
+				DataHandler.getSettings(fileName));
 	}
 
 }
