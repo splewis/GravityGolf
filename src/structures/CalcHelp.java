@@ -42,7 +42,6 @@ public final class CalcHelp {
 		return new Color(newR, newG, newB);
 	}
 
-
 	/**
 	 * Returns a random (with normal distribution) double.
 	 * @param mean the mean of the distribution
@@ -54,6 +53,28 @@ public final class CalcHelp {
 	}
 
 	/**
+	 * Returns a random (with normal distribution) double that is guaranteed to
+	 * lie between two values.
+	 * @param mean the mean of the distribution
+	 * @param standardDeviation the standard deviation of the distribution
+	 * @param min the smallest value that may be returned
+	 * @param max the largest value that may be returned
+	 * @return a random double form a normal distribution
+	 */
+	public static double gaussianDoubleInRange(double mean,
+			double standardDeviation, double min, double max) {
+		if (min > max)
+			throw new IllegalArgumentException("The min parameter "
+					+ "must be less than or equal to the max parameter.");
+		double rand = gaussianDouble(mean, standardDeviation);
+		if (rand < min)
+			return min;
+		if (rand > max)
+			return max;
+		return rand;
+	}
+
+	/**
 	 * Returns a random (with normal distribution) int.
 	 * @param mean the mean of the distribution
 	 * @param standardDeviation the standard deviation of the distribution
@@ -61,6 +82,28 @@ public final class CalcHelp {
 	 */
 	public static int gaussianInteger(double mean, double standardDeviation) {
 		return (int) Math.round(gaussianDouble(mean, standardDeviation));
+	}
+
+	/**
+	 * Returns a random (with normal distribution) double that is guaranteed to
+	 * lie between two values.
+	 * @param mean the mean of the distribution
+	 * @param standardDeviation the standard deviation of the distribution
+	 * @param min the smallest value that may be returned
+	 * @param max the largest value that may be returned
+	 * @return a random double form a normal distribution
+	 */
+	public static int gaussianIntegerInRange(double mean,
+			double standardDeviation, int min, int max) {
+		if (min > max) 
+			throw new IllegalArgumentException("The min parameter "
+					+ "must be less than or equal to the max parameter.");
+		int rand = gaussianInteger(mean, standardDeviation);
+		if (rand < min)
+			return min;
+		if (rand > max)
+			return max;
+		return rand;
 	}
 
 	/**
@@ -113,10 +156,10 @@ public final class CalcHelp {
 			return angle;
 		if (xDif < 0)
 			return angle + Math.PI;
-		if(yDif < 0)
+		if (yDif < 0)
 			return Math.PI / 2;
-		if(yDif > 0)
-			return -Math.PI / 2;			
+		if (yDif > 0)
+			return -Math.PI / 2;
 		return 0;
 	}
 
