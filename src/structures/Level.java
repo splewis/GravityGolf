@@ -109,11 +109,13 @@ public class Level {
 		} else if (followFactor < 1.5) {
 			// arbitrary values, see formula below - using 1 would lead to
 			// division by 0, and using numbers <1.25 would make a huge area
-			xMin = -1500;
-			xMax = 1500;
-			yMin = -1200;
-			yMax = 1200;
+			xMin = (int) (-1.5 * GamePanel.Width);
+			xMax =  -xMin;
+			yMin = (int) (-1.2 * GamePanel.Height);
+			yMax = -yMin;
 		} else {
+			// TODO: clean up math/formatting
+			
 			double oneMinusInverse = 1.0 - 1.0 / followFactor;
 			xMin = (int) Math.floor((-GamePanel.Width / 2 / followFactor)
 					/ oneMinusInverse);
@@ -461,9 +463,9 @@ public class Level {
 			ball.move();
 		}
 		screenXShift = (followFactor == 0) ? 0
-				: ((500 - ball.getCenter().x) / followFactor);
+				: ((GamePanel.Width/2 - ball.getCenter().x) / followFactor);
 		screenYShift = (followFactor == 0) ? 0
-				: ((350 - ball.getCenter().y) / followFactor);
+				: ((GamePanel.Height/2 - ball.getCenter().y) / followFactor);
 	}
 
 
@@ -519,8 +521,8 @@ public class Level {
 	}
 
 	private boolean onScreen(Point2d p) {
-		return p.x + screenXShift > 0 && p.x + screenXShift < 1000
-				&& p.y + screenYShift > 0 && p.y + screenYShift < 700;
+		return p.x + screenXShift > 0 && p.x + screenXShift < GamePanel.Width
+			&& p.y + screenYShift > 0 && p.y + screenYShift < GamePanel.Height;
 	}
 
 	/**
