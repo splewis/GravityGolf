@@ -2,16 +2,17 @@ package tests;
 
 import static org.junit.Assert.*;
 import game.DataHandler;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
-import org.junit.Test;
+import java.io.*;
+import org.junit.*;
 
 public class SettingsReader {
-
+	
 	static final String dir = "testFiles/";
+	
+	@Before
+	public void setup() {
+		new File(dir).mkdir();		
+	}	
 	
 	@Test
 	public void simpleRead() throws FileNotFoundException {
