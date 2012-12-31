@@ -405,8 +405,10 @@ public class Level {
 					} else {
 						nextWarp = warps.get(0);
 					}
-					ball.setCenter(new Point2d(nextWarp.getCenter().x, nextWarp
-							.getCenter().y));
+					
+					double x = nextWarp.getCenter().x;
+					double y = nextWarp.getCenter().y;
+					ball.setCenter(new Point2d(x, y));
 					inAnyWarp = true;
 					break;
 				}
