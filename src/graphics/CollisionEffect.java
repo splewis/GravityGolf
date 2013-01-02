@@ -39,7 +39,7 @@ public final class CollisionEffect extends GraphicEffect {
 
 		double shakeFactor = 3 * speed / currentLevel.getFollowFactor();
 		if (currentLevel.getFollowFactor() == 0.0)
-			shakeFactor = 25 * speed;
+			shakeFactor = .25 * speed;
 		// 1st value is multiplicative factor
 		int sign1 = -1;
 		if (ball.getCenter().x + currentXShift < 0) {
