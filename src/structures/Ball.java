@@ -24,36 +24,12 @@ public class Ball extends MovableCircularShape {
 	}
 
 	/**
-	 * Constructs a Ball in the Ball's text format.
-	 * @param spec
-	 */
-	public Ball(String spec) {
-		String[] data = spec.substring(5, spec.length() - 1).split(",");
-		int x = Integer.parseInt(data[0]);
-		int y = Integer.parseInt(data[1]);
-		int r;
-		Color c;
-		if (data.length > 2) {
-			r = Integer.parseInt(data[2]);
-			c = DataHandler.readColor(data[3]);
-		} else {
-			r = 3;
-			c = Color.red;
-		}
-		setCenter(new Point2d(x, y));
-		startingLocation = new Point2d(x, y);
-		setRadius(r);
-		setColor(c);
-		setVelocity(new Vector2d(0, 0));
-	}
-
-	/**
 	 * Creates a red ball with specific center, radius, and color values.
 	 * @param centerX a parameter
 	 * @param centerY a parameter
 	 * @param radius a parameter
 	 */
-	public Ball(int centerX, int centerY, int radius) {
+	public Ball(double centerX, double centerY, int radius) {
 		this(centerX, centerY, radius, Color.red);
 	}
 
@@ -64,7 +40,7 @@ public class Ball extends MovableCircularShape {
 	 * @param radius a parameter
 	 * @param color a parameter
 	 */
-	public Ball(int centerX, int centerY, int radius, Color color) {
+	public Ball(double centerX, double centerY, int radius, Color color) {
 		setCenter(new Point2d(centerX, centerY));
 		startingLocation = new Point2d(centerX, centerY);
 		setRadius(radius);
