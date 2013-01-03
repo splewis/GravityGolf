@@ -35,8 +35,9 @@ public class GameManager {
 	 * Default location for the level files to be located.
 	 */
 	public static final String DEFAULT_LEVELS = "levels/levels.txt";
-
-	private int currentLevelIndex;
+	private static PrintWriter logger;	
+	
+	private int currentLevelIndex;	
 	private Collection<Point> solutions;
 	private List<Level> levels;
 	private boolean randomLevels; // if game uses dynamic random levels
@@ -65,6 +66,7 @@ public class GameManager {
 		}
 		currentLevelIndex = -1;
 		swingData = new int[levels.size()];
+		setupLogger();
 	}
 
 	/**
@@ -74,13 +76,15 @@ public class GameManager {
 	public GameManager(int numRandLevels) {
 		randomLevels = true;
 		levels = new ArrayList<Level>(numRandLevels);
-
+		setupLogger();
+		logger.println("Generating " + numRandLevels + " random levels.");
 		// assign a task to each random level generation
 		class LevelMaker implements Runnable {
 			int index;
-
 			public void run() {
 				levels.set(index, Randomizer.randomLevel());
+				logger.println("Done with level " + (index + 1) + ".");
+				logger.flush();
 			}
 		}
 
@@ -102,11 +106,24 @@ public class GameManager {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
+		
+		logger.println("Done generating all levels");
+		logger.flush();
 		currentLevelIndex = -1;
 		swingData = new int[levels.size()];
 	}
 
+	private void setupLogger() {
+		new File("logs").mkdir();
+		File f = new File("logs/gamelog.txt");
+		try {
+			logger = new PrintWriter(f);
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Returns the current level number. The menu level is defined as level 0,
 	 * and the first level is defined as level 1.
@@ -229,6 +246,7 @@ public class GameManager {
 	 * @throws IOException
 	 */
 	public static GameManager loadSave(File fileName) throws IOException {
+		logger.println("Loading save in " + fileName + ".");
 		DataHolder d = new DataHolder();
 		d = d.loadSave(fileName);
 
@@ -251,6 +269,7 @@ public class GameManager {
 	 * @param fileName the file name to save to
 	 */
 	public void save(String fileName) {
+		logger.println("Saving to " + fileName + ".");
 		DataHolder d = new DataHolder();
 		d.currentLevelIndex = currentLevelIndex;
 		d.swingData = swingData;
@@ -260,6 +279,7 @@ public class GameManager {
 		if (randomLevels) {
 			String lvlFileName = fileName.substring(0, fileName.indexOf('.'))
 					+ ".txt";
+			logger.println("Reading level data from " + lvlFileName + ".");
 			d.levelsFile = lvlFileName;
 
 			PrintWriter pw = null;
