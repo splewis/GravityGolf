@@ -76,8 +76,9 @@ public class Ball extends MovableCircularShape {
 	 */
 	public String toString() {
 		String str = "ball(";
-		str += startingLocation.x + ", " + startingLocation.y + ", " + radius
-				+ ", " + DataHandler.getColorDisplay(color) + ")";
+		str += (int) startingLocation.x + ", " + (int) startingLocation.y
+				+ ", " + radius + ", " + DataHandler.getColorDisplay(color)
+				+ ")";
 		return str;
 	}
 	
