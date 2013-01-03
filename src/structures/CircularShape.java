@@ -39,7 +39,9 @@ public abstract class CircularShape {
 	 * @param dy a translation y-difference
 	 * @param g the Graphics component to draw with
 	 */
-	public void draw(double dx, double dy, Graphics g) {
+	public void draw(double dx, double dy, Graphics g) {if(g == null)
+		throw new NullPointerException("Cannot draw with " +
+				"a null grahics object.");
 		g.setColor(color);
 		g.fillOval((int) (center.x - radius + dx),
 				(int) (center.y - radius + dy), diameter, diameter);
@@ -61,6 +63,13 @@ public abstract class CircularShape {
 	 * @param color the color to use
 	 */
 	public final void draw(double dx, double dy, Graphics g, Color color) {
+		if(g == null)
+			throw new NullPointerException("Cannot draw with " +
+					"a null grahics object.");
+		if(color == null)
+			throw new NullPointerException("Cannot draw with " +
+					"a null color.");
+		
 		Color savedColor = getColor();
 		setColor(color);
 		draw(dx, dy, g);
@@ -121,6 +130,9 @@ public abstract class CircularShape {
 	 * @param color the new color
 	 */
 	public void setColor(Color color) {
+		if(color == null)
+			throw new NullPointerException("Cannot set a CircularShape's" +
+					" color to null.");
 		this.color = color;
 	}
 
@@ -139,6 +151,9 @@ public abstract class CircularShape {
 	 * @param center the new center
 	 */
 	public final void setCenter(Point2d center) {
+		if (center == null)
+			throw new NullPointerException("Cannot set a CircularShape's"
+					+ " center to null.");
 		this.center = center;
 	}
 
@@ -150,6 +165,9 @@ public abstract class CircularShape {
 	 * @return true if they overlap, false otherwise
 	 */
 	public final boolean intersects(CircularShape circle) {
+		if(circle == null)
+			throw new NullPointerException("Cannot determine if a null " +
+					"object intersects.");
 		double distSquared = getCenter().getDistanceSquared(circle.getCenter());
 		return distSquared < Math.pow((getRadius() + circle.getRadius()), 2);
 	}
