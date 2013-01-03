@@ -90,9 +90,7 @@ object Randomizer {
           
           // check if on screen:
           val curPoint = new Point2d(ball.getCenter().x, ball.getCenter().y)
-          val xInBounds = curPoint.x >= 10 && curPoint.x <= GamePanel.Width
-          val yInBounds = curPoint.y >= 10 && curPoint.y <= GamePanel.Height
-          if (xInBounds && yInBounds) {
+          if (validGoalLocation(curPoint, tempLevel)) {
             
             // check if overlapping a planet:
             var planetOverlap = false
@@ -123,11 +121,11 @@ object Randomizer {
     return new GoalPost(pick.x.toInt, pick.y.toInt, Radius)
   }
 
-  private def validGoalLocation(p: Point2d): Boolean = {
+  private def validGoalLocation(p: Point2d, level: Level): Boolean = {
     val edgeDist = 100
     val xInBounds = p.x >= edgeDist && p.x <= GamePanel.Width - edgeDist
     val yInBounds = p.y >= edgeDist && p.y <= GamePanel.Height- edgeDist
-    return xInBounds && yInBounds    
+    return xInBounds && yInBounds && level.onScreen(p); 
   }
 
   /** Returns a random Ball. */
