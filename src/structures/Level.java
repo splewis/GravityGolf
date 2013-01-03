@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -162,6 +163,15 @@ public class Level {
 		for (GoalPost gp : goals) {
 			gp.draw(-xMin + extraX, -yMin + extraY, g);
 		}
+	}
+
+	/**
+	 * Clears unnecessary level data to define the level. Undoes the operation
+	 * performed in generateLevelData.
+	 */
+	public void clearLevelData() {
+		image = null;
+		stars = null;
 	}
 
 	/**
@@ -522,11 +532,20 @@ public class Level {
 		}
 	}
 
-	private boolean onScreen(Point2d p) {
-		return p.x + screenXShift > 0 && p.x + screenXShift < GamePanel.Width
-			&& p.y + screenYShift > 0 && p.y + screenYShift < GamePanel.Height;
+	/**
+	 * Returns if a point if visible on screen based on the current shift
+	 * values.
+	 * @param p a parameter
+	 * @return if the point is visible
+	 */
+	public boolean onScreen(Point2d p) {
+		boolean xOnScreen = p.x + screenXShift > 0
+				&& p.x + screenXShift < GamePanel.Width;
+		boolean yOnScreen = p.y + screenYShift > 0
+				&& p.y + screenYShift < GamePanel.Height;
+		return xOnScreen && yOnScreen;
 	}
-
+	
 	/**
 	 * Returns the String representation of this Level.
 	 */
