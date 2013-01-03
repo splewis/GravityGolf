@@ -1,8 +1,5 @@
 package game;
 
-import structures.Ball;
-import structures.Point2d;
-
 import graphics.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -19,7 +16,7 @@ import structures.*;
 public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		MouseMotionListener, Runnable {
 
-	private static final boolean DRAW_SOLUTIONS = true;
+	private static final boolean DRAW_SOLUTIONS = false;
 	
 	public static final int Width = 1000;
 	public static final int Height = 700;
@@ -59,7 +56,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private volatile boolean running;
 	private int paints;
 	// Special effect values
-	private static final int TimeBetweenFlashes = 250; // ms
+	private static final int TimeBetweenFlashes = 250; // measured in ms
 
 	// Menu Components
 	JMenuBar menuBar = new JMenuBar();
@@ -89,6 +86,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private JMenuItem saveItem = new JMenuItem("Save current game");
 	private JMenu loadMenu = new JMenu("Load");
 	private JMenuItem loadItem = new JMenuItem("Load game");
+	
+	private JButton defaultGameButton = new JButton("Default levels (recommended option)");
+	private JButton randomGameButton = new JButton("Random levels (may take a minute to generate levels)");
 	
 	/**
 	 * Initializes the game panel and game. 
@@ -156,9 +156,23 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		loadMenu.add(loadItem);
 		loadItem.addActionListener(this);
 		menuBar.add(loadMenu);
+		
+		add(defaultGameButton);
+		add(randomGameButton);
+		defaultGameButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				beginGame();
+			}
+		});
+		randomGameButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// uses default number of levels
+				gameManager = new GameManager(gameManager.getNumberOfLevels());
+				beginGame();				
+			}
+		});
 
 		speedButtons[speed].setSelected(true);
-
 	}
 
 	@Override
@@ -282,6 +296,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
 				RenderingHints.VALUE_STROKE_NORMALIZE);
 		paints++;
+
+		defaultGameButton.setLocation(230, 620);
+		randomGameButton.setLocation(500, 620);
+		
 		if (gameStarted && !gameWon) {
 			ball = currentLevel.getBall();
 			screenXShift = currentLevel.getScreenXShift();
@@ -367,6 +385,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	/**
 	 * Internal routine for interfacing with the level's drawing mechanisms.
 	 */
+	@SuppressWarnings("unused")
 	private void drawLevel(Graphics2D g) {
 
 		long t = System.currentTimeMillis();
@@ -400,9 +419,9 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			TrailEffect.draw(currentLevel, g);
 		}
 
-		if (!CollisionEffect.running()) { // prevents flicker of ball on reset
-											// after
-			// effects
+		if (!CollisionEffect.running()) {
+			// prevents flicker of ball on reset after effects
+			
 			if (!ball.isLaunched()) { // stationary ball
 				Color c = ball.getColor();
 				if (blinkingBall) {
@@ -438,10 +457,11 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			CollisionEffect.draw(g);
 		}
 		
-		if(DRAW_SOLUTIONS && gameStarted) {
+		if(DRAW_SOLUTIONS && gameStarted && !gameWon) {
 			g.setColor(Color.GREEN);
 			for(java.awt.Point p : gameManager.getCurrentSolutions()) 
-				g.fillRect(xShift + p.x, yShift + p.y, 1, 1);
+				
+				g.fillRect((int) screenXShift + p.x, (int)screenYShift + p.y, 1, 1);
 		}
 
 	}
@@ -495,6 +515,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				gamePaused = false;
 				gameManager = GameManager.loadSave(chooser.getSelectedFile());
 			} catch (Exception e) {
+				System.out.println(e);
+				e.printStackTrace();
 			}
 
 		}
@@ -504,6 +526,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	 * Starts the game for the user.
 	 */
 	public void beginGame() {
+		remove(defaultGameButton);
+		remove(randomGameButton);
 		gameWon = false;
 		gameStarted = true;
 		gamePaused = false;
@@ -662,5 +686,4 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		}
 	}
 
-	
 }

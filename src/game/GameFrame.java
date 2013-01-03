@@ -67,11 +67,6 @@ public class GameFrame extends JFrame implements KeyListener {
 			gp.switchSetting(GamePanel.VectorsNum);
 			break;
 
-		case KeyEvent.VK_SPACE:
-			if (!gp.gameStarted)
-				gp.beginGame();
-			break;
-
 		case KeyEvent.VK_RIGHT:
 			if (!gp.speedButtons[4].isSelected())
 				gp.speedButtons[gp.speed + 1].setSelected(true);

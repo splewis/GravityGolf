@@ -11,11 +11,16 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
 import editor.LevelSolver;
+import editor.Randomizer;
 
 import structures.*;
 import graphics.*;
@@ -26,25 +31,78 @@ import graphics.*;
  */
 public class GameManager {
 
+	/**
+	 * Default location for the level files to be located.
+	 */
+	public static final String DEFAULT_LEVELS = "levels/levels.txt";
+
 	private int currentLevelIndex;
-	private List<Point> solutions;
-	private ArrayList<Level> levels;
+	private Collection<Point> solutions;
+	private List<Level> levels;
+	private boolean randomLevels; // if game uses dynamic random levels
 	private int[] swingData;
 	private int totalSwings;
 
 	/**
-	 * Starts the GameManager, reading in all level data.
-	 * @throws IOException
+	 * Initializes a new GameManager with default levels.
 	 */
 	public GameManager() {
+		this(DEFAULT_LEVELS);
+	}
+
+	/**
+	 * Initializes a new GameManager from a given levels file.
+	 * @param levelsFile the text file the levels are defined in
+	 */
+	public GameManager(String levelsFile) {
 		DataHandler reader = new DataHandler();
 		try {
-			levels = reader.getLevelData("levels/levels.txt");
+			levels = reader.getLevelData(levelsFile);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
-					"The levels.txt file could not be read.",
-					"Error", JOptionPane.ERROR_MESSAGE);
+					"The levels.txt file could not be read.", "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
+		currentLevelIndex = -1;
+		swingData = new int[levels.size()];
+	}
+
+	/**
+	 * Initializes a new GameManager that will use random levels.
+	 * @param numRandLevels the number of random levels the game will have
+	 */
+	public GameManager(int numRandLevels) {
+		randomLevels = true;
+		levels = new ArrayList<Level>(numRandLevels);
+
+		// assign a task to each random level generation
+		class LevelMaker implements Runnable {
+			int index;
+
+			public void run() {
+				levels.set(index, Randomizer.randomLevel());
+			}
+		}
+
+		LevelMaker[] tasks = new LevelMaker[numRandLevels];
+		for (int i = 0; i < numRandLevels; i++) {
+			levels.add(null);
+			tasks[i] = new LevelMaker();
+			tasks[i].index = i;
+		}
+
+		// parallel computation for each task:
+		ExecutorService executor = Executors.newCachedThreadPool();
+		for (LevelMaker t : tasks)
+			executor.execute(t);
+		executor.shutdown();
+
+		try {
+			executor.awaitTermination(10, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		currentLevelIndex = -1;
 		swingData = new int[levels.size()];
 	}
@@ -75,11 +133,16 @@ public class GameManager {
 	}
 
 	/**
-	 * Returns the total number of swings taken in the current level.
+	 * Returns the total number of swings taken in the current level. -1 is
+	 * returned if there is no current level.
 	 * @return swings taken in this level
 	 */
 	public int getCurrentLevelSwings() {
-		return swingData[currentLevelIndex];
+		try {
+			return swingData[currentLevelIndex];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return -1;
+		}
 	}
 
 	/**
@@ -107,19 +170,19 @@ public class GameManager {
 	 * computed, an empty list is returned.
 	 * @return the current level's solution set, if computed already
 	 */
-	public List<Point> getCurrentSolutions() {
-		if(solutions == null) {
+	public Collection<Point> getCurrentSolutions() {
+		if (solutions == null) {
 			String fileName = "levels/data/level" + getLevelNumber() + ".txt";
 			try {
 				solutions = LevelSolver.readSolutionSet(fileName);
-			} catch(Exception e) {
+			} catch (Exception e) {
 				System.out.println("Unable to read " + fileName + ".");
 				solutions = new ArrayList<Point>();
-			} 			
-		} 
+			}
+		}
 		return solutions;
 	}
-		
+
 	/**
 	 * Returns if the game has been finished yet.
 	 * @return if the game is over
@@ -133,17 +196,21 @@ public class GameManager {
 	 * @return true if the next level was loaded, false is no more levels exist.
 	 */
 	public boolean nextLevel() {
-
 		solutions = null;
 		// deletes last level from the memory
 		if (currentLevelIndex >= 0) {
-			levels.set(currentLevelIndex, null);
+			if (randomLevels)
+				levels.get(currentLevelIndex).clearLevelData();
+			else
+				levels.set(currentLevelIndex, null);
 		}
+
+		// advance level data
 		currentLevelIndex++;
-		if (currentLevelIndex >= levels.size()) {
+		if (currentLevelIndex >= levels.size())
 			return false;
-		}
-		levels.get(currentLevelIndex).generateLevelData();
+		Level nextLevel = levels.get(currentLevelIndex);
+		nextLevel.generateLevelData();
 		return true;
 	}
 
@@ -162,13 +229,20 @@ public class GameManager {
 	 * @throws IOException
 	 */
 	public static GameManager loadSave(File fileName) throws IOException {
-		GameManager result = new GameManager();
 		DataHolder d = new DataHolder();
 		d = d.loadSave(fileName);
+
+		GameManager result = null;
+		if (d.levelsFile != null) // non-standard level files (random levels)
+			result = new GameManager(d.levelsFile);
+		else
+			result = new GameManager(DEFAULT_LEVELS);
+
 		result.currentLevelIndex = d.currentLevelIndex;
 		result.swingData = d.swingData;
 		result.totalSwings = d.totalSwings;
 		result.levels.get(result.currentLevelIndex).generateLevelData();
+
 		return result;
 	}
 
@@ -181,13 +255,36 @@ public class GameManager {
 		d.currentLevelIndex = currentLevelIndex;
 		d.swingData = swingData;
 		d.totalSwings = totalSwings;
+
+		// save level data if needed:
+		if (randomLevels) {
+			String lvlFileName = fileName.substring(0, fileName.indexOf('.'))
+					+ ".txt";
+			d.levelsFile = lvlFileName;
+
+			PrintWriter pw = null;
+			try {
+				pw = new PrintWriter(new File(lvlFileName));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			for (int i = 0; i < levels.size(); i++)
+				pw.println(levels.get(i));
+			pw.close();
+		} else {
+			d.levelsFile = null;
+		}
 		DataHolder.save(d, fileName);
 	}
 
+	/**
+	 * Temporary hold for saving the game state. (does not include levels List)
+	 */
 	private static class DataHolder implements Serializable {
 		int currentLevelIndex;
 		int[] swingData;
 		int totalSwings;
+		String levelsFile;
 
 		public DataHolder loadSave(File fileName) throws FileNotFoundException {
 			FileInputStream fin = null;

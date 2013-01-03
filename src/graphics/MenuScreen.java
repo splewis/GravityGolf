@@ -21,12 +21,15 @@ import structures.WarpPoint;
  */
 public final class MenuScreen {
 
-	private static final String[] instructionStrings = { "H: Help", "P: pause",
-			"R: reset", "Right arrow: speed up",
+	private static final String[] instructionStrings = {
+			"P: pause",
+			"R: reset", 
+			"Right arrow: speed up",
 			"Left arrow: slow down",
 			// break
-			"S: hide stars", "V: show gravity vectors",
-			"D: show gravity resultant", "T: show ball trail",
+			"V: show gravity vectors",
+			"D: show gravity resultant", 
+			"T: show ball trail",
 			"E: show special effects" };
 	private static Level menuLevel = null;
 
@@ -57,12 +60,11 @@ public final class MenuScreen {
 	 * @param g the Graphics component to draw with
 	 */
 	public static void draw(Level menuLevel, boolean[] settings, Graphics g) {
-		if (settings[GamePanel.VectorsNum]) {
+		if (settings[GamePanel.VectorsNum]) 
 			GravityVectorsEffect.draw(menuLevel, g);
-		}
-		if (settings[GamePanel.ResultantNum]) {
+
+		if (settings[GamePanel.ResultantNum])
 			ResultantDrawer.draw(menuLevel, g);
-		}
 
 		g.setColor(Color.blue);
 		g.setFont(new Font("Tahoma", Font.ITALIC, 80));
@@ -70,52 +72,23 @@ public final class MenuScreen {
 
 		g.setFont(new Font("Times new Roman", Font.ITALIC, 25));
 		g.setColor(Color.blue);
-		if (settings[GamePanel.VectorsNum]) {
-			instructionStrings[6] = instructionStrings[6].replace("show",
-					"hide");
-		} else {
-			instructionStrings[6] = instructionStrings[6].replace("hide",
-					"show");
-		}
-		if (settings[GamePanel.ResultantNum]) {
-			instructionStrings[7] = instructionStrings[7].replace("show",
-					"hide");
-		} else {
-			instructionStrings[7] = instructionStrings[7].replace("hide",
-					"show");
-		}
-		if (settings[GamePanel.TrailNum]) {
-			instructionStrings[8] = instructionStrings[8].replace("show",
-					"hide");
-		} else {
-			instructionStrings[8] = instructionStrings[8].replace("hide",
-					"show");
-		}
-		if (settings[GamePanel.EffectsNum]) {
-			instructionStrings[9] = instructionStrings[9].replace("show",
-					"hide");
-		} else {
-			instructionStrings[9] = instructionStrings[9].replace("hide",
-					"show");
-		}
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 4; i++) {
 			g.drawString(instructionStrings[i], 50, 60 * i + 235);
 		}
-		for (int i = 5; i < instructionStrings.length; i++) {
-			g.drawString(instructionStrings[i], 700, 60 * (i - 5) + 235);
+		for (int i = 4; i < instructionStrings.length; i++) {
+			g.drawString(instructionStrings[i], 700, 60 * (i - 4) + 235);
 		}
 
 		g.setFont(new Font("Times new Roman", Font.ITALIC, 20));
 		g.setColor(Color.green);
-		g.drawString(
-				"Your goal is to give the ball an initial velocity that allows it reach the white goal.",
-				140, 590);
+		g.drawString("Your goal is to give the ball an initial velocity that "
+				+ "allows it reach the white goal.", 140, 550);
 
 		g.setColor(Color.white);
-		g.drawString("Press Space to begin", 373, 630);
+		g.drawString("Chose an option below to begin", 345, 590);
 		g.drawString("1.00", 10, 630);
-		g.drawString("12/12/2012", 10, 660);
+		g.drawString("1/1/2013", 10, 660);
 	}
 
 }
