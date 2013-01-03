@@ -136,6 +136,16 @@ public class Point2d {
 	}
 
 	/**
+	 * Returns if two point have the same perpendicular components, to within
+	 * default precision, 10^-8.
+	 * @param v a vector
+	 * @return if the two objects represent the same point
+	 */
+	public boolean equals(Point2d p) {
+		return this.equals(p, 1e-8);
+	}
+
+	/**
 	 * Returns if two points have the same perpendicular components, to within
 	 * epsilon precision.
 	 * @param p a point

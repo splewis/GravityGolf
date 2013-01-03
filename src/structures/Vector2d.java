@@ -219,6 +219,16 @@ public class Vector2d {
 
 	/**
 	 * Returns if two vectors have the same perpendicular components, to within
+	 * default precision, 10^-8.
+	 * @param v a vector
+	 * @return if the two objects represent the same vector
+	 */
+	public boolean equals(Vector2d v) {
+		return this.equals(v, 1e-8);
+	}
+	
+	/**
+	 * Returns if two vectors have the same perpendicular components, to within
 	 * epsilon precision.
 	 * @param v a vector
 	 * @param epsilon maximum allowed difference

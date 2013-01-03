@@ -15,6 +15,16 @@ public class Point2dTest {
 	static final double epsilon = 1e-8;
 
 	@Test
+	public void integerPointTest() {
+		assertEquals(new java.awt.Point(1, 3),
+				new Point2d(1.2, 2.6).getIntegerPoint());
+		assertEquals(new java.awt.Point(0, -1),
+				new Point2d(.4, -1.1).getIntegerPoint());
+		assertEquals(new java.awt.Point(-9, 15),
+				new Point2d(-9.5, 15.4).getIntegerPoint());
+	}	
+	
+	@Test
 	public void distanceTest() {
 		// Distance between (0,0) and (0,1) should be 1
 		assertEquals(1, new Point2d(0, 0).getDistance(new Point2d(0, 1)),
