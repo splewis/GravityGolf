@@ -309,7 +309,7 @@ public class DataHandler {
 			return "purple";
 		if (c.equals(new Color(127, 0, 255)))
 			return "violet";
-		return "Color(" + c.getRed() + ", " + c.getGreen() + ", " + c.getBlue()
+		return "Color(" + c.getRed() + "/ " + c.getGreen() + "/ " + c.getBlue()
 				+ ")";
 	}
 
@@ -352,10 +352,10 @@ public class DataHandler {
 			return new Color(127, 0, 255);
 		try {		
 			String r = colorSpec.substring(colorSpec.indexOf("(") + 1,
-					colorSpec.indexOf(","));
-			String g = colorSpec.substring(colorSpec.indexOf(",") + 1,
-					colorSpec.lastIndexOf(","));
-			String b = colorSpec.substring(colorSpec.lastIndexOf(",") + 1,
+					colorSpec.indexOf("/"));
+			String g = colorSpec.substring(colorSpec.indexOf("/") + 1,
+					colorSpec.lastIndexOf("/"));
+			String b = colorSpec.substring(colorSpec.lastIndexOf("/") + 1,
 					colorSpec.indexOf(")"));
 			return new Color(Integer.parseInt(r), Integer.parseInt(g),
 					Integer.parseInt(b));

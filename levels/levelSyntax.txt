@@ -2,7 +2,7 @@ General syntax requirements:
 	Comments may be placed into a file by starting the line with //
 	All values must be integers unless otherwise specified.
 	Colors may be input via one of the following Strings: red, black, blue, cyan, gray, green, magenta, orange, pink, yellow, purple, or violet
-	Colors may be put in via rgb components using the following syntax, using no quotes: "Color(r#, g#, b#)". For example, Color(255, 0, 0) creates red.
+	Colors may be put in via rgb components using the following syntax, using no quotes: "Color(r#/ g#/ b#)". For example, Color(255 / 0 / 0) creates red.
 
 	The basic unit of a file input is the level. Each level is defined seperateley. 
 	Each level ends with the level() line. This is what seperates each level.
