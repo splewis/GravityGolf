@@ -107,9 +107,9 @@ public class DataHandler {
 
 				if (line.length() > 2 && !line.substring(0, 2).equals("//")) {
 					String[] data;
-					// Read ball data in
-					if (line.substring(0, 4).equals("ball")) {
-
+					if (line.substring(0, 4).equals("null")) {
+						levels.add(null);						
+					} else if (line.substring(0, 4).equals("ball")) {
 						data = line.substring(5, line.length() - 1).split(",");
 						int x = Integer.parseInt(data[0]);
 						int y = Integer.parseInt(data[1]);
@@ -322,36 +322,41 @@ public class DataHandler {
 	 */
 	public static Color readColor(String str) {
 		if (str == null || str.length() == 0)
-			return null;			
-		str = str.toLowerCase();
-		if (str.equals("red"))
+			return null;	
+		String colorSpec = str.toLowerCase().replaceAll(" ", "");
+		if (colorSpec.equals("red"))
 			return Color.red;
-		if (str.equals("black"))
+		if (colorSpec.equals("black"))
 			return Color.black;
-		if (str.equals("blue"))
+		if (colorSpec.equals("blue"))
 			return Color.blue;
-		if (str.equals("cyan"))
+		if (colorSpec.equals("cyan"))
 			return Color.cyan;
-		if (str.equals("gray"))
+		if (colorSpec.equals("gray"))
 			return Color.gray;
-		if (str.equals("green"))
+		if (colorSpec.equals("green"))
 			return Color.green;
-		if (str.equals("magenta"))
+		if (colorSpec.equals("magenta"))
 			return Color.magenta;
-		if (str.equals("orange"))
+		if (colorSpec.equals("orange"))
 			return Color.orange;
-		if (str.equals("pink"))
+		if (colorSpec.equals("pink"))
 			return Color.pink;
-		if (str.equals("yellow"))
-			return Color.yellow;
-		if (str.equals("purple"))
+		if (colorSpec.equals("yellow"))
+			return Color.yellow;	
+		if (colorSpec.equals("white"))
+				return Color.white;
+		if (colorSpec.equals("purple"))
 			return new Color(128, 0, 128);
-		if (str.equals("violet"))
+		if (colorSpec.equals("violet"))
 			return new Color(127, 0, 255);
 		try {		
-			String r = str.substring(str.indexOf("(") + 1, str.indexOf(","));
-			String g = str.substring(str.indexOf(",") + 1, str.lastIndexOf(","));
-			String b = str.substring(str.lastIndexOf(",") + 1, str.indexOf(")"));
+			String r = colorSpec.substring(colorSpec.indexOf("(") + 1,
+					colorSpec.indexOf(","));
+			String g = colorSpec.substring(colorSpec.indexOf(",") + 1,
+					colorSpec.lastIndexOf(","));
+			String b = colorSpec.substring(colorSpec.lastIndexOf(",") + 1,
+					colorSpec.indexOf(")"));
 			return new Color(Integer.parseInt(r), Integer.parseInt(g),
 					Integer.parseInt(b));
 		} catch(Exception e) {
