@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -115,19 +114,17 @@ public class Level {
 			yMin = (int) (-1.2 * GamePanel.Height);
 			yMax = -yMin;
 		} else {
-			// TODO: clean up math/formatting
 			
+			// algebraic solutions to the min/max values that can be reached
+			// based on the follow factors of the level:
+			double halfWidth = GamePanel.Width / 2;
+			double halfHeight = GamePanel.Height / 2;			
 			double oneMinusInverse = 1.0 - 1.0 / followFactor;
-			xMin = (int) Math.floor((-GamePanel.Width / 2 / followFactor)
-					/ oneMinusInverse);
-			xMax = (int) Math
-					.ceil((-GamePanel.Width / 2 / followFactor + GamePanel.Width)
-							/ oneMinusInverse);
-			yMin = (int) Math.floor((-GamePanel.Height / 2 / followFactor)
-					/ oneMinusInverse);
-			yMax = (int) Math
-					.ceil((-GamePanel.Height / 2 / followFactor + GamePanel.Height)
-							/ oneMinusInverse);
+
+			xMin = (int) ((-halfWidth / followFactor) / oneMinusInverse);
+			xMax = (int) (xMin + GamePanel.Width / oneMinusInverse);
+			yMin = (int) ((-halfHeight / followFactor) / oneMinusInverse);
+			yMax = (int) (yMin + GamePanel.Height / oneMinusInverse);
 		}
 
 		// stars are never recalculated
