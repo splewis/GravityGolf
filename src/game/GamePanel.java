@@ -87,8 +87,10 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private JMenu loadMenu = new JMenu("Load");
 	private JMenuItem loadItem = new JMenuItem("Load game");
 	
-	private JButton defaultGameButton = new JButton("Default levels (recommended option)");
-	private JButton randomGameButton = new JButton("Random levels (may take a minute to generate levels)");
+	private JButton defaultGameButton = new JButton(
+			"Default levels (recommended option)");
+	private JButton randomGameButton = new JButton(
+			"Random levels (may take a minute to generate levels)");
 	
 	/**
 	 * Initializes the game panel and game. 

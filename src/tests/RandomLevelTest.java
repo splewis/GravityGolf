@@ -8,8 +8,9 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import editor.Randomizer;
+
 import structures.Level;
-import structures.Randomizer;
 
 /**
  * Procedurally generates random levels on any keyboard-button pushing.

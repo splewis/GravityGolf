@@ -73,20 +73,20 @@ public class DataHandlerTests {
 		assertEquals(new Color(3,2,1), DataHandler.readColor("Color(3/ 2/ 1)"));
 		assertEquals(new Color(1,2,3), DataHandler.readColor("Color(1/ 2/ 3))"));
 		assertEquals(new Color(3,2,1), DataHandler.readColor("Color(3/ 2/ 1))"));
-		
+
 		assertEquals(null, DataHandler.readColor("Color(3.1/ 2/ 1)"));
 		assertEquals(null, DataHandler.readColor("Color(4/ 3/ 2/ 1)"));
 		assertEquals(null, DataHandler.readColor("Color(1/ 2)"));
-		
+
 		assertEquals(true, same(Color.red));
 		assertEquals(true, same(Color.green));
 		assertEquals(true, same(Color.blue));
 		assertEquals(true, same(Color.white));
 		assertEquals(true, same(Color.yellow));
 		assertEquals(true, same(Color.cyan));
-		assertEquals(true, same(new Color(1,2,3)));
-		assertEquals(true, same(new Color(100,2,3)));
-		assertEquals(true, same(new Color(1,32,35)));		
+		assertEquals(true, same(new Color(1, 2, 3)));
+		assertEquals(true, same(new Color(100, 2, 3)));
+		assertEquals(true, same(new Color(1, 32, 35)));
 	}
 	
 	private boolean same(Color c) {
