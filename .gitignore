@@ -8,3 +8,4 @@ settings.txt
 *.classpath
 testFiles
 description
+.cache
