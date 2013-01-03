@@ -176,13 +176,15 @@ public final class CalcHelp {
 	}
 
 	/**
-	 * Returns a new Color with each component randomly shifted by at most d.
-	 * The values are adjusted so that the new Color is valid.
+	 * Returns a new Color with each component randomly shifted by at most some
+	 * value. The values are adjusted so that the new Color is valid.
 	 * @param color the base color
 	 * @param maxDifference the maximum change for any one color
 	 * @return a color randomly shifted by at most maxDifference
 	 */
 	public static Color getShiftedColor(Color color, int maxDifference) {
+		if(color == null)
+			throw new NullPointerException("A null color cannot be shifted");
 		int r = randomInteger(color.getRed() - maxDifference, color.getRed()
 				+ maxDifference);
 		if (r < 0 || r > 255)
