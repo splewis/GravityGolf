@@ -75,6 +75,9 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 	JMenuItem saveObjectItem = new JMenuItem("Save current object");
 	JMenuItem saveItem = new JMenuItem("Save current level");
 
+	/**
+	 * Initializes the level editor properties. 
+	 */
 	public LevelPanel() {
 		for (int i = 0; i < objectItems.length; i++) {
 			objectGroup.add(objectItems[i]);
@@ -114,6 +117,10 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 		addMouseMotionListener(this);
 	}
 
+	/**
+	 * Returns the currently selected color.
+	 * @return the currently selected color
+	 */
 	public Color selectedColor() {
 		for (int i = 0; i < colorItems.length; i++) {
 			if (colorItems[i].isSelected()) {
@@ -124,6 +131,9 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 		return null;
 	}
 
+	/**
+	 * Display driver for the painting.
+	 */
 	public void paintComponent(Graphics gr) {
 		Graphics2D g = (Graphics2D) gr;
 		super.paintComponent(g);
@@ -245,18 +255,25 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 		repaint();
 	}
 
-	public void updateLevelComponents(Level l) {
-		currentLevel = l;
-		ball = l.getBall();
-		bodies = l.getBodies();
-		warps = l.getWarpPoints();
-		goals = l.getGoalPosts();
-		blockages = l.getBlockages();
-		followFactor = l.getFollowFactor();
-		gravityStrength = l.getGravityStrength();
+	/**
+	 * Updates local level data to match the input level.
+	 * @param level a parameter
+	 */
+	public void updateLevelComponents(Level level) {
+		currentLevel = level;
+		ball = level.getBall();
+		bodies = level.getBodies();
+		warps = level.getWarpPoints();
+		goals = level.getGoalPosts();
+		blockages = level.getBlockages();
+		followFactor = level.getFollowFactor();
+		gravityStrength = level.getGravityStrength();
 
 	}
 
+	/**
+	 * User-feedback driver; checks for save/loads/editing constants
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == saveItem) {
 			JFileChooser chooser = new JFileChooser(
@@ -321,7 +338,6 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 		}
 		p1 = null;
 		p2 = null;
-
 	}
 
 	public void reset() {
@@ -331,6 +347,9 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 		p2 = null;
 	}
 
+	/**
+	 * Saves the currently selected object to the level.
+	 */
 	public void saveObject() {
 		try {
 
@@ -379,14 +398,17 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 			p2 = null;
 
 		} catch (Exception e) {
-
+			// Error occurred; do nothing
 		}
 	}
 
-	public void sleep(int ms) {
+	private void sleep(int ms) {
 		try {
 			Thread.sleep(ms);
 		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			// Animation error
 		}
 	}
 
@@ -451,16 +473,8 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 			p2.translate(-dx, -dy);
 	}
 
-	public void mouseClicked(MouseEvent event) {
-	}
-
-	public void mouseEntered(MouseEvent event) {
-	}
-
-	public void mouseExited(MouseEvent event) {
-	}
-
-	public void mouseMoved(MouseEvent event) {
-	}
-
+	public void mouseClicked(MouseEvent event) {}
+	public void mouseEntered(MouseEvent event) {}
+	public void mouseExited(MouseEvent event)  {}
+	public void mouseMoved(MouseEvent event)   {}
 }
