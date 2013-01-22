@@ -230,10 +230,9 @@ public final class CalcHelp {
 	 * @return -1 or 1, randomly
 	 */
 	public static int randomSign() {
-		int x = (int) Math.signum(Math.random() - 0.5);
-		if (x == 0)
-			return 1;
-		return x;
-	}
+		if(Math.random() < 0.5)
+			return -1;
+		return 1;
+	}	
 
 }
