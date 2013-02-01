@@ -154,7 +154,8 @@ public class Body extends CircularShape {
 	public String toString() {
 		String str = "body(";
 		str += Math.round(center.x) + ", " + Math.round(center.y) + ", "
-				+ radius + ", " + DataHandler.getColorDisplay(color) + ")";
+				+ radius + ", " + DataHandler.getColorDisplay(color) + ", "
+				+ mass + ")";
 		for (Moon m : moons) {
 			str += "\n" + m.toString();
 		}
