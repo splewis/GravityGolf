@@ -2,7 +2,8 @@ package graphics;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.util.List;
+
 import structures.*;
 
 /**
@@ -18,7 +19,7 @@ public final class WarpDrawer extends GraphicEffect {
 	 */
 	public static void draw(Level level, Graphics g) {
 		g.setColor(Color.white);
-		ArrayList<WarpPoint> warps = level.getWarpPoints();
+		List<WarpPoint> warps = level.getWarpPoints();
 		double screenXShift = level.getScreenXShift();
 		double screenYShift = level.getScreenYShift();
 

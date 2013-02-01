@@ -6,6 +6,7 @@ import game.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.List;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -31,10 +32,10 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 	// Level Components
 	Level currentLevel = new Level();
 	Ball ball = new Ball();
-	ArrayList<Body> bodies = new ArrayList<Body>();
-	ArrayList<WarpPoint> warps = new ArrayList<WarpPoint>();
-	ArrayList<Blockage> blockages = new ArrayList<Blockage>();
-	ArrayList<GoalPost> goals = new ArrayList<GoalPost>();
+	List<Body> bodies = new ArrayList<Body>();
+	List<WarpPoint> warps = new ArrayList<WarpPoint>();
+	List<Blockage> blockages = new ArrayList<Blockage>();
+	List<GoalPost> goals = new ArrayList<GoalPost>();
 	double gravityStrength = 1.0;
 	double followFactor = 5.0;
 	double screenXShift, screenYShift;

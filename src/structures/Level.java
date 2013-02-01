@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A Level is the generic structure for each level's storage information.
@@ -25,11 +26,11 @@ public class Level {
 	private static final int extraY = 100;
 
 	private Ball ball;
-	private ArrayList<Body> bodies;
-	private ArrayList<GoalPost> goals;
-	private ArrayList<WarpPoint> warps;
-	private ArrayList<Blockage> blockages;
-	private ArrayList<Rectangle> blockageRects;
+	private List<Body> bodies;
+	private List<GoalPost> goals;
+	private List<WarpPoint> warps;
+	private List<Blockage> blockages;
+	private List<Rectangle> blockageRects;
 	private double followFactor, gravityStrength;
 
 	private double screenXShift, screenYShift;
@@ -60,8 +61,8 @@ public class Level {
 	/**
 	 * Creates a new level
 	 */
-	public Level(Ball ball, ArrayList<Body> bodies, ArrayList<WarpPoint> warps,
-			ArrayList<GoalPost> goals, ArrayList<Blockage> blockages,
+	public Level(Ball ball, List<Body> bodies, List<WarpPoint> warps,
+			List<GoalPost> goals, List<Blockage> blockages,
 			double followfactor, double gravityStrength) {
 		this.ball = ball;
 
@@ -211,7 +212,7 @@ public class Level {
 	 * Returns the ArrayList of Bodies.
 	 * @return the ArrayList of Bodies.
 	 */
-	public ArrayList<Body> getBodies() {
+	public List<Body> getBodies() {
 		return bodies;
 	}
 
@@ -240,7 +241,7 @@ public class Level {
 	 * Returns the ArrayList of Blockages.
 	 * @return the ArrayList of Blockages.
 	 */
-	public ArrayList<Blockage> getBlockages() {
+	public List<Blockage> getBlockages() {
 		return blockages;
 	}
 
@@ -272,7 +273,7 @@ public class Level {
 	 * Returns the ArrayList of GoalPosts.
 	 * @return the ArrayList of GoalPosts
 	 */
-	public ArrayList<GoalPost> getGoalPosts() {
+	public List<GoalPost> getGoalPosts() {
 		return goals;
 	}
 
@@ -304,7 +305,7 @@ public class Level {
 	 * Returns the ArrayList of WarpPoints.
 	 * @return the ArrayList of WarpPoints
 	 */
-	public ArrayList<WarpPoint> getWarpPoints() {
+	public List<WarpPoint> getWarpPoints() {
 		return warps;
 	}
 
