@@ -68,7 +68,7 @@ public class Ball extends MovableCircularShape {
 	 * Resets the ball to its location as was defined in its construction.
 	 */
 	public void resetLocation() {
-		center = new Point2d(startingLocation.x, startingLocation.y);
+		center = new Point2d(startingLocation.x(), startingLocation.y());
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class Ball extends MovableCircularShape {
 	 */
 	public String toString() {
 		String str = "ball(";
-		str += (int) startingLocation.x + ", " + (int) startingLocation.y
+		str += (int) startingLocation.x() + ", " + (int) startingLocation.y()
 				+ ", " + radius + ", " + DataHandler.getColorDisplay(color)
 				+ ")";
 		return str;

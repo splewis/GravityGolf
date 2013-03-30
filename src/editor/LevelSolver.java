@@ -103,16 +103,16 @@ public class LevelSolver {
 		List<Task> tasks = new ArrayList<Task>();
 		
 		// iterate over all possible x values
-		int leftX = (int) (ball.getCenter().x - MAX);
-		int rightX = (int) (ball.getCenter().x + MAX);
+		int leftX = (int) (ball.getCenter().x() - MAX);
+		int rightX = (int) (ball.getCenter().x() + MAX);
 		for (int x = leftX; x <= rightX; x++) {
 			if (xOutOfBounds(level, x)) {
 				continue;
 			}
 
 			// iterate over all possible y values
-			int bottomY = (int) (ball.getCenter().y - MAX);
-			int topY = (int) (ball.getCenter().y + MAX);
+			int bottomY = (int) (ball.getCenter().y() - MAX);
+			int topY = (int) (ball.getCenter().y() + MAX);
 			List<Point2d> points = new ArrayList<Point2d>();
 			for (int y = bottomY; y <= topY; y++) {
 				points.add(new Point2d(x, y));
@@ -157,14 +157,14 @@ public class LevelSolver {
 			Ball ball = level.getBall();
 
 			for (Point2d point : inputPoints) {
-				double x = point.getX();
-				double y = point.getY();
+				double x = point.x();
+				double y = point.y();
 
 				boolean outOfBounds = yOutOfBounds(level, y)
 						|| isOutOfBounds(level, ball.getCenter());
 
-				boolean inShotRange = Math.pow(x - ball.getCenter().x, 2)
-						+ Math.pow(y - ball.getCenter().y, 2) <= sqr;
+				boolean inShotRange = Math.pow(x - ball.getCenter().x(), 2)
+						+ Math.pow(y - ball.getCenter().y(), 2) <= sqr;
 
 				if (!outOfBounds && inShotRange) {
 					if (level.possibleWin(point, MAX)) {
@@ -235,8 +235,8 @@ public class LevelSolver {
 	}
 
 	private static boolean isOutOfBounds(Level level, Point2d center) {
-		return xOutOfBounds(level, center.getX())
-			|| yOutOfBounds(level, center.getY());
+		return xOutOfBounds(level, center.x())
+			|| yOutOfBounds(level, center.y());
 	}
 
 }

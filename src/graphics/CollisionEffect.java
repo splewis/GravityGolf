@@ -24,13 +24,12 @@ public final class CollisionEffect extends GraphicEffect {
 	public static void start(Level currentLevel) {
 		started = true;
 		CollisionEffect.currentLevel = currentLevel;
-		int currentXShift = (int) currentLevel.getScreenXShift();
-		int currentYShift = (int) currentLevel.getScreenYShift();
+		Point2d shift = currentLevel.getShift();
 		Ball ball = currentLevel.getBall();
 		Body intersected = currentLevel.getIntersectingBody();
 		particles = Particle.generateParticles(ball, intersected);
 		shakeValues = new double[6];
-		double speed = ball.getVelocity().getLength();
+		double speed = ball.getVelocity().magnitude();
 
 		if (speed < .25)
 			speed = .25;
@@ -42,17 +41,17 @@ public final class CollisionEffect extends GraphicEffect {
 			shakeFactor = .25 * speed;
 		// 1st value is multiplicative factor
 		int sign1 = -1;
-		if (ball.getCenter().x + currentXShift < 0) {
+		if (ball.getCenter().x() + shift.x() < 0) {
 			sign1 = 1;
-		} else if (ball.getCenter().x + currentXShift > 0) {
+		} else if (ball.getCenter().x() + shift.x() > 0) {
 			sign1 = CalcHelp.randomSign();
 		}
 		shakeValues[0] = CalcHelp.randomDouble(35, 40) * shakeFactor * sign1;
 
 		int sign2 = -1;
-		if (ball.getCenter().y + currentYShift < 0) {
+		if (ball.getCenter().y() + shift.y() < 0) {
 			sign2 = 1;
-		} else if (ball.getCenter().y + currentYShift > 0) {
+		} else if (ball.getCenter().y() + shift.y() > 0) {
 			sign2 = CalcHelp.randomSign();
 		}
 		shakeValues[3] = CalcHelp.randomDouble(35, 40) * shakeFactor * sign2;
@@ -90,7 +89,7 @@ public final class CollisionEffect extends GraphicEffect {
 
 			for (Body bod : currentLevel.getBodies()) {
 				if (bod.intersects(p)
-						|| bod.getCenter().getDistanceSquared(p.getCenter()) <= (bod
+						|| bod.getCenter().distanceSquared(p.getCenter()) <= (bod
 								.getRadius() * .5) * (bod.getRadius() * .5)
 						&& i != 0) {
 					particles.remove(i);
@@ -164,18 +163,18 @@ public final class CollisionEffect extends GraphicEffect {
 
 		public void draw(double dx, double dy, Graphics g) {
 			g.setColor(color);
-			g.fillOval((int) Math.round(center.x - 0.5 + dx),
-					(int) Math.round(center.y - 0.5 + dy), 1, 1);
+			g.fillOval((int) Math.round(center.x() - 0.5 + dx),
+					(int) Math.round(center.y() - 0.5 + dy), 1, 1);
 		}
 
 		/**
 		 * Internal routine for generating the List of particles on collision.
 		 */
 		public static ArrayList<Particle> generateParticles(Ball ball, Body body) {
-			double centerX = ball.getCenter().x;
-			double centerY = ball.getCenter().y;
+			double centerX = ball.getCenter().x();
+			double centerY = ball.getCenter().y();
 			
-			double speed = ball.getVelocity().getLength()
+			double speed = ball.getVelocity().magnitude()
 					* ((body != null) ? (body.getRadius() / 100.0) : 1);
 			
 			if (speed < .50)
@@ -184,9 +183,9 @@ public final class CollisionEffect extends GraphicEffect {
 				speed = 2.50;
 			if (body != null) {
 				double max = Math.pow(body.getRadius() + ball.getRadius(), 2);
-				while (body.getCenter().getDistanceSquared(new Point2d(centerX, centerY)) < max) {
-					centerX -= ball.getVelocity().getXComponent();
-					centerY -= ball.getVelocity().getYComponent();
+				while (body.getCenter().distanceSquared(new Point2d(centerX, centerY)) < max) {
+					centerX -= ball.getVelocity().xComponent();
+					centerY -= ball.getVelocity().yComponent();
 				}
 			}
 

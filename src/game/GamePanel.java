@@ -1,6 +1,7 @@
 package game;
 
 import graphics.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -264,8 +265,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				currentLevel.updateLevel();
 			}
 			if (settings[TrailNum] && ball.isLaunched() && paints > 2) {
-				TrailEffect.addTrailPoint(new Point2d(ball.getCenter().x, ball
-						.getCenter().y));
+				TrailEffect.addTrailPoint(new Point2d(ball.getCenter().x(), ball
+						.getCenter().y()));
 			}
 			if (currentLevel.timeToReset() && settings[EffectsNum]) {
 
@@ -306,8 +307,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			ball = currentLevel.getBall();
 			screenXShift = currentLevel.getScreenXShift();
 			screenYShift = currentLevel.getScreenYShift();
-			initialPoint = new Point2d((int) Math.round(ball.getCenter().x
-					+ screenXShift), (int) Math.round(ball.getCenter().y
+			initialPoint = new Point2d((int) Math.round(ball.getCenter().x()
+					+ screenXShift), (int) Math.round(ball.getCenter().y()
 					+ screenYShift));
 
 			drawLevel(g);
@@ -335,18 +336,18 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				g.drawString("Click to continue", 10, 80);
 			}
 			if (!ball.isLaunched() && drawingInitialVelocity) {
-				initialPoint = new Point2d((int) Math.round(ball.getCenter().x
-						+ screenXShift), (int) Math.round(ball.getCenter().y
+				initialPoint = new Point2d((int) Math.round(ball.getCenter().x()
+						+ screenXShift), (int) Math.round(ball.getCenter().y()
 						+ screenYShift));
 				double angle = CalcHelp.getAngle(initialPoint, terminalPoint);
 				g.setColor(Color.white);
-				if (initialPoint.getDistance(terminalPoint) <= MaxInitialMagnitude) {
+				if (initialPoint.distance(terminalPoint) <= MaxInitialMagnitude) {
 					GraphicEffect.drawArrow(initialPoint, terminalPoint, g);
 				} else {
 					double xSide = MaxInitialMagnitude * Math.cos(angle);
 					double ySide = MaxInitialMagnitude * -Math.sin(angle);
 					Point2d tempTerminalPoint = new Point2d(
-							(initialPoint.x + xSide), (initialPoint.y + ySide));
+							(initialPoint.x() + xSide), (initialPoint.y() + ySide));
 					GraphicEffect.drawArrow(initialPoint, tempTerminalPoint, g);
 				}
 			}
@@ -445,11 +446,11 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 				&& gameManager.getCurrentLevelSwings() == 0) {
 			GoalPost goal = currentLevel.getGoalPosts().get(0);
 			g.setColor(Color.white);
-			g.drawString("Aim here!", (int) (goal.getCenter().x - 20 + xShift),
-					(int) (goal.getCenter().y - 70 + yShift));
+			g.drawString("Aim here!", (int) (goal.getCenter().x() - 20 + xShift),
+					(int) (goal.getCenter().y() - 70 + yShift));
 
-			Point2d p1 = new Point2d(goal.getCenter().x - 5 + xShift,
-					goal.getCenter().y - 65 + yShift);
+			Point2d p1 = new Point2d(goal.getCenter().x() - 5 + xShift,
+					goal.getCenter().y() - 65 + yShift);
 			Point2d p2 = goal.getCenter().translate(xShift,
 					yShift - goal.getRadius() - 3);
 			GraphicEffect.drawArrow(p1, p2, 0, 5, g);
@@ -545,12 +546,12 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	public void mouseDragged(MouseEvent event) {
 		if (!currentLevel.getBall().isLaunched()
 				&& !gamePaused
-				&& initialPoint.getDistance(new Point2d(event.getPoint())) > 2 * 4
+				&& initialPoint.distance(new Point2d(event.getPoint())) > 2 * 4
 				// 4 is 1 above typical ball radius, so it is used here
 				&& !CollisionEffect.running()) {
 			terminalPoint = new Point2d(event.getPoint().getX(), event
 					.getPoint().getY());
-			launchMagnitude = initialPoint.getDistance(terminalPoint);
+			launchMagnitude = initialPoint.distance(terminalPoint);
 			if (launchMagnitude > MaxInitialMagnitude) {
 				launchMagnitude = MaxInitialMagnitude;
 			}
@@ -569,7 +570,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		if (!gamePaused && !ball.isLaunched() && !CollisionEffect.running()
 				&& drawingInitialVelocity) {
 			gameManager.swingTaken();
-			launchMagnitude = initialPoint.getDistance(terminalPoint);
+			launchMagnitude = initialPoint.distance(terminalPoint);
 			launchAngle = CalcHelp.getAngle(initialPoint, terminalPoint);
 			if (launchAngle < 0)
 				launchAngle += (2 * Math.PI); // so the display only shows the

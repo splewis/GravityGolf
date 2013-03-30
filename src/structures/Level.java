@@ -33,7 +33,7 @@ public class Level {
 	private List<Rectangle> blockageRects;
 	private double followFactor, gravityStrength;
 
-	private double screenXShift, screenYShift;
+	private Point2d screenShift;
 	private boolean ballInWarp, hittingBlockage;
 	private ArrayList<Star> stars;
 
@@ -90,10 +90,11 @@ public class Level {
 
 		this.followFactor = followfactor;
 		this.gravityStrength = gravityStrength;
-		this.screenXShift = (followFactor == 0) ? 0
-				: ((500 - ball.getCenter().x) / followFactor);
-		this.screenYShift = (followFactor == 0) ? 0
-				: ((350 - ball.getCenter().y) / followFactor);
+		double xs = (followFactor == 0) ? 0
+				: ((500 - ball.getCenter().x()) / followFactor);
+		double ys = (followFactor == 0) ? 0
+				: ((350 - ball.getCenter().y()) / followFactor);
+		screenShift = new Point2d(xs, ys);
 	}
 
 	/**
@@ -286,19 +287,29 @@ public class Level {
 	}
 
 	/**
+	 * Returns the current screen shift.
+	 * @return the current screen shift
+	 */
+	public Point2d getShift() {
+		return screenShift;
+	}
+	
+	/**
 	 * Returns the current horizontal screen shift distance.
 	 * @return the current horizontal screen shift distance
+	 * @deprecated
 	 */
 	public double getScreenXShift() {
-		return screenXShift;
+		return screenShift.x();
 	}
 
 	/**
 	 * Returns the current vertical screen shift distance.
 	 * @return the current vertical screen shift distance
+	 * @deprecated
 	 */
 	public double getScreenYShift() {
-		return screenYShift;
+		return screenShift.y();
 	}
 
 	/**
@@ -310,9 +321,9 @@ public class Level {
 	}
 
 	private boolean isOutOfBounds(Point2d p) {
-		return p.x + screenXShift < 0 || p.x + screenXShift > GamePanel.Width
-				|| p.y + screenYShift < 0
-				|| p.y + screenYShift > GamePanel.Height - 20;
+		return p.x() + screenShift.x() < 0 || p.x() + screenShift.x() > GamePanel.Width
+				|| p.y() + screenShift.y() < 0
+				|| p.y() + screenShift.y() > GamePanel.Height - 20;
 	}
 
 	private boolean isOutOfBounds() {
@@ -338,10 +349,11 @@ public class Level {
 	public void reset() {
 		ball.resetLocation();
 		ball.setLaunched(false);
-		screenXShift = (followFactor == 0) ? 0
-				: ((500 - ball.getCenter().x) / followFactor);
-		screenYShift = (followFactor == 0) ? 0
-				: ((350 - ball.getCenter().y) / followFactor);
+		double xs = (followFactor == 0) ? 0
+				: ((500 - ball.getCenter().x()) / followFactor);
+		double ys = (followFactor == 0) ? 0
+				: ((350 - ball.getCenter().y()) / followFactor);
+		screenShift = new Point2d(xs, ys);
 	}
 
 	/**
@@ -388,10 +400,10 @@ public class Level {
 			// Reflector collision and resolution
 			if (b.isReflector() && b.intersects(ball)) {
 				Vector2d v_i = ball.getVelocity();
-				double dy = ball.getCenter().y - b.getCenter().y;
-				double dx = ball.getCenter().x - b.getCenter().x;
-				Vector2d v_p = v_i.projection(Math.atan(dy / dx));
-				Vector2d v_f = v_i.subtract(v_p.multiply(2));
+				double dy = ball.getCenter().y() - b.getCenter().y();
+				double dx = ball.getCenter().x() - b.getCenter().x();
+				Vector2d v_p = v_i.proj(Math.atan(dy / dx));
+				Vector2d v_f = v_i.subtract(v_p.multiply(2.0));
 				ball.setVelocity(v_f);
 				while (ball.intersects(b)) {
 					ball.move();
@@ -414,8 +426,8 @@ public class Level {
 						nextWarp = warps.get(0);
 					}
 					
-					double x = nextWarp.getCenter().x;
-					double y = nextWarp.getCenter().y;
+					double x = nextWarp.getCenter().x();
+					double y = nextWarp.getCenter().y();
 					ball.setCenter(new Point2d(x, y));
 					inAnyWarp = true;
 					break;
@@ -434,12 +446,12 @@ public class Level {
 		for (Rectangle r : blockageRects) {
 			if (r.contains(ball.getCenter().getIntegerPoint())) {
 				if (!hittingBlockage) {
-					double xSpeed = ball.getVelocity().getXComponent();
-					double ySpeed = ball.getVelocity().getYComponent();
-					boolean sureUpDown = ball.getCenter().x > r.getX() + 3
-							&& ball.getCenter().x < r.getX() + r.getWidth() - 3;
-					boolean sureLeftRight = ball.getCenter().y > r.getY() + 3
-							&& ball.getCenter().y < r.getY() + r.getHeight()
+					double xSpeed = ball.getVelocity().xComponent();
+					double ySpeed = ball.getVelocity().yComponent();
+					boolean sureUpDown = ball.getCenter().x() > r.getX() + 3
+							&& ball.getCenter().x() < r.getX() + r.getWidth() - 3;
+					boolean sureLeftRight = ball.getCenter().y() > r.getY() + 3
+							&& ball.getCenter().y() < r.getY() + r.getHeight()
 									- 3;
 					if (sureLeftRight) {
 						xSpeed *= -1;
@@ -472,10 +484,11 @@ public class Level {
 			ball.accelerate(new Vector2d(sumXForce, sumYForce));
 			ball.move();
 		}
-		screenXShift = (followFactor == 0) ? 0
-				: ((GamePanel.Width/2 - ball.getCenter().x) / followFactor);
-		screenYShift = (followFactor == 0) ? 0
-				: ((GamePanel.Height/2 - ball.getCenter().y) / followFactor);
+		double xs = (followFactor == 0) ? 0
+				: ((GamePanel.Width/2 - ball.getCenter().x()) / followFactor);
+		double ys = (followFactor == 0) ? 0
+				: ((GamePanel.Height/2 - ball.getCenter().y()) / followFactor);
+		screenShift = new Point2d(xs, ys);
 	}
 
 
@@ -487,8 +500,8 @@ public class Level {
 	 */
 	public boolean possibleWin(java.awt.Point clickedPoint, double max) {
 		// for a screen (game) coordinate
-		return possibleWin(new Point2d(clickedPoint).translate(-screenXShift,
-				-screenYShift), max);
+		return possibleWin(new Point2d(clickedPoint).translate(-screenShift.x(),
+				-screenShift.y()), max);
 	}
 	
 	/**
@@ -502,13 +515,13 @@ public class Level {
 		// for non-translated points
 		if (!onScreen(translatedPoint))
 			return false;
-		double mag = translatedPoint.getDistance(ball.getCenter());
+		double mag = translatedPoint.distance(ball.getCenter());
 		if (mag > max) {
 			mag = max;
 		}
 		double ang = CalcHelp.getAngle(ball.getCenter(), translatedPoint);
-		Level cloneLevel = new Level(new Ball((int) ball.getCenter().x,
-				(int) ball.getCenter().y, ball.getRadius(), ball.getColor()),
+		Level cloneLevel = new Level(new Ball((int) ball.getCenter().x(),
+				(int) ball.getCenter().y(), ball.getRadius(), ball.getColor()),
 				bodies, warps, goals, blockages, followFactor, gravityStrength);
 		double xLength = Math.cos(ang) * mag;
 		double yLength = -Math.sin(ang) * mag;
@@ -537,10 +550,10 @@ public class Level {
 	 * @return if the point is visible
 	 */
 	public boolean onScreen(Point2d p) {
-		boolean xOnScreen = p.x + screenXShift > 0
-				&& p.x + screenXShift < GamePanel.Width;
-		boolean yOnScreen = p.y + screenYShift > 0
-				&& p.y + screenYShift < GamePanel.Height;
+		boolean xOnScreen = p.x() + screenShift.x() > 0
+				&& p.x() + screenShift.x() < GamePanel.Width;
+		boolean yOnScreen = p.y() + screenShift.y() > 0
+				&& p.y() + screenShift.y() < GamePanel.Height;
 		return xOnScreen && yOnScreen;
 	}
 	

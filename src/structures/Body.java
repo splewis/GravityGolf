@@ -34,7 +34,7 @@ public class Body extends CircularShape {
 	 * @param shape a parameter
 	 */
 	public Body(CircularShape shape) {
-		this((int) shape.center.x, (int) shape.center.y, shape.radius,
+		this((int) shape.center.x(), (int) shape.center.y(), shape.radius,
 				shape.color);
 	}
 
@@ -94,14 +94,14 @@ public class Body extends CircularShape {
 		Graphics2D g2 = (Graphics2D) g;
 		if (radius < 10) {
 			g.setColor(color);
-			g.fillOval((int) Math.round(center.x - radius + dx),
-					(int) Math.round(center.y - radius + dy), diameter,
+			g.fillOval((int) Math.round(center.x() - radius + dx),
+					(int) Math.round(center.y() - radius + dy), diameter,
 					diameter);
 		} else {
-			g2.setPaint(new RadialGradientPaint(new Point2D.Double(center.x
-					+ dx, center.y + dy), radius + extraRadius, dist, colors));
-			g2.fillOval((int) Math.round(center.x - radius + dx - extraRadius),
-					(int) Math.round(center.y - radius + dy - extraRadius),
+			g2.setPaint(new RadialGradientPaint(new Point2D.Double(center.x()
+					+ dx, center.y() + dy), radius + extraRadius, dist, colors));
+			g2.fillOval((int) Math.round(center.x() - radius + dx - extraRadius),
+					(int) Math.round(center.y() - radius + dy - extraRadius),
 					diameter + 2 * extraRadius, diameter + 2 * extraRadius);
 		}
 
@@ -153,7 +153,7 @@ public class Body extends CircularShape {
 	@Override
 	public String toString() {
 		String str = "body(";
-		str += Math.round(center.x) + ", " + Math.round(center.y) + ", "
+		str += Math.round(center.x()) + ", " + Math.round(center.y()) + ", "
 				+ radius + ", " + DataHandler.getColorDisplay(color) + ", "
 				+ mass + ")";
 		for (Moon m : moons) {

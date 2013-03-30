@@ -85,8 +85,8 @@ public class BodyGraphicsTest extends JFrame {
 			b.draw(g);
 			if (drawOutline) {
 				g.setColor(Color.red);
-				g.drawOval((int) b.getCenter().x - b.getRadius(),
-						(int) b.getCenter().y - b.getRadius(), b.getDiameter(),
+				g.drawOval((int) b.getCenter().x() - b.getRadius(),
+						(int) b.getCenter().y() - b.getRadius(), b.getDiameter(),
 						b.getDiameter());
 			}
 		}

@@ -32,8 +32,8 @@ public abstract class MovableCircularShape extends CircularShape {
 	 * @param dt the value to multiply velocity by when adding
 	 */
 	public void move(Vector2d velocity, double dt) {
-		center.setX(center.getX() + dt * velocity.getXComponent());
-		center.setY(center.getY() + dt * velocity.getYComponent());
+		center = center.translate(dt * velocity.xComponent(), 
+				                  dt * velocity.yComponent());
 	}
 
 	/**

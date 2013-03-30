@@ -90,7 +90,7 @@ public class Blockage {
 	 * @return the x center coordinate
 	 */
 	public int getCenterX() {
-		return (int) center.x;
+		return (int) center.x();
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class Blockage {
 	 * @return the y center coordinate
 	 */
 	public int getCenterY() {
-		return (int) center.y;
+		return (int) center.y();
 	}
 
 	/**

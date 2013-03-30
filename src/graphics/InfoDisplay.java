@@ -41,8 +41,9 @@ public final class InfoDisplay {
 		g.setColor(c);
 		g.setFont(InfoFont);
 		int xCoord = GamePanel.Width - 90;
-		g.drawString("(" + (int) terminalPoint.x + ", " + (int) terminalPoint.y
-				+ ")", xCoord, 20);
+		g.drawString(
+				"(" + (int) terminalPoint.x() + ", " + (int) terminalPoint.y()
+						+ ")", xCoord, 20);
 		g.drawString("Length: " + DecimalFormatter.format(magnitude), xCoord,
 				40);
 		double degrees = Math.toDegrees(angle);

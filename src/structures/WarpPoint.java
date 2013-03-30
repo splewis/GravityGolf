@@ -41,7 +41,7 @@ public class WarpPoint extends CircularShape {
 
 	@Override
 	public void draw(double dx, double dy, Graphics g) {
-		g.drawImage(Image, (int) (center.x - radius + dx), (int) (center.y
+		g.drawImage(Image, (int) (center.x() - radius + dx), (int) (center.y()
 				- radius + dy), null);
 	}
 
@@ -49,7 +49,7 @@ public class WarpPoint extends CircularShape {
 	 * Returns the description of this WarpPoint.
 	 */
 	public String toString() {
-		return "warp(" + center.x + ", " + center.y + ")";
+		return "warp(" + center.x() + ", " + center.y() + ")";
 	}
 
 }

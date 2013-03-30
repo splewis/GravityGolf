@@ -27,8 +27,8 @@ public class GoalPost extends CircularShape {
 	 * Returns the description of the GoalPost.
 	 */
 	public String toString() {
-		return "goal(" + (int) center.x + ", " + (int) center.y + ", " + radius
-				+ ")";
+		return "goal(" + (int) center.x() + ", " + (int) center.y() + ", "
+				+ radius + ")";
 	}
-	
+
 }

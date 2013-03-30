@@ -187,15 +187,15 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 				if (p2 != null && ball != null && !ball.isLaunched()) {
 					g.setColor(Color.white);
 					Point2d initialPoint = new Point2d((int) Math.round(ball
-							.getCenter().x + screenXShift),
-							(int) Math.round(ball.getCenter().y + screenYShift));					
+							.getCenter().x() + screenXShift),
+							(int) Math.round(ball.getCenter().y() + screenYShift));					
 					GraphicEffect.drawArrow(initialPoint, new Point2d(p2), g);
 				}
 
 				if (p2 != null && ball != null && !ball.isLaunched()
 						&& released) {
 					ball.setLaunched(true);
-					double mag = ball.getCenter().getDistance(new Point2d(p2));
+					double mag = ball.getCenter().distance(new Point2d(p2));
 					if (mag > 300)
 						mag = 300;
 					double angle = CalcHelp.getAngle(ball.getCenter(),
@@ -235,8 +235,8 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 			}
 		}
 		for (WarpPoint w : warps) {
-			g.drawImage(WarpPoint.Image, (int) w.getCenter().x
-					- WarpPoint.RADIUS + xShift, (int) w.getCenter().y
+			g.drawImage(WarpPoint.Image, (int) w.getCenter().x()
+					- WarpPoint.RADIUS + xShift, (int) w.getCenter().y()
 					- WarpPoint.RADIUS + yShift, this);
 		}
 		for (Blockage b : blockages) {
@@ -245,9 +245,9 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 		if (ball != null) {
 			g.setColor(ball.getColor());
 			g.fillOval(
-					(int) Math.round(ball.getCenter().x - ball.getRadius()
+					(int) Math.round(ball.getCenter().x() - ball.getRadius()
 							+ screenXShift),
-					(int) Math.round(ball.getCenter().y - ball.getRadius()
+					(int) Math.round(ball.getCenter().y() - ball.getRadius()
 							+ screenYShift), ball.getDiameter(),
 					ball.getDiameter());
 		}
@@ -365,10 +365,10 @@ class LevelPanel extends JPanel implements ActionListener, MouseListener,
 				int r = (int) p1.distance(p2);
 				Point2d center = new Point2d(p1);
 				int index = 0;
-				double smallestDistance = center.getDistance(bodies.get(0)
+				double smallestDistance = center.distance(bodies.get(0)
 						.getCenter()) - bodies.get(0).getRadius();
 				for (int i = 1; i < bodies.size(); i++) {
-					double d = center.getDistance(bodies.get(i).getCenter())
+					double d = center.distance(bodies.get(i).getCenter())
 							- bodies.get(i).getRadius();
 					if (d < smallestDistance) {
 						smallestDistance = d;

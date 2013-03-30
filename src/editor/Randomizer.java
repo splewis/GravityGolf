@@ -61,9 +61,9 @@ public final class Randomizer {
 			} while (!tempLevel.onScreen(launchPoint));
 
 			// compute launch parameters
-			Point2d ballStart = new Point2d(ball.getCenter().x,
-					ball.getCenter().y);
-			double launchMagnitude = ball.getCenter().getDistance(launchPoint);
+			Point2d ballStart = new Point2d(ball.getCenter().x(),
+					ball.getCenter().y());
+			double launchMagnitude = ball.getCenter().distance(launchPoint);
 			double launchAngle = CalcHelp.getAngle(ball.getCenter(),
 					launchPoint);
 			if (launchMagnitude > GamePanel.MaxInitialMagnitude)
@@ -88,8 +88,8 @@ public final class Randomizer {
 				if (!tooClose) {
 
 					// check if on screen:
-					Point2d curPoint = new Point2d(ball.getCenter().x,
-							ball.getCenter().y);
+					Point2d curPoint = new Point2d(ball.getCenter().x(),
+							ball.getCenter().y());
 					if (validGoalLocation(curPoint, tempLevel)) {
 
 						// check if overlapping a planet:
@@ -118,28 +118,28 @@ public final class Randomizer {
 
 		int randIndex = CalcHelp.randomInteger(0, possibleGoalPoints.size());
 		Point2d pick = possibleGoalPoints.get(randIndex);
-		return new GoalPost((int) pick.x, (int) pick.y, Radius);
+		return new GoalPost((int) pick.x(), (int) pick.y(), Radius);
 	}
 
 	private static Point2d randPointInCircle(Point2d center, double radius) {
-		double randX = CalcHelp.randomDouble(center.x - radius, center.x
+		double randX = CalcHelp.randomDouble(center.x() - radius, center.x()
 				+ radius);
 		// (x-h)^2 + (y-k)^2 = r^2
 		// => y = k +/- sqrt ( r^2 - (x-h)^2 )
-		double xMinusH = randX - center.x;
+		double xMinusH = randX - center.x();
 		double yRange = Math.sqrt(radius * radius - xMinusH * xMinusH)
-				+ center.y;
-		double randY = CalcHelp.randomDouble(center.y - yRange, center.x
+				+ center.y();
+		double randY = CalcHelp.randomDouble(center.y() - yRange, center.x()
 				+ yRange);
 		return new Point2d(randX, randY);
 	}
 
 	private static boolean validGoalLocation(Point2d p, Level level) {
 		int edgeDist = 100;
-		boolean xInBounds = p.x >= edgeDist
-				&& p.x <= GamePanel.Width - edgeDist;
-		boolean yInBounds = p.y >= edgeDist
-				&& p.y <= GamePanel.Height - edgeDist;
+		boolean xInBounds = p.x() >= edgeDist
+				&& p.x() <= GamePanel.Width - edgeDist;
+		boolean yInBounds = p.y() >= edgeDist
+				&& p.y() <= GamePanel.Height - edgeDist;
 		return xInBounds && yInBounds && level.onScreen(p);
 	}
 

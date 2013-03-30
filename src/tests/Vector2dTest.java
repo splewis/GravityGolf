@@ -34,19 +34,19 @@ public class Vector2dTest {
 		Vector2d v1 = new Vector2d(1, 1);
 		Vector2d v2 = new Vector2d(3, 1);
 		Vector2d proj = new Vector2d(1.2, 0.4);
-		assertEquals(true, v1.projection(v2).equals(proj, epsilon));
+		assertEquals(true, v1.proj(v2).equals(proj, epsilon));
 
 		// <1,1> in the direction of <-1, -1> = <1, 1>
 		v1 = new Vector2d(1, 1);
 		v2 = new Vector2d(-1, -1);
 		proj = new Vector2d(1, 1);
-		assertEquals(true, v1.projection(v2).equals(proj, epsilon));
+		assertEquals(true, v1.proj(v2).equals(proj, epsilon));
 
 		// <1,0> in the direction of <0, 1> = <0, 0>
 		v1 = new Vector2d(1, 0);
 		v2 = new Vector2d(0, 1);
 		proj = new Vector2d(0, 0);
-		assertEquals(true, v1.projection(v2).equals(proj, epsilon));
+		assertEquals(true, v1.proj(v2).equals(proj, epsilon));
 	}
 
 }

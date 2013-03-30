@@ -43,8 +43,8 @@ public abstract class CircularShape {
 		throw new NullPointerException("Cannot draw with " +
 				"a null grahics object.");
 		g.setColor(color);
-		g.fillOval((int) (center.x - radius + dx),
-				(int) (center.y - radius + dy), diameter, diameter);
+		g.fillOval((int) (center.x() - radius + dx),
+				(int) (center.y() - radius + dy), diameter, diameter);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public abstract class CircularShape {
 		if(circle == null)
 			throw new NullPointerException("Cannot determine if a null " +
 					"object intersects.");
-		double distSquared = getCenter().getDistanceSquared(circle.getCenter());
+		double distSquared = getCenter().distanceSquared(circle.getCenter());
 		return distSquared < Math.pow((getRadius() + circle.getRadius()), 2);
 	}
 

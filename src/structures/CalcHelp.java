@@ -141,7 +141,7 @@ public final class CalcHelp {
 	 */
 	public static double getAcceleration(Point2d location,
 			Point2d sourceLocation, double strength, double g) {
-		return g * strength / location.getDistanceSquared(sourceLocation);
+		return g * strength / location.distanceSquared(sourceLocation);
 	}
 
 	/**
@@ -172,7 +172,7 @@ public final class CalcHelp {
 	 * @return the angle, in the the range [0, 2pi)
 	 */
 	public static double getAngle(Point2d p1, Point2d p2) {
-		return getAngle(p2.x - p1.x, p2.y - p1.y);
+		return getAngle(p2.x() - p1.x(), p2.y() - p1.y());
 	}
 
 	/**

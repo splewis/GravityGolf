@@ -22,12 +22,12 @@ public class Point2dTest {
 	@Test
 	public void originVerfication() {
 		// test on x/y origin values
-		assertEquals(0.0, Point2d.ORIGIN.x, epsilon);
-		assertEquals(0.0, Point2d.ORIGIN.y, epsilon);
-		assertEquals(true, Point2d.ORIGIN.equals(new Point2d(0, 0), epsilon));
+		assertEquals(0.0, new Point2d().x(), epsilon);
+		assertEquals(0.0, new Point2d().y(), epsilon);
+		assertEquals(true, new Point2d().equals(new Point2d(0, 0), epsilon));
 
 		// check that constructor yields origin coordinate
-		assertEquals(true, Point2d.ORIGIN.equals(new Point2d(), epsilon));
+		assertEquals(true, new Point2d().equals(new Point2d(), epsilon));
 	}
 
 	@Test
@@ -43,34 +43,34 @@ public class Point2dTest {
 	@Test
 	public void distanceTest() {
 		// Distance between (0,0) and (0,1) should be 1
-		assertEquals(1, p(0, 0).getDistance(p(0, 1)), epsilon);
+		assertEquals(1, p(0, 0).distance(p(0, 1)), epsilon);
 
 		// Distance between (1,1) and (2,2) should be sqrt 2
-		assertEquals(Math.sqrt(2), p(1, 1).getDistance(p(2, 2)), epsilon);
+		assertEquals(Math.sqrt(2), p(1, 1).distance(p(2, 2)), epsilon);
 
 		// Distance between (3,4) and (0,0) should be 5
-		assertEquals(5, p(3, 4).getDistance(p(0, 0)), epsilon);
+		assertEquals(5, p(3, 4).distance(p(0, 0)), epsilon);
 
 		// Distance between (1, 1) and (1,1) should be 0
-		assertEquals(0, p(1, 1).getDistance(p(1, 1)), epsilon);
+		assertEquals(0, p(1, 1).distance(p(1, 1)), epsilon);
 	}
 
 	@Test
 	public void distanceSquaredTest() {
 		// Distance between (0,0) and (0,1) should be 1
-		assertEquals(1, p(0, 0).getDistance(p(0, 1)), epsilon);
+		assertEquals(1, p(0, 0).distance(p(0, 1)), epsilon);
 
 		// Distance^2 between (1,1) and (2,2) should be 2
-		assertEquals(2.0, p(1, 1).getDistanceSquared(p(2, 2)), epsilon);
+		assertEquals(2.0, p(1, 1).distanceSquared(p(2, 2)), epsilon);
 
 		// Distance^2 between (3,4) and (0,0) should be 25
-		assertEquals(25, p(3, 4).getDistanceSquared(p(0, 0)), epsilon);
+		assertEquals(25, p(3, 4).distanceSquared(p(0, 0)), epsilon);
 
 		// Distance^2 between (1, 1) and (1,1) should be 0
-		assertEquals(0, p(1, 1).getDistanceSquared(p(1, 1)), epsilon);
+		assertEquals(0, p(1, 1).distanceSquared(p(1, 1)), epsilon);
 
 		// Distance^2 between (100, 100) and (150,150) should be 2500
-		assertEquals(2500, p(100, 100).getDistanceSquared(p(100, 150)), epsilon);
+		assertEquals(2500, p(100, 100).distanceSquared(p(100, 150)), epsilon);
 	}
 
 	@Test

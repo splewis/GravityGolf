@@ -45,21 +45,21 @@ public abstract class GraphicEffect {
 		double xShift = Math.cos(ang) * (drawingOffset);
 		double yShift = -Math.sin(ang) * (drawingOffset);
 
-		g.drawLine((int) Math.round(p1.x + xShift),
-				(int) Math.round(p1.y + yShift), (int) Math.round(p2.x),
-				(int) Math.round(p2.y));
+		g.drawLine((int) Math.round(p1.x() + xShift),
+				(int) Math.round(p1.y() + yShift), (int) Math.round(p2.x()),
+				(int) Math.round(p2.y()));
 
 		double angle = ang - Math.PI / 4;
 		double cosine = Math.cos(angle);
 		double sine = Math.sin(angle);
 
-		g.drawLine((int) Math.round(p2.x), (int) Math.round(p2.y),
-				(int) Math.round(p2.x - arrowSize * cosine),
-				(int) Math.round(p2.y + arrowSize * sine));
+		g.drawLine((int) Math.round(p2.x()), (int) Math.round(p2.y()),
+				(int) Math.round(p2.x() - arrowSize * cosine),
+				(int) Math.round(p2.y() + arrowSize * sine));
 
-		g.drawLine((int) Math.round(p2.x), (int) Math.round(p2.y),
-				(int) Math.round(p2.x + arrowSize * sine),
-				(int) Math.round(p2.y + arrowSize * cosine));
+		g.drawLine((int) Math.round(p2.x()), (int) Math.round(p2.y()),
+				(int) Math.round(p2.x() + arrowSize * sine),
+				(int) Math.round(p2.y() + arrowSize * cosine));
 
 	}
 
