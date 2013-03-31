@@ -1,7 +1,7 @@
-package graphics;
+package graphics
 
 import java.awt.Color
-import java.awt.Font;
+import java.awt.Font
 import java.awt.Graphics
 import java.util.ArrayList
 import game._

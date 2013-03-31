@@ -11,7 +11,7 @@ package object graphics {
 
   /** Rounding method for Double -> Int */
   def round(x: Double): Int 
-    = math.round(x.asInstanceOf[Float])
+    = CalcHelp.round(x)
 
   /**
    * Draws an arrow between two points.

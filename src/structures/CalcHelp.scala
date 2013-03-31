@@ -9,12 +9,13 @@ import java.util.Random
  */
 object CalcHelp {
 
-  private val randomGenerator = new Random()
+  private val randomGenerator = new Random
 
   /**
    * Rounds a Double precision value to an Integer.
    */
-  def round(x: Double): Int = math.round(x.asInstanceOf[Float])
+  def round(x: Double): Int 
+    = math.round(x.asInstanceOf[Float])
 
   /**
    * Creates a new color based on the specified component values. If the
@@ -38,6 +39,11 @@ object CalcHelp {
   def gaussianDouble(mean: Double, standardDeviation: Double): Double 
     = randomGenerator.nextGaussian() * standardDeviation + mean
 
+  /**
+   * Bounds a value to be within the given range.
+   * @param min the smallest allowed value
+   * @param max the largest allowed value
+   */
   def bound[T <% Ordered[T]](x: T, min: T, max: T): T = {
     if (x < min) min
     if (x > max) max

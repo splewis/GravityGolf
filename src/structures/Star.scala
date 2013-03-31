@@ -14,8 +14,7 @@ class Star(val x: Int, val y: Int) {
     = this(p.x, p.y)
   
   private val point = new java.awt.Point(x, y)
-  private var size = CalcHelp.gaussianInteger(1.5, 1.05)
-  if (size < 1) size = 1
+  private val size = CalcHelp.bound(CalcHelp.gaussianInteger(1.5, 1.05), 1, 10)
 
   val r = CalcHelp.gaussianInteger(240, 30)
   val g = CalcHelp.gaussianInteger(240, 30)

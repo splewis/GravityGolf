@@ -1,12 +1,12 @@
-package graphics;
+package graphics
 
-import game.GamePanel;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.text.DecimalFormat;
-import structures._;
-import game._;
+import game.GamePanel
+import java.awt.Color
+import java.awt.Font
+import java.awt.Graphics
+import java.text.DecimalFormat
+import structures._
+import game._
 
 /**
  * Holder class for methods used to display information to the user.
@@ -15,10 +15,10 @@ import game._;
 object InfoDisplay {
 
   /** Default decimal formatting for all output from the game. */
-  val DecimalFormatter = new DecimalFormat("#0.00");
+  val DecimalFormatter = new DecimalFormat("#0.00")
 
   /** Font used to display small information such as level and vector data.  */
-  val InfoFont = new Font("Times new Roman", Font.PLAIN, 12);
+  val InfoFont = new Font("Times new Roman", Font.PLAIN, 12)
 
   /**
    * Draws the information about the initial vector given.

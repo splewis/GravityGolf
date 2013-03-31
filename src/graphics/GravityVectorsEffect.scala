@@ -1,9 +1,9 @@
-package graphics;
+package graphics
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.List;
-import structures._;
+import java.awt.Color
+import java.awt.Graphics
+import java.util.List
+import structures._
 
 /**
  * Holder class for gravitational vectors effect.
@@ -35,10 +35,10 @@ object GravityVectorsEffect {
       drawArrow(ballPt, p2, 4, 12, g)
     }
 
-    for (i <- 0 to bodies.size() - 1) {
+    for (i <- 0 until bodies.size()) {
       val b = bodies.get(i)
       drawVector(b)
-      for (i <- 0 to b.getMoons().size() - 1) {
+      for (i <- 0 until b.getMoons().size()) {
         val m = b.getMoons().get(i)
         drawVector(m)
       }

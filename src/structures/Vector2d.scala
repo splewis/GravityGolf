@@ -44,13 +44,25 @@ class Vector2d(val xComponent: Double, val yComponent: Double) {
   def multiply(k: Double): Vector2d
     = new Vector2d(k * xComponent, k * yComponent)
   
+   /** Returns the scalar multiple of this vector by 1/k. */ 
+  def divide(k: Double): Vector2d
+    = this.multiply(1.0 / k)
+  
   /** Returns the scalar multiple of this vector by k. */ 
   def *(k: Double): Vector2d 
     = this.multiply(k)
+    
+ /** Returns the scalar multiple of this vector by 1/k. */ 
+  def /(k: Double): Vector2d 
+    = this.multiply(1.0 / k)
 
   /** Returns the dot product of two vectors. */
   def dot(v: Vector2d): Double 
     = xComponent * v.xComponent + yComponent * v.yComponent
+
+  /** Returns a unit vector in the direction of this vector. */
+  def normalize(): Vector2d 
+    = this / this.dot(this)
     
   /** Returns the projection of this vector onto v. */
   def proj(v: Vector2d): Vector2d

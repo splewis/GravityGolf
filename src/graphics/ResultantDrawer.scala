@@ -1,4 +1,4 @@
-package graphics;
+package graphics
 
 import java.awt.Color
 import java.awt.Graphics
@@ -36,10 +36,10 @@ object ResultantDrawer {
     }
 
     // sums up all forces
-    for (i <- 0 to bodies.size() - 1) {
+    for (i <- 0 until bodies.size()) {
       addValues(bodies.get(i))
       val moons = bodies.get(i).getMoons()
-      for (j <- 0 to moons.size() - 1) {
+      for (j <- 0 until moons.size()) {
         addValues(moons.get(j))
       }
     }

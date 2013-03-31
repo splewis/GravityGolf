@@ -1,9 +1,9 @@
-package graphics;
+package graphics
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.ArrayList;
-import structures._;
+import java.awt.Color
+import java.awt.Graphics
+import java.util.ArrayList
+import structures._
 
 /**
  * Holder object for the trail drawing effect
@@ -31,9 +31,9 @@ object TrailEffect {
   def draw(level: Level, g: Graphics) = {
     val shift = level.getShift
     // n = number of points to draw
-    val n = trailPoints.size() - 3
+    val n = trailPoints.size() - 2
     g.setColor(Color.green)
-    for (i <- 0 to n) {
+    for (i <- 0 until n) {
       val from = (trailPoints.get(i)     + shift).getIntegerPoint
       val to   = (trailPoints.get(i + 1) + shift).getIntegerPoint
       g.drawLine(from.x, from.y, to.x, to.y)

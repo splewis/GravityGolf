@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import structures.*;
 
-public final class CollisionEffect extends GraphicEffect {
+public final class CollisionEffect {
 
 	private static final int EFFECT_TIME = 1000;
 
