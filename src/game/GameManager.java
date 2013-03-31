@@ -177,7 +177,7 @@ public class GameManager {
 	 */
 	public Level getCurrentLevel() {
 		if (currentLevelIndex == -1) {
-			return MenuScreen.getMenuLevel();
+			return MenuScreen.getMenuLevel();			
 		}
 		return levels.get(currentLevelIndex);
 	}

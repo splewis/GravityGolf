@@ -324,7 +324,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			
 			if (textColor != null && terminalPoint != null) {
 				InfoDisplay.vectorInformation(terminalPoint, launchMagnitude,
-						launchAngle, textColor, g);
+						launchAngle, textColor, g); 
 			}
 
 			if (!gameWon && gameStarted) {

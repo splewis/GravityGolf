@@ -14,18 +14,6 @@ package object graphics {
     = math.round(x.asInstanceOf[Float])
 
   /**
-   * Draws an arrow between two points with default properties: offset of 4
-   * and arrow head length of 12.
-   * @param p1 the initial point
-   * @param p2 the terminal point
-   * @param g the Graphics Component to draw with
-   */
-  def drawArrow(p1: Point2d, p2: Point2d, g: Graphics) {
-    GraphicEffect.drawArrow(p1, p2, 4, 12, g)
-  }
-  
-
-  /**
    * Draws an arrow between two points.
    * @param p1 the initial point
    * @param p2 the terminal point
