@@ -50,6 +50,7 @@ public class CalcHelpTest {
 		assertEquals(4, CalcHelp.quadrant(3 * Math.PI / 2), epsilon);
 	}
 
+	@Test
 	public void angleTest() {
 		double dx, dy, angle;
 		Point2d p1, p2;
@@ -61,7 +62,7 @@ public class CalcHelpTest {
 
 		dx = 0.0;
 		dy = 1.0;
-		angle = Math.PI / 2;
+		angle = -Math.PI / 2;
 		assertEquals(angle, CalcHelp.getAngle(dx, dy), epsilon);
 
 		dx = -1.0;
@@ -71,22 +72,22 @@ public class CalcHelpTest {
 
 		dx = 0.0;
 		dy = -1.0;
-		angle = 3 * Math.PI / 2;
+		angle = Math.PI / 2;
 		assertEquals(angle, CalcHelp.getAngle(dx, dy), epsilon);
 
 		dx = 0.5;
 		dy = Math.sqrt(3) / 2.0;
-		angle = Math.PI / 6;
+		angle = -Math.PI / 3;
 		assertEquals(angle, CalcHelp.getAngle(dx, dy), epsilon);
 
 		dx = -1.0;
 		dy = -Math.sqrt(3);
-		angle = 4 * Math.PI / 3;
+		angle = 2 * Math.PI / 3;
 		assertEquals(angle, CalcHelp.getAngle(dx, dy), epsilon);
 
 		dx = 5 * Math.sqrt(3);
 		dy = -5.0;
-		angle = 11 * Math.PI / 6;
+		angle = Math.PI / 6;
 		assertEquals(angle, CalcHelp.getAngle(dx, dy), epsilon);
 
 		p1 = new Point2d(0, 0);
@@ -96,7 +97,7 @@ public class CalcHelpTest {
 
 		p1 = new Point2d(0, 0);
 		p2 = new Point2d(0, 1);
-		angle = Math.PI / 2;
+		angle = -Math.PI / 2;
 		assertEquals(angle, CalcHelp.getAngle(p1, p2), epsilon);
 
 		p1 = new Point2d(0, 0);
@@ -106,22 +107,17 @@ public class CalcHelpTest {
 
 		p1 = new Point2d(0, 0);
 		p2 = new Point2d(0, -1);
-		angle = 3 * Math.PI / 2;
-		assertEquals(angle, CalcHelp.getAngle(p1, p2), epsilon);
-
-		p1 = new Point2d(0.5, Math.sqrt(3) / 2);
-		p2 = new Point2d(0, 1);
-		angle = Math.PI / 6;
+		angle = Math.PI / 2;
 		assertEquals(angle, CalcHelp.getAngle(p1, p2), epsilon);
 
 		p1 = new Point2d(1, 1);
 		p2 = new Point2d(0, 1 - Math.sqrt(3));
-		angle = 4 * Math.PI / 3;
+		angle = 2 * Math.PI / 3;
 		assertEquals(angle, CalcHelp.getAngle(p1, p2), epsilon);
 
 		p1 = new Point2d(6, 6);
 		p2 = new Point2d(6 - 5 * Math.sqrt(3), 1);
-		angle = 11 * Math.PI / 6;
+		angle = 5 * Math.PI / 6;
 		assertEquals(angle, CalcHelp.getAngle(p1, p2), epsilon);
 	}
 
