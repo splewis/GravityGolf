@@ -3,6 +3,9 @@ package game;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
 
 /**
@@ -27,6 +30,13 @@ public class GameFrame extends JFrame implements KeyListener {
 					"images/icon.png"));
 			setJMenuBar(gp.menuBar);
 			this.addKeyListener(this);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			addWindowListener(new WindowAdapter() {
+				public void windowClosing(WindowEvent ev) {
+					safeQuit(); 
+					dispose();
+				}
+			});
 			setFocusable(true);
 			this.setVisible(true);
 		} else {
