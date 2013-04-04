@@ -29,7 +29,7 @@ object InfoDisplay {
    * @param g the Graphics component to draw with
    */
   def vectorInformation(terminalPoint: Point2d,
-    magnitude: Double, angle: Double, c: Color, g: Graphics) {
+    magnitude: Double, angle: Double, c: Color, g: Graphics) = {
     g.setColor(c)
     g.setFont(InfoFont)
     val xCoord = GamePanel.Width - 90
@@ -45,7 +45,7 @@ object InfoDisplay {
    * @param game the GameManager for the game
    * @param g the Graphics component to draw with
    */
-  def levelInformation(game: GameManager, g: Graphics) {
+  def levelInformation(game: GameManager, g: Graphics) = {
     g.setColor(Color.white)
     g.setFont(InfoFont)
     g.drawString("Level " + game.getLevelNumber() + " / "
@@ -59,7 +59,7 @@ object InfoDisplay {
    * @param game the GameManager for the game
    * @param g the Graphics component to draw with
    */
-  def drawWinScreen(game: GameManager, g: Graphics) {
+  def drawWinScreen(game: GameManager, g: Graphics) = {
     val numLevels = game.getNumberOfLevels()
     g.setColor(Color.black)
     g.fillRect(0, 0, GamePanel.Width + 30, GamePanel.Height)
@@ -89,7 +89,7 @@ object InfoDisplay {
    * Displays the paused message.
    * @param g the Graphics component to draw with
    */
-  def drawPaused(g: Graphics) {
+  def drawPaused(g: Graphics) = {
     g.setFont(new Font("Tahoma", Font.ITALIC, 30))
     g.setColor(Color.red)
     g.drawString("PAUSED", 422, 50)
@@ -99,7 +99,7 @@ object InfoDisplay {
    * Displays the message that the level is complete to the user.
    * @param g the Graphics component to draw with
    */
-  def drawNextLevelMessage(g: Graphics) {
+  def drawNextLevelMessage(g: Graphics) = {
     g.setFont(new Font("Times new Roman", Font.ITALIC, 25))
     g.setColor(Color.WHITE)
     g.drawString("Click to continue to the next level", 320, 60)

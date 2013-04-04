@@ -10,8 +10,7 @@ import java.awt.Graphics;
  */
 class Star(val x: Int, val y: Int) {
 
-  def this(p: java.awt.Point) 
-    = this(p.x, p.y)
+  def this(p: java.awt.Point) = this(p.x, p.y)
   
   private val point = new java.awt.Point(x, y)
   private val size = CalcHelp.bound(CalcHelp.gaussianInteger(1.5, 1.05), 1, 10)
@@ -30,8 +29,6 @@ class Star(val x: Int, val y: Int) {
    * Draws the star.
    * @param g the Graphics component to draw with
    */
-  def draw(g: Graphics): Unit
-    = draw(0, 0, g);
-  
+  def draw(g: Graphics): Unit = draw(0, 0, g)  
   
 }

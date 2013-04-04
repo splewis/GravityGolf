@@ -13,60 +13,53 @@ class Vector2d(val xComponent: Double, val yComponent: Double) {
   val angle = CalcHelp.getAngle(xComponent, yComponent)
 
   /** Creates a new zero vector. */
-  def this() 
-    = this(0.0, 0.0)
+  def this() = this(0.0, 0.0)
+  
+  /** Creates a vector as determined by a point. */
+  def this(p: Point2d) = this(p.x, p.y)
 
   /** Defines a vector in polar coordinates. */
-  def polarVector(magnitude: Double, angle: Double) 
-    = new Vector2d(magnitude * math.cos(angle), magnitude * math.sin(angle))
+  def polarVector(magnitude: Double, angle: Double) =
+    new Vector2d(magnitude * math.cos(angle), magnitude * math.sin(angle))
 
   /** Negates a vector. */
-  def unary_- 
-    = new Vector2d(-xComponent, -yComponent)
-   
+  def unary_- = new Vector2d(-xComponent, -yComponent)
+
   /** Returns the sum of two vectors. */
-  def add(v: Vector2d): Vector2d
-    = new Vector2d(xComponent + v.xComponent, yComponent + v.yComponent)
-  
+  def add(v: Vector2d): Vector2d = 
+    new Vector2d(xComponent + v.xComponent, yComponent + v.yComponent)
+
   /** Returns the sum of two vectors. */
-  def +(v: Vector2d): Vector2d
-    = this.add(v)
-  
-  /** Returns the difference of two vectors. */  
-  def subtract(v: Vector2d): Vector2d
-    = this + (-v)
-  
+  def +(v: Vector2d): Vector2d = this.add(v)
+
   /** Returns the difference of two vectors. */
-  def -(v: Vector2d): Vector2d
-    = this.subtract(v)
+  def subtract(v: Vector2d): Vector2d = this + (-v)
+
+  /** Returns the difference of two vectors. */
+  def -(v: Vector2d): Vector2d = this.subtract(v)
      
   /** Returns the scalar multiple of this vector by k. */ 
-  def multiply(k: Double): Vector2d
-    = new Vector2d(k * xComponent, k * yComponent)
-  
-   /** Returns the scalar multiple of this vector by 1/k. */ 
-  def divide(k: Double): Vector2d
-    = this.multiply(1.0 / k)
-  
-  /** Returns the scalar multiple of this vector by k. */ 
-  def *(k: Double): Vector2d 
-    = this.multiply(k)
-    
- /** Returns the scalar multiple of this vector by 1/k. */ 
-  def /(k: Double): Vector2d 
-    = this.multiply(1.0 / k)
+  def multiply(k: Double): Vector2d =
+    new Vector2d(k * xComponent, k * yComponent)
+
+  /** Returns the scalar multiple of this vector by 1/k. */
+  def divide(k: Double): Vector2d = this.multiply(1.0 / k)
+
+  /** Returns the scalar multiple of this vector by k. */
+  def *(k: Double): Vector2d = this.multiply(k)
+
+  /** Returns the scalar multiple of this vector by 1/k. */
+  def /(k: Double): Vector2d = this.multiply(1.0 / k)
 
   /** Returns the dot product of two vectors. */
-  def dot(v: Vector2d): Double 
-    = xComponent * v.xComponent + yComponent * v.yComponent
+  def dot(v: Vector2d): Double =
+    xComponent * v.xComponent + yComponent * v.yComponent
 
   /** Returns a unit vector in the direction of this vector. */
-  def normalize(): Vector2d 
-    = this / this.dot(this)
-    
+  def normalize(): Vector2d = this / this.dot(this)
+
   /** Returns the projection of this vector onto v. */
-  def proj(v: Vector2d): Vector2d
-    = v * (this.dot(v) / v.dot(v))
+  def proj(v: Vector2d): Vector2d = v * (this.dot(v) / v.dot(v))
     
   /** Returns the projection of this vector in the direction of angle. */
   def proj(angle: Double): Vector2d

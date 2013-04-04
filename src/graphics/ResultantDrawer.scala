@@ -16,7 +16,7 @@ object ResultantDrawer {
    * @param level the level in the game
    * @param g the Graphics component to draw with
    */
-  def draw(level: Level, g: Graphics) {
+  def draw(level: Level, g: Graphics) = {
     val shift = level.getShift()
     val ball = level.getBall()
     val bodies = level.getBodies()

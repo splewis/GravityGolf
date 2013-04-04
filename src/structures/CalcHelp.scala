@@ -14,8 +14,7 @@ object CalcHelp {
   /**
    * Rounds a Double precision value to an Integer.
    */
-  def round(x: Double): Int 
-    = math.round(x.asInstanceOf[Float])
+  def round(x: Double): Int = math.round(x.asInstanceOf[Float])
 
   /**
    * Creates a new color based on the specified component values. If the
@@ -26,9 +25,8 @@ object CalcHelp {
    * @param b the blue value
    * @return a new Color
    */
-  def correctColor(r: Int, g: Int, b: Int): Color 
-    = new Color(bound(r, 0, 255), bound(g, 0, 255), bound(b, 0, 255))
-  
+  def correctColor(r: Int, g: Int, b: Int): Color = 
+    new Color(bound(r, 0, 255), bound(g, 0, 255), bound(b, 0, 255))
 
   /**
    * Returns a random (with normal distribution) double.
@@ -36,8 +34,8 @@ object CalcHelp {
    * @param standardDeviation the standard deviation of the distribution
    * @return a random double form a normal distribution
    */
-  def gaussianDouble(mean: Double, standardDeviation: Double): Double 
-    = randomGenerator.nextGaussian() * standardDeviation + mean
+  def gaussianDouble(mean: Double, standardDeviation: Double): Double = 
+    randomGenerator.nextGaussian() * standardDeviation + mean
 
   /**
    * Bounds a value to be within the given range.
@@ -74,8 +72,8 @@ object CalcHelp {
    * @param standardDeviation the standard deviation of the distribution
    * @return a random int form a normal distribution
    */
-  def gaussianInteger(mean: Double, standardDeviation: Double): Int 
-    = round(gaussianDouble(mean, standardDeviation));
+  def gaussianInteger(mean: Double, standardDeviation: Double): Int = 
+    round(gaussianDouble(mean, standardDeviation))
 
   /**
    * Returns a random (with normal distribution) double that is guaranteed to
@@ -96,7 +94,7 @@ object CalcHelp {
       min
     if (rand > max)
       max
-    else rand;
+    else rand
   }
 
   /**
@@ -113,15 +111,16 @@ object CalcHelp {
     while (x < 0)
       x += 2 * math.Pi;
     while (x > 2 * math.Pi)
-      x -= 2 * math.Pi;
+      x -= 2 * math.Pi
 
     if (x < math.Pi / 2)
-      return 1;
-    if (x < math.Pi)
-      return 2;
-    if (x < 3 * math.Pi / 2)
-      return 3;
-    return 4;
+      1
+    else if (x < math.Pi)
+      2
+    else if (x < 3 * math.Pi / 2)
+      3
+    else
+      4
   }
 
   /**
@@ -134,8 +133,8 @@ object CalcHelp {
    * @return the magnitude of the acceleration felt
    */
   def getAcceleration(location: Point2d, sourceLocation: Point2d,
-                      strength: Double, g: Double): Double 
-    = return g * strength / location.distanceSquared(sourceLocation)
+                      strength: Double, g: Double): Double
+    = g * strength / location.distanceSquared(sourceLocation)
 
   /**
    * Calculates the angle (in radians), formed by (0,0) and (xDif, yDif).
@@ -144,7 +143,7 @@ object CalcHelp {
    * @return the angle, in the range [0, 2pi)
    */
   def getAngle(xDif: Double, yDif: Double): Double = {
-    val angle = java.lang.Math.atan(-yDif / xDif)
+    val angle = math.atan(-yDif / xDif)
     if (xDif > 0.0)
       angle
     else if (xDif < 0.0)
@@ -165,8 +164,8 @@ object CalcHelp {
    * @param p2 the second point
    * @return the angle, in the the range [0, 2pi)
    */
-  def getAngle(p1: Point2d, p2: Point2d): Double 
-    = getAngle(p2.x - p1.x, p2.y - p1.y)
+  def getAngle(p1: Point2d, p2: Point2d): Double =
+    getAngle(p2.x - p1.x, p2.y - p1.y)
 
   /**
    * Returns a new Color with each component randomly shifted by at most some
@@ -203,8 +202,8 @@ object CalcHelp {
    * @param b the maximum value (exclusive)
    * @return random double in the range
    */
-  def randomDouble(a: Double, b: Double): Double 
-    = math.random * (b - a) + a;
+  def randomDouble(a: Double, b: Double): Double =
+    math.random * (b - a) + a;
 
   /**
    * Randomly calculates an int in the range [a, b) with a uniform random
@@ -213,8 +212,8 @@ object CalcHelp {
    * @param b the maximum value (exclusive)
    * @return random int in the range
    */
-  def randomInteger(a: Int, b: Int): Int 
-    = round(randomDouble(a, b))
+  def randomInteger(a: Int, b: Int): Int =
+    round(randomDouble(a, b))
 
   /**
    * Randomly returns -1 or 1.

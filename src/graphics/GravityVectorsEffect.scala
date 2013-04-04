@@ -16,8 +16,7 @@ object GravityVectorsEffect {
    * @param level the current Level in the game
    * @param g the Graphics component to draw with
    */
-  def draw(level: Level, g: Graphics) {
-
+  def draw(level: Level, g: Graphics) = {
     g.setColor(Color.white);
     val ball = level.getBall()
     val ballCent = new Point2d(ball.getCenter.x, ball.getCenter.y)

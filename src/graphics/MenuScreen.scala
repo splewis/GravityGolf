@@ -42,7 +42,7 @@ object MenuScreen {
       menuLevel = new Level(b, bod, ws, gs, bs, 0, 3.5)
       menuLevel.generateLevelData()
     }
-    return menuLevel
+    menuLevel
   }
 
   /**
@@ -51,7 +51,7 @@ object MenuScreen {
    * @param settings the current settings in the game
    * @param g the Graphics component to draw with
    */
-  def draw(menuLevel: Level, settings: Array[Boolean], g: Graphics) {
+  def draw(menuLevel: Level, settings: Array[Boolean], g: Graphics) = {
     if (settings(GamePanel.VectorsNum))
       GravityVectorsEffect.draw(menuLevel, g)
     if (settings(GamePanel.ResultantNum))

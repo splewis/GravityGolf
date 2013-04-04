@@ -16,7 +16,7 @@ object WarpDrawer {
    * @param level the current Level
    * @param g the Graphics component to draw with
    */
-  def draw(level: Level, g: Graphics) {
+  def draw(level: Level, g: Graphics): Unit = {
     g.setColor(Color.white)
     val warps = level.getWarpPoints()
     val shift = level.getShift

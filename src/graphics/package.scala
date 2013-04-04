@@ -12,7 +12,7 @@ package object graphics {
   /** Rounding method for Double -> Int */
   def round(x: Double): Int 
     = CalcHelp.round(x)
-
+    
   /**
    * Draws an arrow between two points.
    * @param p1 the initial point
@@ -23,7 +23,7 @@ package object graphics {
    * @param g the Graphics component to draw with
    */
   def drawArrow(p1: Point2d, p2: Point2d, drawingOffset: Int,
-    arrowSize: Int, g: Graphics) {
+    arrowSize: Int, g: Graphics): Unit = {
     val ang = CalcHelp.getAngle(p1, p2)
 
     // Shifts away from the center of the ball, so the line starts a little
@@ -32,19 +32,28 @@ package object graphics {
     val yShift = -math.sin(ang) * drawingOffset
 
     g.drawLine(round(p1.x + xShift), round(p1.y + yShift), 
-      round(p2.x), round(p2.y));
+               round(p2.x), round(p2.y));
 
     val angle  = ang - math.Pi / 4
     val cosine = math.cos(angle)
     val sine   = math.sin(angle)
 
     g.drawLine(round(p2.x), round(p2.y),
-      round(p2.x - arrowSize * cosine),
-      round(p2.y + arrowSize * sine));
+               round(p2.x - arrowSize * cosine),
+               round(p2.y + arrowSize * sine));
 
     g.drawLine(round(p2.x), round(p2.y),
-      round(p2.x + arrowSize * sine),
-      round(p2.y + arrowSize * cosine));
+               round(p2.x + arrowSize * sine),
+               round(p2.y + arrowSize * cosine));
   }
+  
+  /**
+   * Draws a small arrow between two points.
+   * @param p1 the initial point
+   * @param p2 the terminal point
+   * @param g the Graphics component to draw with
+   */
+  def drawArrow(p1: Point2d, p2: Point2d, g: Graphics): Unit = 
+    drawArrow(p1, p2, 4, 12, g)
 
 }
