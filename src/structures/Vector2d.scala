@@ -55,11 +55,21 @@ class Vector2d(val xComponent: Double, val yComponent: Double) {
   def dot(v: Vector2d): Double =
     xComponent * v.xComponent + yComponent * v.yComponent
 
+  /** Returns if this is the zero vector. */
+  def isZero(): Boolean =
+    (xComponent == 0 && yComponent == 0) || magnitude == 0
+
   /** Returns a unit vector in the direction of this vector. */
-  def normalize(): Vector2d = this / this.dot(this)
+  def normalize(): Vector2d = {
+    require(!isZero, "A zero vector cannot be normalized")
+    this / this.dot(this)
+  }
 
   /** Returns the projection of this vector onto v. */
-  def proj(v: Vector2d): Vector2d = v * (this.dot(v) / v.dot(v))
+  def proj(v: Vector2d): Vector2d = {
+    require(!v.isZero, "A vector cannot be projected onto the zero vector.")
+    v * (this.dot(v) / v.dot(v))
+  }
     
   /** Returns the projection of this vector in the direction of angle. */
   def proj(angle: Double): Vector2d
