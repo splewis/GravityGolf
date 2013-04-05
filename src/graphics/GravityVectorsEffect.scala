@@ -26,12 +26,12 @@ object GravityVectorsEffect {
 
     def drawVector(b: Body) = {
       val angle = CalcHelp.getAngle(ballCent, b.getCenter());
-      val length = 5 + level.getGravityStrength() * ArrowLength *
+      val length = 5 + level.getGravityStrength() * GraphicEffect.ArrowLength *
         b.getRadius() / ballCent.distance(b.getCenter)
       val dx = shift.x + length *  math.cos(angle)
       val dy = shift.y + length * -math.sin(angle)
       val p2 = ballCent.translate(dx, dy)
-      drawArrow(ballPt, p2, 4, 12, g)
+      GraphicEffect.drawArrow(ballPt, p2, g) 
     }
 
     for (i <- 0 until bodies.size()) {

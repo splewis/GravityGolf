@@ -24,7 +24,7 @@ object WarpDrawer {
     for (i <- 1 until warps.size()) {
       val p1 = warps.get(i - 1).getCenter + shift
       val p2 = warps.get(i)    .getCenter + shift
-      drawArrow(p1, p2, 0, 25, g)
+      GraphicEffect.drawArrow(p1, p2, 0, 25, g)
     }
   }
 

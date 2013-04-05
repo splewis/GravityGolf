@@ -29,7 +29,7 @@ object ResultantDrawer {
     def addValues(b: Body) = {
       val bodyCent = new Point2d(b.getCenter.x, b.getCenter.y)
       val angle = CalcHelp.getAngle(ballCent, bodyCent)
-      val length = level.getGravityStrength * ArrowLength *
+      val length = level.getGravityStrength * GraphicEffect.ArrowLength *
         b.getRadius / ballCent.distance(bodyCent) + 5
       totalX += length * math.cos(angle)
       totalY -= length * math.sin(angle)
@@ -47,7 +47,7 @@ object ResultantDrawer {
     g.setColor(Color.blue);
     val tempPt1 = ball.getCenter().translate(shift)
     val tempPt2 = tempPt1.translate(totalX, totalY)
-    drawArrow(tempPt1, tempPt2, 4, 12, g) 
+    GraphicEffect.drawArrow(tempPt1, tempPt2, g) 
   }
 
 }

@@ -46,14 +46,20 @@ class Point2d(val x: Double, val y: Double) {
   /** Translates a point by dx and dy. */
   def +(dx: Double, dy: Double): Point2d = translate(dx, dy)
 
-  /** Translates a point by the values of another point */
+  /** Translates a point by the values of another point. */
   def +(p: Point2d): Point2d = translate(p.x, p.y)
 
+  /** Translates a point by the values of a vector. */
+  def +(v: Vector2d): Point2d = translate(v.xComponent, v.yComponent)
+  
   /** Translates a point by -dx and -dy. */
   def -(dx: Double, dy: Double): Point2d = translate(-dx, -dy)
 
-  /** Translates a point by the negation of another point */
+  /** Translates a point by the negation of another point. */
   def -(p: Point2d): Point2d = this - (p.x, p.y)
+  
+  /** Translates a point by the negation of a vector. */
+  def -(v: Vector2d): Point2d = this + (-v)
 
   /** Tells if another instance can equal a Point2d. */
   def canEqual(other: Any): Boolean = other.isInstanceOf[structures.Point2d]  

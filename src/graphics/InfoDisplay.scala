@@ -33,8 +33,8 @@ object InfoDisplay {
     g.setColor(c)
     g.setFont(InfoFont)
     val xCoord = GamePanel.Width - 90
-    g.drawString("(" + round(terminalPoint.x) + ", " 
-        + round(terminalPoint.y)+ ")", xCoord, 20)
+    g.drawString("(" + CalcHelp.round(terminalPoint.x) + ", " 
+        + CalcHelp.round(terminalPoint.y)+ ")", xCoord, 20)
     g.drawString("Length: " + DecimalFormatter.format(magnitude), xCoord, 40)
     val degrees = math.toDegrees(angle)
     g.drawString("Angle: " + DecimalFormatter.format(degrees), xCoord, 60)
