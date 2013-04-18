@@ -12,7 +12,7 @@ import structures._
 object TrailEffect {
 
   /** Internal point storage */
-  private var trailPoints: ArrayList[Point2d] = new ArrayList[Point2d](100);
+  private var trailPoints: ArrayList[Point2d] = new ArrayList[Point2d](100)
 
   /** Adds a point the to current trail. */
   def addTrailPoint(point: Point2d): Unit = trailPoints.add(point)

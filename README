@@ -1,22 +1,8 @@
 GravityGolf is a 2-d game that simulates the movement of objects in space, where they are affected by the gravitational pull of other planets.
 
-
-A more thorough (2 pages) description of the project is in description.pdf, or avaliable at https://dl.dropbox.com/u/76035852/githubBuilds/description.pdf.
-
-
 The goal of the game is to launch the ball (typically a small red ball) to a Goal (usually white). 
-
 
 The basic permise of the game is relatively simple; the above mechanics are implemented is less than 100 lines of code.
 However, the addition of many small features into one proejct has made management and design significant challanges.
 
-
-Some of the small features of the game:
- - Graphical effects (ball trail, particle effects on collisions)
- - Speed settings
- - All settings made persistant for a user (saved to and reloaded from settings.txt)
- - Save/load game support
- 
- 
- A built release-version of the game is the Release folder. 
- GravityGolf.jar launches the game.
+Read more about the project at http://splewis.net/projects/gravity-golf/ 

@@ -9,3 +9,5 @@ settings.txt
 testFiles
 description
 .cache
+Release
+*.pdf
