@@ -9,7 +9,7 @@ import structures.Point2d;
 
 /**
  * JUnit tests for critical methods in the <code>CalcHelp<code> class.
- * @author Sean Lewis\
+ * @author Sean Lewis
  */
 public class CalcHelpTest {
 

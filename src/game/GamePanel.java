@@ -301,7 +301,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		paints++;
 
 		defaultGameButton.setLocation(230, 620);
-		randomGameButton.setLocation(500, 620);
+		randomGameButton.setLocation(530, 620);
 		
 		if (gameStarted && !gameWon) {
 			ball = currentLevel.getBall();

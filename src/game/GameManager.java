@@ -60,6 +60,7 @@ public class GameManager {
 		try {
 			levels = reader.getLevelData(levelsFile);
 		} catch (Exception e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null,
 					"The levels.txt file could not be read.", "Error",
 					JOptionPane.ERROR_MESSAGE);

@@ -35,7 +35,9 @@ public class DataHandler {
 	 * @throws IOException if any input error occurred
 	 */
 	public ArrayList<Level> getLevelData(String fileName) throws IOException {
-		pw = new PrintWriter(new File("logs/datalog.txt"));
+		File f = new File("logs/datalog.txt");
+		f.getParentFile().mkdirs();
+		pw = new PrintWriter(f);
 		ArrayList<Level> levels = new ArrayList<Level>();
 		long startTime = System.currentTimeMillis();
 		levels.addAll(readFile(new File(fileName)));
