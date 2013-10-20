@@ -20,7 +20,7 @@ public class WarpPoint extends CircularShape {
 	 * The Image for all WarpPoints.
 	 */
 	public static final Image Image = Toolkit.getDefaultToolkit().getImage(
-			"images/spiralImage.gif");
+			"src/resources/images/spiralImage.gif");
 
 	/**
 	 * Creates a new WarpPoint at (0,0).

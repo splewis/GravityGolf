@@ -34,10 +34,10 @@ public class GameManager {
 	/**
 	 * Default location for the level files to be located.
 	 */
-	public static final String DEFAULT_LEVELS = "levels/levels.txt";
-	private static PrintWriter logger;	
-	
-	private int currentLevelIndex;	
+	public static final String DEFAULT_LEVELS = "src/resources/levels/levels.txt";
+	private static PrintWriter logger;
+
+	private int currentLevelIndex;
 	private Collection<Point> solutions;
 	private List<Level> levels;
 	private boolean randomLevels; // if game uses dynamic random levels
@@ -107,7 +107,7 @@ public class GameManager {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		logger.println("Done generating all levels");
 		logger.flush();
 		currentLevelIndex = -1;
@@ -124,7 +124,7 @@ public class GameManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Returns the current level number. The menu level is defined as level 0,
 	 * and the first level is defined as level 1.
@@ -178,7 +178,7 @@ public class GameManager {
 	 */
 	public Level getCurrentLevel() {
 		if (currentLevelIndex == -1) {
-			return MenuScreen.getMenuLevel();			
+			return MenuScreen.getMenuLevel();
 		}
 		return levels.get(currentLevelIndex);
 	}

@@ -60,8 +60,8 @@ object MenuScreen {
     g.setColor(Color.blue)
     g.setFont(new Font("Tahoma", Font.ITALIC, 80))
     g.drawString("Gravity Golf", 275, 100)
-    
-    g.setFont(new Font("Times new Roman", Font.ITALIC, 25))    
+
+    g.setFont(new Font("Times new Roman", Font.ITALIC, 25))
     g.setColor(Color.blue)
     for (i <- 0 to 3)
       g.drawString(instructionStrings(i), 50, 60 * i + 235)
@@ -76,8 +76,6 @@ object MenuScreen {
 
     g.setColor(Color.white)
     g.drawString("Chose an option below to begin", 345, 590)
-    g.drawString("1.00", 10, 630)
-    g.drawString("1/1/2013", 10, 660)
   }
 
 }

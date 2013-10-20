@@ -47,7 +47,7 @@ public class DataHandler {
 		pw.close();
 		return levels;
 	}
-	 
+
 	/**
 	 * Reads in the settings from the basic settings file.
 	 * @return the int array of settings parameters.
@@ -55,8 +55,8 @@ public class DataHandler {
 	public static int[] getSettings() {
 		return getSettings("settings.txt");
 	}
-	
-	
+
+
 	/**
 	 * Reads in the settings from an arbitrary file path.
 	 * @param fileName the file to read settings from
@@ -110,7 +110,7 @@ public class DataHandler {
 				if (line.length() > 2 && !line.substring(0, 2).equals("//")) {
 					String[] data;
 					if (line.substring(0, 4).equals("null")) {
-						levels.add(null);						
+						levels.add(null);
 					} else if (line.substring(0, 4).equals("ball")) {
 						data = line.substring(5, line.length() - 1).split(",");
 						int x = Integer.parseInt(data[0]);
@@ -324,7 +324,7 @@ public class DataHandler {
 	 */
 	public static Color readColor(String str) {
 		if (str == null || str.length() == 0)
-			return null;	
+			return null;
 		String colorSpec = str.toLowerCase().replaceAll(" ", "");
 		if (colorSpec.equals("red"))
 			return Color.red;
@@ -345,14 +345,14 @@ public class DataHandler {
 		if (colorSpec.equals("pink"))
 			return Color.pink;
 		if (colorSpec.equals("yellow"))
-			return Color.yellow;	
+			return Color.yellow;
 		if (colorSpec.equals("white"))
 				return Color.white;
 		if (colorSpec.equals("purple"))
 			return new Color(128, 0, 128);
 		if (colorSpec.equals("violet"))
 			return new Color(127, 0, 255);
-		try {		
+		try {
 			String r = colorSpec.substring(colorSpec.indexOf("(") + 1,
 					colorSpec.indexOf("/"));
 			String g = colorSpec.substring(colorSpec.indexOf("/") + 1,
@@ -362,9 +362,9 @@ public class DataHandler {
 			return new Color(Integer.parseInt(r), Integer.parseInt(g),
 					Integer.parseInt(b));
 		} catch(Exception e) {
-			return null;			
+			return null;
 		}
-		
+
 	}
 
 	/**

@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		MouseMotionListener, Runnable {
 
 	private static final boolean DRAW_SOLUTIONS = false;
-	
+
 	public static final int Width = 1000;
 	public static final int Height = 700;
 
@@ -87,14 +87,14 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 	private JMenuItem saveItem = new JMenuItem("Save current game");
 	private JMenu loadMenu = new JMenu("Load");
 	private JMenuItem loadItem = new JMenuItem("Load game");
-	
+
 	private JButton defaultGameButton = new JButton(
 			"Default levels (recommended option)");
 	private JButton randomGameButton = new JButton(
 			"Random levels (may take a minute to generate levels)");
-	
+
 	/**
-	 * Initializes the game panel and game. 
+	 * Initializes the game panel and game.
 	 */
 	public GamePanel() {
 		gameManager = new GameManager();
@@ -159,7 +159,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		loadMenu.add(loadItem);
 		loadItem.addActionListener(this);
 		menuBar.add(loadMenu);
-		
+
 		add(defaultGameButton);
 		add(randomGameButton);
 		defaultGameButton.addActionListener(new ActionListener() {
@@ -171,7 +171,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			public void actionPerformed(ActionEvent e) {
 				// uses default number of levels
 				gameManager = new GameManager(gameManager.getNumberOfLevels());
-				beginGame();				
+				beginGame();
 			}
 		});
 
@@ -183,7 +183,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		super.addNotify();
 		startGame();
 	}
-	
+
 	/**
 	 * Starts the game animation.
 	 */
@@ -302,7 +302,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 		defaultGameButton.setLocation(230, 620);
 		randomGameButton.setLocation(530, 620);
-		
+
 		if (gameStarted && !gameWon) {
 			ball = currentLevel.getBall();
 			screenXShift = currentLevel.getScreenXShift();
@@ -314,17 +314,17 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 			drawLevel(g);
 
 			Color textColor = null;
-			
+
 			if (ball.isLaunched())
 				textColor = Color.green;
 			else if (drawingInitialVelocity)
 				textColor = Color.white;
 			else if (CollisionEffect.running())
 				textColor = Color.red;
-			
+
 			if (textColor != null && terminalPoint != null) {
 				InfoDisplay.vectorInformation(terminalPoint, launchMagnitude,
-						launchAngle, textColor, g); 
+						launchAngle, textColor, g);
 			}
 
 			if (!gameWon && gameStarted) {
@@ -351,27 +351,27 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 					GraphicEffect.drawArrow(initialPoint, tempTerminalPoint, g);
 				}
 			}
-			
+
 			if (settings[VectorsNum] && !CollisionEffect.running())
 				GravityVectorsEffect.draw(currentLevel, g);
 			if (settings[ResultantNum] && !CollisionEffect.running())
 				ResultantDrawer.draw(currentLevel, g);
 			if (gamePaused)
-				InfoDisplay.drawPaused(g);			
-			
+				InfoDisplay.drawPaused(g);
+
 		} else {
 			screenXShift = 0.0;
 			screenYShift = 0.0;
 			drawLevel(g);
 			MenuScreen.draw(currentLevel, settings, g);
 		}
-		
+
 		if (settings[WarpArrowsNum])
 			WarpDrawer.draw(currentLevel, g);
 		if (gameWon)
 			InfoDisplay.drawWinScreen(gameManager, g);
 		if (levelComplete)
-			InfoDisplay.drawNextLevelMessage(g);		
+			InfoDisplay.drawNextLevelMessage(g);
 	}
 
 	/**
@@ -424,7 +424,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 
 		if (!CollisionEffect.running()) {
 			// prevents flicker of ball on reset after effects
-			
+
 			if (!ball.isLaunched()) { // stationary ball
 				Color c = ball.getColor();
 				if (blinkingBall) {
@@ -459,11 +459,11 @@ public class GamePanel extends JPanel implements ActionListener, MouseListener,
 		if (settings[EffectsNum] && CollisionEffect.running()) {
 			CollisionEffect.draw(g);
 		}
-		
+
 		if(DRAW_SOLUTIONS && gameStarted && !gameWon) {
 			g.setColor(Color.GREEN);
-			for(java.awt.Point p : gameManager.getCurrentSolutions()) 
-				
+			for(java.awt.Point p : gameManager.getCurrentSolutions())
+
 				g.fillRect((int) screenXShift + p.x, (int)screenYShift + p.y, 1, 1);
 		}
 
