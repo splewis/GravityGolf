@@ -27,13 +27,13 @@ public class GameFrame extends JFrame implements KeyListener {
 			this.setSize(GamePanel.Width + 8, GamePanel.Height + 33);
 			this.setResizable(false);
 			this.setIconImage(Toolkit.getDefaultToolkit().getImage(
-					"images/icon.png"));
+					"src/resources/images/icon.png"));
 			setJMenuBar(gp.menuBar);
 			this.addKeyListener(this);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent ev) {
-					safeQuit(); 
+					safeQuit();
 					dispose();
 				}
 			});
