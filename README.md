@@ -8,8 +8,6 @@ The goal of the game is to launch the ball (typically a small red ball) to a Goa
 The basic premise of the game is relatively simple; the above mechanics are implemented is less than 100 lines of code.
 However, the addition of many small features into one project has made management and design significant challenges.
 
-Read more about the project at http://splewis.net/projects/gravity-golf/
-
 
 Running from a jar in the Releases Section
 -----------------------------------------------
@@ -37,4 +35,11 @@ To import into Eclipse after a git clone:
 
 Building and Running with SBT
 ---------------------------------------
-One day...
+This is a work in progress. Currently working:
+
+The game can be launched using:
+
+		sbt run
+
+Testing and packaging using sbt are not yet implemented.
+
